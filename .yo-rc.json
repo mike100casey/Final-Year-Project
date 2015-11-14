@@ -1,0 +1,22 @@
+{
+  "generator-jhipster": {
+    "baseName": "FYP",
+    "packageName": "ie.ittralee",
+    "packageFolder": "ie/ittralee",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "hazelcast",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": false,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "3dce4deecb680bed8d55d0cbb88987487f049fc3",
+    "testFrameworks": []
+  }
+}
