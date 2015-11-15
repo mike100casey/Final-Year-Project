@@ -172,32 +172,6 @@
     </table>
 </div>
 
-<h3>Ehcache statistics</h3>
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Cache name</th>
-            <th class="text-right">Objects</th>
-            <th class="text-right">Hits</th>
-            <th class="text-right">Misses</th>
-            <th class="text-right">Eviction count</th>
-            <th class="text-right">Mean get time (ms)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="(k, v) in cachesStats" ng-once>
-            <td>{{v.name}}</td>
-            <td class="text-right">{{metrics.gauges[k + '.objects'].value}}</td>
-            <td class="text-right">{{metrics.gauges[k + '.hits'].value}}</td>
-            <td class="text-right">{{metrics.gauges[k + '.misses'].value}}</td>
-            <td class="text-right">{{metrics.gauges[k + '.eviction-count'].value}}</td>
-            <td class="text-right">{{metrics.gauges[k + '.mean-get-time'].value | number:2}}</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
 <h3 ng-show="metrics.gauges['HikariPool-0.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
 <div class="table-responsive" ng-show="metrics.gauges['HikariPool-0.pool.TotalConnections'].value > 0">
     <table class="table table-striped">

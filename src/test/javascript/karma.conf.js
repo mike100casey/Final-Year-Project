@@ -28,6 +28,8 @@ module.exports = function (config) {
             'main/webapp/bower_components/json3/lib/json3.js',
             'main/webapp/bower_components/ng-file-upload/ng-file-upload.js',
             'main/webapp/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
+            'main/webapp/bower_components/sockjs-client/dist/sockjs.js',
+            'main/webapp/bower_components/stomp-websocket/lib/stomp.min.js',
             'main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'main/webapp/scripts/app/app.js',

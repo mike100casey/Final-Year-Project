@@ -4,11 +4,11 @@
     "packageName": "ie.ittralee",
     "packageFolder": "ie/ittralee",
     "authenticationType": "session",
-    "hibernateCache": "ehcache",
-    "clusteredHttpSession": "hazelcast",
-    "websocket": "no",
+    "hibernateCache": "no",
+    "clusteredHttpSession": "no",
+    "websocket": "spring-websocket",
     "databaseType": "sql",
-    "devDatabaseType": "h2Memory",
+    "devDatabaseType": "mysql",
     "prodDatabaseType": "mysql",
     "searchEngine": "no",
     "useSass": false,
@@ -16,7 +16,9 @@
     "frontendBuilder": "grunt",
     "enableTranslation": false,
     "enableSocialSignIn": false,
-    "rememberMeKey": "3dce4deecb680bed8d55d0cbb88987487f049fc3",
-    "testFrameworks": []
+    "rememberMeKey": "4375208f3987c7a1747e9cbd9e97431c40f48ace",
+    "testFrameworks": [
+      "gatling"
+    ]
   }
 }

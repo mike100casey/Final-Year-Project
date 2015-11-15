@@ -2,8 +2,6 @@ package ie.ittralee.domain;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -19,7 +17,6 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "jhi_persistent_token")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PersistentToken implements Serializable {
 
     

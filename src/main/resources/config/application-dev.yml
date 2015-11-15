@@ -17,11 +17,11 @@ spring:
         restart:
             enabled: true
         livereload:
-            enabled: false # we use Grunt + BrowserSync for livereload org.h2.jdbcx.JdbcDataSource   jdbc:h2:mem:fyp;DB_CLOSE_DELAY=-1 ie.ittralee.domain.util.FixedH2Dialect H2
+            enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://localhost:3306/fyp
-        name: fyp
+        url: jdbc:mysql://localhost:3306/fyp?useUnicode=true&characterEncoding=utf8
+        name:
         username: root
         password: Mike!234
     jpa:
@@ -29,10 +29,9 @@ spring:
         database: MYSQL
         show_sql: true
         properties:
-            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
         host: localhost
     messages:
@@ -51,12 +50,11 @@ server:
 # ===================================================================
 
 jhipster:
-    cache: # Hibernate 2nd level cache, used by CacheConfiguration
-        timeToLiveSeconds: 3600
-        hazelcast:
-            backupCount: 1
-        ehcache:
-            maxBytesLocalHeap: 16M
+    datasource: # JHipster-specific configuration, in addition to the standard spring.datasource properties
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: FYP@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

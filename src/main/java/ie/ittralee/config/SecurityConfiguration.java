@@ -67,8 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/i18n/**")
             .antMatchers("/assets/**")
             .antMatchers("/swagger-ui/index.html")
-            .antMatchers("/test/**")
-            .antMatchers("/console/**");
+            .antMatchers("/test/**");
     }
 
     @Override
@@ -97,7 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .deleteCookies("JSESSIONID", "hazelcast.sessionId")
+            .deleteCookies("JSESSIONID")
             .permitAll()
         .and()
             .headers()
@@ -113,6 +112,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/audits/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
+            .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/websocket/**").permitAll()
             .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)

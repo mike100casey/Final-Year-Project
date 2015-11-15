@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('fYPApp')
-    .factory('AuthServerProvider', function loginService($http, localStorageService, $window) {
+    .factory('AuthServerProvider', function loginService($http, localStorageService, $window, Tracker) {
         return {
             login: function(credentials) {
                 var data = 'j_username=' + encodeURIComponent(credentials.username) +
@@ -16,6 +16,7 @@ angular.module('fYPApp')
                 });
             },
             logout: function() {
+                Tracker.disconnect();
                 // logout from the server
                 $http.post('api/logout').success(function (response) {
                     localStorageService.clearAll();

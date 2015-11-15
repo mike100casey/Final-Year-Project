@@ -38,7 +38,8 @@
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <hazelcast.version>3.5.2</hazelcast.version>
+        <gatling.version>2.1.7</gatling.version>
+        <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -81,11 +82,6 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-annotation</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-ehcache</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
         <dependency>
@@ -144,16 +140,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-wm</artifactId>
-            <version>${hazelcast.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.awaitility</groupId>
@@ -230,6 +217,12 @@
             <version>${commons-lang.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javax.inject.version}</version>
@@ -243,17 +236,6 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>${hibernate.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.sf.ehcache</groupId>
-                    <artifactId>ehcache-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -338,6 +320,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
         <!-- Spring Cloud -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -355,6 +341,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-messaging</artifactId>
+            <version>${spring-security.version}</version>
         </dependency>
         <!-- reporting -->
         <dependency>
@@ -401,6 +392,21 @@
                     <sortPlugins>groupId,artifactId</sortPlugins>
                     <keepBlankLines>true</keepBlankLines>
                     <expandEmptyElements>false</expandEmptyElements>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-maven-plugin.version}</version>
+                <configuration>
+                    <configFolder>src/test/gatling/conf</configFolder>
+                    <dataFolder>src/test/gatling/data</dataFolder>
+                    <resultsFolder>target/gatling/results</resultsFolder>
+                    <bodiesFolder>src/test/gatling/bodies</bodiesFolder>
+                    <simulationsFolder>src/test/gatling/simulations</simulationsFolder>
+                    <!-- This will force Gatling to ask which simulation to run
+                      This is useful when you have multiple simulations -->
+                    <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -529,10 +535,10 @@
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                     <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost:3306/fyp</url>
-                    <defaultSchemaName>fyp</defaultSchemaName>
+                    <url>jdbc:mysql://localhost:3306/FYP</url>
+                    <defaultSchemaName>FYP</defaultSchemaName>
                     <username>root</username>
-                    <password>Mike!234</password>
+                    <password></password>
                     <referenceUrl>hibernate:spring:ie.ittralee.domain?dialect=org.hibernate.dialect.MySQLInnoDBDialect</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>

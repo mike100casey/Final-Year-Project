@@ -67,6 +67,8 @@
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active"><a ui-sref="user-management" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-user"></span>
                             &#xA0;<span>User management</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="tracker" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-eye-open"></span>
+                                &nbsp;<span>User tracker</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="metrics" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-dashboard"></span>
                             &#xA0;<span>Metrics</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="health" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-heart"></span>
@@ -79,8 +81,6 @@
                             &#xA0;<span>Logs</span></a></li>
                         <li ng-hide="inProduction" ui-sref-active="active"><a ui-sref="docs" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-book"></span>
                             &#xA0;<span>API</span></a></li>
-                        <li ng-hide="inProduction"><a href='/console' target="_tab" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-hdd"></span>
-                            &#xA0;<span>Database</span></a></li>
                     </ul>
                 </li>
             </ul>

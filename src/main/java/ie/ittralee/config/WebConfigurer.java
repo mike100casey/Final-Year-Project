@@ -3,9 +3,6 @@ package ie.ittralee.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.WebFilter;
 import ie.ittralee.web.filter.CachingHttpHeadersFilter;
 import ie.ittralee.web.filter.StaticResourcesProductionFilter;
 import org.slf4j.Logger;
@@ -45,15 +42,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     @Autowired(required = false)
     private MetricRegistry metricRegistry;
 
-    // Hazelcast instance is injected to force its initialization before the Servlet filter uses it.
-    @Inject
-    private HazelcastInstance hazelcastInstance;
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        initClusteredHttpSessionFilter(servletContext, disps);
         if (!env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
             initMetrics(servletContext, disps);
         }
@@ -61,54 +53,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             initCachingHttpHeadersFilter(servletContext, disps);
             initStaticResourcesProductionFilter(servletContext, disps);
         }
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
-            initH2Console(servletContext);
-        }
         log.info("Web application fully configured");
-    }
-
-    /**
-     * Initializes the Clustered Http Session filter
-     */
-    private void initClusteredHttpSessionFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        log.debug("Registering Clustered Http Session Filter");
-        disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
-        servletContext.addListener(new SessionListener());
-
-        FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", new WebFilter());
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("instance-name", "FYP");
-        // Name of the distributed map storing your web session objects
-        parameters.put("map-name", "clustered-http-sessions");
-
-        // How is your load-balancer configured?
-        // Setting "sticky-session" to "true" means all requests of a session
-        // are routed to the node where the session is first created.
-        // This is excellent for performance.
-        // If "sticky-session" is set to "false", then when a session is updated
-        // on a node, entries for this session on all other nodes are invalidated.
-        // You have to know how your load-balancer is configured before
-        // setting this parameter. Default is true.
-        parameters.put("sticky-session", "false");
-
-        // Name of session id cookie
-        parameters.put("cookie-name", "hazelcast.sessionId");
-
-        // Are you debugging? Default is false.
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            parameters.put("debug", "false");
-        } else {
-            parameters.put("debug", "true");
-        }
-
-        // Do you want to shutdown HazelcastInstance during
-        // web application undeploy process?
-        // Default is true.
-        parameters.put("shutdown-on-destroy", "true");
-
-        hazelcastWebFilter.setInitParameters(parameters);
-        hazelcastWebFilter.addMappingForUrlPatterns(disps, false, "/*");
-        hazelcastWebFilter.setAsyncSupported(true);
     }
 
     /**
@@ -193,16 +138,5 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             source.registerCorsConfiguration("/oauth/**", config);
         }
         return new CorsFilter(source);
-    }
-
-    /**
-     * Initializes H2 console
-     */
-    private void initH2Console(ServletContext servletContext) {
-        log.debug("Initialize H2 console");
-        ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
-        h2ConsoleServlet.addMapping("/console/*");
-        h2ConsoleServlet.setInitParameter("-properties", "src/main/resources");
-        h2ConsoleServlet.setLoadOnStartup(1);
     }
 }
