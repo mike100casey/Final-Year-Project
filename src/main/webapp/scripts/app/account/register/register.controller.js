@@ -9,6 +9,16 @@ angular.module('fYPApp')
         $scope.registerAccount = {};
         $timeout(function (){angular.element('[ng-model="registerAccount.login"]').focus();});
 
+        $("[name='my-checkbox']").bootstrapSwitch();
+        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+            if(state == true){
+                $('#carDetails').show();
+            }else {
+                $('#carDetails').hide();
+            }
+        });
+
+
         $scope.register = function () {
             if ($scope.registerAccount.password !== $scope.confirmPassword) {
                 $scope.doNotMatch = 'ERROR';
