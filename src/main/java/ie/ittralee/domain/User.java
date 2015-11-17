@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
  * A user.
  */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
 
     @Id

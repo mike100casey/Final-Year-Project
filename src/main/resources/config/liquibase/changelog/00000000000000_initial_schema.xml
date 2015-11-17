@@ -50,7 +50,16 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-        
+
+        <createTable tableName = "makes">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="make" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"
             unique="true">
@@ -62,7 +71,7 @@
             unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
-        
+
         <createTable tableName="jhi_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -130,6 +139,11 @@
                   separator=";"
                   tableName="jhi_user_authority"/>
 
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/makes.csv"
+                  separator=";"
+                  tableName="makes" />
+
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -170,7 +184,7 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
-    
+
     </changeSet>
-    
+
 </databaseChangeLog>
