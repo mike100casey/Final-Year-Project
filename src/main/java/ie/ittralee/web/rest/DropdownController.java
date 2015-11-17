@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import ie.ittralee.domain.MakeAndModel;
+import ie.ittralee.repository.MakeAndModelRepository;
 import ie.ittralee.repository.MakesRepository;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import ie.ittralee.domain.Make;
 public class DropdownController {
 
     @Autowired
+    MakeAndModelRepository makeAndModelRepository;
+    @Autowired
     MakesRepository makesRepository;
 
     @SuppressWarnings("unchecked")
@@ -36,5 +40,15 @@ public class DropdownController {
         Iterable<Make> list = makesRepository.findAll();
         makesAsJson.put("makes", list);
         return makesAsJson;
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/models/{make}", method=RequestMethod.GET)
+    @PreAuthorize("permitAll")
+    public @ResponseBody JSONObject sendModels(@PathVariable("make") Long makeId, HttpServletResponse response) {
+        JSONObject makeAndModelAsJson = new JSONObject();
+        List<MakeAndModel> makeAndModelsList = makeAndModelRepository.findByMakeId(makeId);
+        makeAndModelAsJson.put("makeAndModel", makeAndModelsList);
+        return makeAndModelAsJson;
     }
 }

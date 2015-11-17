@@ -60,6 +60,7 @@
             </column>
         </createTable>
 
+
         <createTable tableName = "makeandmodel">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -71,6 +72,19 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/makes.csv"
+                  separator=";"
+                  tableName="makes" />
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/models.csv"
+                  separator=";"
+                  tableName="makeandmodel" />
+
+
+
 
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"
@@ -132,6 +146,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
+        <addForeignKeyConstraint baseColumnNames="makeId"
+                                 baseTableName="makeandmodel"
+                                 constraintName="fk_makeId"
+                                 referencedColumnNames="id"
+                                 referencedTableName="makes"/>
+
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -151,15 +171,7 @@
                   separator=";"
                   tableName="jhi_user_authority"/>
 
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/makes.csv"
-                  separator=";"
-                  tableName="makes" />
 
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/models.csv"
-                  separator=";"
-                  tableName="makeandmodel" />
 
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">

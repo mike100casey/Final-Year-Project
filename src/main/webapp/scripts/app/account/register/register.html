@@ -120,26 +120,26 @@
                     <h3  class="list-group-item active">Car Details</h3>&#xA0;
                     <div class="row" >
                         <div class="col-sm-5">
-                            <label>Make</label>
-                            <select class="form-control" name="make" ng-model="make" ng-minlength=1 required >
-                                <option value="" disabled selected>Select make</option>
-                                <option ng-repeat="make in makes" value="{{make.id}}">{{make.make}}</option>
-                            </select>
-                        </div>
-                        <!--<div class="col-sm-5">
-                            <label>Model</label>
-                            <select class="form-control" name="model" ng-model="car.model" ng-minlength=1 required>
-                                <option value="" disabled selected>Select model</option>
-                                <option ng-repeat="model in models" value="{{model.id}}">{{model.model}}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Year</label>
-                            <select class="form-control" name="model" ng-model="car.year" ng-minlength=1 required>
-                                <option value="" disabled selected>Year</option>
-                                <option ng-repeat="year in years" value="{{year}}">{{year}}</option>
-                            </select>
-                        </div>-->
+                        <label>Make</label>
+                        <select class="form-control" name="make" ng-model="car.make" ng-minlength=1 required ng-change="getModels(car.make)">
+                            <option value="" disabled selected>Select make</option>
+                            <option ng-repeat="make in makes" value="{{make.id}}">{{make.make}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-5">
+                        <label>Model</label>
+                        <select class="form-control" name="model" ng-model="car.model" ng-minlength=1 required>
+                            <option value="" disabled selected>Select model</option>
+                            <option ng-repeat="model in models" value="{{model.id}}">{{model.model}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Year</label>
+                        <select class="form-control" name="model" ng-model="car.year" ng-minlength=1 required>
+                            <option value="" disabled selected>Year</option>
+                            <option ng-repeat="year in years" value="{{year}}">{{year}}</option>
+                        </select>
+                    </div>
                     </div>
                 </div>
 

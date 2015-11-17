@@ -42,6 +42,7 @@ angular.module('fYPApp')
             }
         });
 
+        $scope.car = {};
         $scope.getMakes = function(){
             $http.get('/api/dropdown/makes').
                 success(function(data, status, headers, config){
@@ -51,5 +52,24 @@ angular.module('fYPApp')
                     // log error
                 });
         };
+
+
+        $scope.getModels = function(make){
+            $http.get('/api/dropdown/models/' + make).
+                success(function(data, status, headers, config){
+                    $scope.models = data.makeAndModel;
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(config);
+                });
+        };
         $scope.getMakes();
+
+        $scope.years = [];
+        $scope.currentYear = (new Date).getFullYear();
+        $scope.minYear = 1960;
+
+        for(var i = $scope.currentYear; i >= $scope.minYear; i--){
+            $scope.years.push(i);
+        }
     });
