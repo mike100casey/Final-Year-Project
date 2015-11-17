@@ -1,23 +1,13 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('RegisterController', function ($scope, $timeout, Auth) {
+    .controller('RegisterController', function ($scope, $timeout, Auth,$http) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorUserExists = null;
         $scope.registerAccount = {};
         $timeout(function (){angular.element('[ng-model="registerAccount.login"]').focus();});
-
-        $("[name='my-checkbox']").bootstrapSwitch();
-        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-            if(state == true){
-                $('#carDetails').show();
-            }else {
-                $('#carDetails').hide();
-            }
-        });
-
 
         $scope.register = function () {
             if ($scope.registerAccount.password !== $scope.confirmPassword) {
@@ -43,4 +33,23 @@ angular.module('fYPApp')
                 });
             }
         };
+        $("[name='my-checkbox']").bootstrapSwitch();
+        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+            if(state == true){
+                $('#carDetails').show();
+            }else {
+                $('#carDetails').hide();
+            }
+        });
+
+        $scope.getMakes = function(){
+            $http.get('/api/dropdown/makes').
+                success(function(data, status, headers, config){
+                    $scope.makes = data.makes;
+                }).
+                error(function(data, status, headers, config) {
+                    // log error
+                });
+        };
+        $scope.getMakes();
     });

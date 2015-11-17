@@ -121,12 +121,12 @@
                     <div class="row" >
                         <div class="col-sm-5">
                             <label>Make</label>
-                            <select class="form-control" name="make" ng-model="car.make" ng-minlength=1 required ng-change="getModels(car.make)">
+                            <select class="form-control" name="make" ng-model="make" ng-minlength=1 required >
                                 <option value="" disabled selected>Select make</option>
                                 <option ng-repeat="make in makes" value="{{make.id}}">{{make.make}}</option>
                             </select>
                         </div>
-                        <div class="col-sm-5">
+                        <!--<div class="col-sm-5">
                             <label>Model</label>
                             <select class="form-control" name="model" ng-model="car.model" ng-minlength=1 required>
                                 <option value="" disabled selected>Select model</option>
@@ -139,7 +139,7 @@
                                 <option value="" disabled selected>Year</option>
                                 <option ng-repeat="year in years" value="{{year}}">{{year}}</option>
                             </select>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
 
