@@ -15,8 +15,8 @@ angular.module('fYPApp.directive.map', [])
                 }
                 mapTypeIds.push("OSM");
                 var map = new google.maps.Map(element, {
-                    center: new google.maps.LatLng(53.312800596408394, -7.910156247500026),
-                    zoom: 6,
+                    center: new google.maps.LatLng(53.5, -8.623056),
+                    zoom: 7,
                     mapTypeId: "OSM",
                     mapTypeControlOptions: {
                         mapTypeIds: mapTypeIds
@@ -29,7 +29,7 @@ angular.module('fYPApp.directive.map', [])
                     },
                     tileSize: new google.maps.Size(256, 256),
                     name: "OpenStreetMap",
-                    maxZoom: 18}));
+                    maxZoom: 11}));
             }//Link
         }; //return
     });
