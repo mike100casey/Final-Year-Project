@@ -33,14 +33,14 @@ angular.module('fYPApp')
                 });
             }
         };
-        $("[name='my-checkbox']").bootstrapSwitch();
+        /*$("[name='my-checkbox']").bootstrapSwitch();
         $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
             if(state == true){
                 $('#carDetails').show();
             }else {
                 $('#carDetails').hide();
             }
-        });
+        });*/
 
         $scope.car = {};
         $scope.getMakes = function(){
@@ -54,7 +54,7 @@ angular.module('fYPApp')
         };
 
 
-        $scope.getModels = function(make){
+       /* $scope.getModels = function(make){
             $http.get('/api/dropdown/models/' + make).
                 success(function(data, status, headers, config){
                     $scope.models = data.makeAndModel;
@@ -62,7 +62,7 @@ angular.module('fYPApp')
                 error(function(data, status, headers, config) {
                     console.log(config);
                 });
-        };
+        };*/
         $scope.getMakes();
 
         $scope.years = [];

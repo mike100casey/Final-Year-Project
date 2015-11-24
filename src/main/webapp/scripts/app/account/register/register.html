@@ -26,9 +26,9 @@
         <div class="col-md-8 col-md-offset-2">
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
 
-                <div class="form-group" ng-show="!success">
+               <!-- <div class="form-group" ng-show="!success">
                     <input id = "my-checkbox" type="checkbox" name="my-checkbox" checked="checked">
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <label for="login">Username</label>
@@ -116,7 +116,7 @@
                     </div>
                 </div>
 
-                <div id="carDetails" class="form-group list-group" ng-show="!success">
+                <!--  <div id="carDetails" class="form-group list-group" ng-show="!success">
                     <h3  class="list-group-item active">Car Details</h3>&#xA0;
                     <div class="row" >
                         <div class="col-sm-5">
@@ -126,7 +126,7 @@
                             <option ng-repeat="make in makes" value="{{make.id}}">{{make.make}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-5">
+                  <div class="col-sm-5">
                         <label>Model</label>
                         <select class="form-control" name="model" ng-model="car.model" ng-minlength=1 required>
                             <option value="" disabled selected>Select model</option>
@@ -141,7 +141,7 @@
                         </select>
                     </div>
                     </div>
-                </div>
+                </div> -->
 
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Register</button>
             </form>

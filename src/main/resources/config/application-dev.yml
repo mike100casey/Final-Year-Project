@@ -24,6 +24,8 @@ spring:
         name:
         username: root
         password: Mike!234
+        validation-query: SELECT 1
+        test-on-borrow: true
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL

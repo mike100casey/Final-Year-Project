@@ -51,50 +51,15 @@
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
 
-        <createTable tableName = "makes">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="make" type="varchar(255)" >
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-
-        <createTable tableName = "makeandmodel">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="makeId" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="model" type="varchar(255)" >
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/makes.csv"
-                  separator=";"
-                  tableName="makes" />
-
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/models.csv"
-                  separator=";"
-                  tableName="makeandmodel" />
-
-
-
-
         <createIndex indexName="idx_user_login"
-            tableName="jhi_user"
-            unique="true">
+                     tableName="jhi_user"
+                     unique="true">
             <column name="login" type="varchar(50)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"
-            tableName="jhi_user"
-            unique="true">
+                     tableName="jhi_user"
+                     unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
 
@@ -146,12 +111,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="makeId"
-                                 baseTableName="makeandmodel"
-                                 constraintName="fk_makeId"
-                                 referencedColumnNames="id"
-                                 referencedTableName="makes"/>
-
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -170,8 +129,6 @@
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="jhi_user_authority"/>
-
-
 
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">

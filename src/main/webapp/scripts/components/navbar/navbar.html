@@ -28,9 +28,28 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- JHipster will add entities to the menu here -->
+
+
                     </ul>
                 </li>
+
+                <li ng-class="{active: $state.includes('map')}" class="dropdown pointer">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+	                    <span>
+	                        <span class="glyphicon glyphicon-road txtColor smallerText"></span>
+	                        <span class="hidden-tablet txtColor smallerText">Journeys</span>
+	                        <b class="caret txtColor"></b>
+	                    </span>
+                    </a>
+                    <ul class="dropdown-menu multi-level ">
+                        <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="map" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-marker"></span>
+                            &#xA0;<span>Map</span></a></li>
+
+                    </ul>
+                </li>
+
+
+
                 <li ng-class="{active: $state.includes('account')}" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
@@ -42,6 +61,7 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
+
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="settings" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-wrench"></span>
                             &#xA0;<span>Settings</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="password" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-lock"></span>
