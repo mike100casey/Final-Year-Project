@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('fYPApp')
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider) {
         $stateProvider
             .state('map', {
-                parent: 'map',
+                parent: 'account',
                 url: '/map',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: [],
                     pageTitle: 'Map'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/journey/addMap/map.html',
+                        templateUrl: 'scripts/app/account/map/map.html',
                         controller: 'MapController'
                     }
                 },

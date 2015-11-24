@@ -16,6 +16,7 @@
         <!-- build:css assets/styles/main.css -->
         <link rel="stylesheet" href="assets/styles/main.css">
         <!-- endbuild -->
+
     </head>
     <body ng-app="fYPApp">
         <!--[if lt IE 9]>
@@ -30,6 +31,14 @@
                 <p translate="footer">This is your footer</p>
             </div>
         </div>
+
+
+
+        <!-- bring in the google maps library -->
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&callback"></script>
+
+
+
 
         <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
         <script>
@@ -107,6 +116,10 @@
     <script src="scripts/app/account/password/password.directive.js"></script>
     <script src="scripts/app/account/register/register.js"></script>
     <script src="scripts/app/account/register/register.controller.js"></script>
+
+        <script src="scripts/app/account/map/map.js"></script>
+        <script src="scripts/app/account/map/map.controller.js"></script>
+
     <script src="scripts/app/account/settings/settings.js"></script>
     <script src="scripts/app/account/settings/settings.controller.js"></script>
     <script src="scripts/app/account/reset/finish/reset.finish.controller.js"></script>
@@ -142,6 +155,7 @@
     <script src="scripts/app/admin/tracker/tracker.js"></script>
     <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
     <script src="scripts/components/tracker/tracker.service.js"></script>
+        <script src="scripts/components/util/directive.js"></script>
     <!-- endbuild -->
 </body>
 </html>
