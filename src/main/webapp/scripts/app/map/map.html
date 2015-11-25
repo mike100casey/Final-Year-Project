@@ -1,0 +1,18 @@
+
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <input type="text" class="form-control" id="source" name="source" placeholder="Source"
+                    ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" id="destination" name="destination" placeholder="Destination"
+                    ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
+        </div>
+        <div class="col-md-4">
+            <button type="submit"  class="btn btn-primary">Search</button>
+        </div>
+
+    </div>
+<div>
+    <my-map id="map_canvas"></my-map>
+</div>

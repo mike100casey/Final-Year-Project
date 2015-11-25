@@ -4,7 +4,7 @@ angular.module('fYPApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('map', {
-                parent: 'account',
+                parent: 'site',
                 url: '/map',
                 data: {
                     authorities: [],
@@ -12,7 +12,7 @@ angular.module('fYPApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/account/map/map.html',
+                        templateUrl: 'scripts/app/map/map.html',
                         controller: 'MapController'
                     }
                 },

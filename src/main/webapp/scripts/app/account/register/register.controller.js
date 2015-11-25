@@ -33,14 +33,14 @@ angular.module('fYPApp')
                 });
             }
         };
-        /*$("[name='my-checkbox']").bootstrapSwitch();
+        $("[name='my-checkbox']").bootstrapSwitch();
         $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
             if(state == true){
                 $('#carDetails').show();
             }else {
                 $('#carDetails').hide();
             }
-        });*/
+        });
 
         $scope.car = {};
         $scope.getMakes = function(){

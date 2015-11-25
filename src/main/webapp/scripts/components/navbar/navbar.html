@@ -17,7 +17,7 @@
                         <span class="hidden-sm">Home</span>
                     </a>
                 </li>
-                <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
+                <li ng-class="{active: $state.includes('account')}"class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
                             <span class="glyphicon glyphicon-th-list"></span>
@@ -28,7 +28,8 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-
+                        <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="map" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-road"></span>
+                            &#xA0;<span>Map</span></a></li>
 
                     </ul>
                 </li>
@@ -44,8 +45,7 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="map" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-road"></span>
-                            &#xA0;<span>Map</span></a></li>
+
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="settings" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-wrench"></span>
                             &#xA0;<span>Settings</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="password" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-lock"></span>
