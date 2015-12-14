@@ -1,8 +1,10 @@
 'use strict';
 
-angular.module('fYPApp', ['LocalStorageModule',
-               'ui.bootstrap', // for modal dialogs
-    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'angular-loading-bar','fYPApp.directive.map'])
+angular.module('fYPApp', ['LocalStorageModule','ngResource', 'ui.router', 'ngCookies', 'ngAria',
+    'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'angular-loading-bar','fYPApp.directive.map'])
+
+
+
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
 

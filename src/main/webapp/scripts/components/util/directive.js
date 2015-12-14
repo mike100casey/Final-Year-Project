@@ -14,7 +14,7 @@ angular.module('fYPApp.directive.map', [])
                     mapTypeIds.push(google.maps.MapTypeId[type])
                 }
                 mapTypeIds.push("OSM");
-                var map = new google.maps.Map(element, {
+                 map = new google.maps.Map(element, {
                     center: new google.maps.LatLng(53.5, -8.623056),
                     zoom: 7,
                     mapTypeId: "OSM",
@@ -32,5 +32,20 @@ angular.module('fYPApp.directive.map', [])
                     maxZoom: 11}));
             }//Link
         }; //return
+        //return {
+        //    restrict: 'E',
+        //    replace: true,
+        //    template: '<div></div>',
+        //    link: function(scope, element, attrs) {
+        //        var myOptions = {
+        //            zoom: 6,
+        //            draggable: true,
+        //            center: new google.maps.LatLng(53.312800596408394, -7.910156247500026),
+        //            mapTypeId: google.maps.MapTypeId.ROADMAP,
+        //            region: "ireland"
+        //        };
+        //        map = new google.maps.Map(document.getElementById(attrs.id), myOptions);
+        //    }//Link
+        //}; //return
     });
 

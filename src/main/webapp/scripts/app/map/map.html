@@ -1,18 +1,55 @@
+<div class="col-md-12">
+    <div class="col-md-5 ">
+    <form>
+        <div class="list-group-item">
+            <p class="smallerText">Please fill in the following form to register a journey</p>
+            <fieldset class="main-block">
+                <label >Departure</label>
+                <input type="text" id="source" name="source" class="form-control"  ng-model="journey.source" maxlength="60"
+                       ng-minlength=1 ng-maxlength=50 ng-autocomplete  placeholder="Enter Departure (address)" required
+                       data-toggle="tooltip" data-placement="top" data-original-title="Enter a specific departure point that's convenient for passengers.">
+                <div ng-show="form.source.$dirty && form.source.$invalid">
+                    <p class="help-block" ng-show="form.source.$error.required" >
+                        Source is required.
+                    </p>
+                    <p class="help-block" ng-show="form.source.$error.maxlength" >
+                        Source cannot be longer than 50 characters
+                    </p>
+                </div>
+            </fieldset>
+            <fieldset class="main-block">
+                <label>Arrival</label>
+                <input type="text" id="destination" name="destination" class="form-control" ng-model="journey.destination" maxlength="60"
+                       ng-autocomplete ng-minlength=1 ng-maxlength=50 placeholder="Enter Arrival (address)"  required
+                       data-toggle="tooltip" data-placement=top data-original-title="Enter a specific arrival point.">
 
-    <div class="col-md-12">
-        <div class="col-md-4">
-            <input type="text" class="form-control" id="source" name="source" placeholder="Source"
+                <div ng-show="form.destination.$dirty && form.destination.$invalid">
+                    <p class="help-block" ng-show="form.destination.$error.required" >
+                        Destination is required.
+                    </p>
+                    <p class="help-block" ng-show="form.destination.$error.maxlength" >
+                        Destination cannot be longer than 50 characters
+                    </p>
+                </div>
+            </fieldset>
+            <br>
+            <fieldset class="main-block">
+
+                <button type="submit"  class="btn btn-primary" ng-click="calcRoute();">Search</button>
+
+            </fieldset>
+        </div>
+    </form>
+    </div>
+    <div class="col-md-7">
+        <my-map id="map_canvas"></my-map>
+    </div>
+</div>
+
+    <!-- <input type="text" class="form-control" id="source" name="source" placeholder="Source"
                     ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
         </div>
         <div class="col-md-4">
             <input type="text" class="form-control" id="destination" name="destination" placeholder="Destination"
                     ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
-        </div>
-        <div class="col-md-4">
-            <button type="submit"  class="btn btn-primary">Search</button>
-        </div>
-
-    </div>
-<div>
-    <my-map id="map_canvas"></my-map>
-</div>
+        </div>-->
