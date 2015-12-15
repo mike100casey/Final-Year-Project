@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fYPApp', ['LocalStorageModule','ngResource', 'ui.router', 'ngCookies', 'ngAria',
+angular.module('fYPApp', ['LocalStorageModule','ngResource', 'ui.router', 'ngCookies', 'ngAria','ngAutocomplete',
     'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'angular-loading-bar','fYPApp.directive.map'])
 
 

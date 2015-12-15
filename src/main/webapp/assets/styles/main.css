@@ -209,3 +209,6 @@ Map
     transform: translateZ(10px);
     margin-top: 5px;
 }
+#myRoute {
+    background-color: #FAFAFA;
+}

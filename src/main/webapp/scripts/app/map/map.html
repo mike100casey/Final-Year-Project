@@ -1,13 +1,13 @@
 <div class="col-md-12">
     <div class="col-md-5 ">
     <form>
-        <div class="list-group-item">
-            <p class="smallerText">Please fill in the following form to register a journey</p>
+        <div id="myRoute" class="list-group-item">
+            <h5><b>Please fill in the following form to display route</b></h5>&#xA0;
             <fieldset class="main-block">
-                <label >Departure</label>
+                <label >Departing</label>
                 <input type="text" id="source" name="source" class="form-control"  ng-model="journey.source" maxlength="60"
                        ng-minlength=1 ng-maxlength=50 ng-autocomplete  placeholder="Enter Departure (address)" required
-                       data-toggle="tooltip" data-placement="top" data-original-title="Enter a specific departure point that's convenient for passengers.">
+                       data-toggle="tooltip" data-placement="top" data-original-title="Enter a specific departure point that's convenient for passengers.">&#xA0;
                 <div ng-show="form.source.$dirty && form.source.$invalid">
                     <p class="help-block" ng-show="form.source.$error.required" >
                         Source is required.
@@ -18,10 +18,10 @@
                 </div>
             </fieldset>
             <fieldset class="main-block">
-                <label>Arrival</label>
+                <label>Arriving</label>
                 <input type="text" id="destination" name="destination" class="form-control" ng-model="journey.destination" maxlength="60"
-                       ng-autocomplete ng-minlength=1 ng-maxlength=50 placeholder="Enter Arrival (address)"  required
-                       data-toggle="tooltip" data-placement=top data-original-title="Enter a specific arrival point.">
+                       ng-autocomplete ng-minlength=1 ng-maxlength=50 placeholder="Enter Arrival (address)" ng-pattern="/^[a-z0-9]*$/" required
+                       data-toggle="tooltip" data-placement=top data-original-title="Enter a specific arrival point.">&#xA0;
 
                 <div ng-show="form.destination.$dirty && form.destination.$invalid">
                     <p class="help-block" ng-show="form.destination.$error.required" >
@@ -29,7 +29,18 @@
                     </p>
                     <p class="help-block" ng-show="form.destination.$error.maxlength" >
                         Destination cannot be longer than 50 characters
-                    </p>
+                    </p><br>&#xA0;
+                </div>
+                <label id="distanceLabel"></label>
+            </fieldset>
+            <fieldset>
+                <div class="well">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
                 </div>
             </fieldset>
             <br>
@@ -45,11 +56,3 @@
         <my-map id="map_canvas"></my-map>
     </div>
 </div>
-
-    <!-- <input type="text" class="form-control" id="source" name="source" placeholder="Source"
-                    ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
-        </div>
-        <div class="col-md-4">
-            <input type="text" class="form-control" id="destination" name="destination" placeholder="Destination"
-                    ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
-        </div>-->
