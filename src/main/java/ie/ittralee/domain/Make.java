@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@SuppressWarnings("serial")
-@Entity
 @Table(name = "makes")
 public class Make implements Serializable{
 

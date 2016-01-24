@@ -3,10 +3,8 @@ package ie.ittralee.web.rest;
 /**
  * Created by Michael on 11/17/2015.
  */
-import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
+import ie.ittralee.domain.Make;
 import ie.ittralee.domain.MakeAndModel;
 import ie.ittralee.repository.MakeAndModelRepository;
 import ie.ittralee.repository.MakesRepository;
@@ -19,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ie.ittralee.domain.Make;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 @Controller
 @RequestMapping("/api/dropdown")
-public class DropdownController {
+public class MakeModelController {
 
     @Autowired
     MakeAndModelRepository makeAndModelRepository;
@@ -33,6 +32,7 @@ public class DropdownController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/makes", method = RequestMethod.GET)
+    @PreAuthorize("permitAll")
     public
     @ResponseBody
     JSONObject sendMakes(HttpServletResponse response) {
@@ -43,12 +43,15 @@ public class DropdownController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/models/{make}", method=RequestMethod.GET)
+    @RequestMapping(value = "/models/{make}", method = RequestMethod.GET)
     @PreAuthorize("permitAll")
-    public @ResponseBody JSONObject sendModels(@PathVariable("make") Long makeId, HttpServletResponse response) {
+    public
+    @ResponseBody
+    JSONObject sendModels(@PathVariable("make") Long Id, HttpServletResponse response) {
         JSONObject makeAndModelAsJson = new JSONObject();
-        List<MakeAndModel> makeAndModelsList = makeAndModelRepository.findByMakeId(makeId);
-        makeAndModelAsJson.put("makeAndModel", makeAndModelsList);
+        List<MakeAndModel> makeAndModelsList = makeAndModelRepository.findByMakeId(Id);
+        makeAndModelAsJson.put("makeandmodel", makeAndModelsList);
         return makeAndModelAsJson;
     }
+
 }

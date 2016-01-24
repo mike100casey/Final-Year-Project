@@ -1,19 +1,23 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('RegisterController', function ($scope, $timeout, Auth,$http) {
+    .controller('RegisterController', function ($scope, $timeout, Auth, $http) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorUserExists = null;
         $scope.registerAccount = {};
-        $timeout(function (){angular.element('[ng-model="registerAccount.login"]').focus();});
+        $timeout(function () {
+            angular.element('[ng-model="registerAccount.login"]').focus();
+        });
+
+        $scope.userType;
 
         $scope.register = function () {
             if ($scope.registerAccount.password !== $scope.confirmPassword) {
                 $scope.doNotMatch = 'ERROR';
             } else {
-                $scope.registerAccount.langKey =  'en' ;
+                $scope.registerAccount.langKey = 'en';
                 $scope.doNotMatch = null;
                 $scope.error = null;
                 $scope.errorUserExists = null;
@@ -33,43 +37,45 @@ angular.module('fYPApp')
                 });
             }
         };
+
         $("[name='my-checkbox']").bootstrapSwitch();
-        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-            if(state == true){
+        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
+            if (state == true) {
                 $('#carDetails').show();
-            }else {
+                $scope.userType = "driver";
+            } else {
                 $('#carDetails').hide();
+                $scope.userType = "passenger";
             }
         });
 
         $scope.car = {};
-        $scope.getMakes = function(){
+        $scope.getMakes = function () {
             $http.get('/api/dropdown/makes').
-                success(function(data, status, headers, config){
+                success(function (data, status, headers, config) {
                     $scope.makes = data.makes;
                 }).
-                error(function(data, status, headers, config) {
+                error(function (data, status, headers, config) {
                     // log error
                 });
         };
 
-
-       /* $scope.getModels = function(make){
+        $scope.getModels = function (make) {
             $http.get('/api/dropdown/models/' + make).
-                success(function(data, status, headers, config){
-                    $scope.models = data.makeAndModel;
+                success(function (data, status, headers, config) {
+                    $scope.models = data.makeandmodel;
                 }).
-                error(function(data, status, headers, config) {
+                error(function (data, status, headers, config) {
                     console.log(config);
                 });
-        };*/
+        };
         $scope.getMakes();
 
         $scope.years = [];
         $scope.currentYear = (new Date).getFullYear();
-        $scope.minYear = 1960;
+        $scope.minYear = 1980;
 
-        for(var i = $scope.currentYear; i >= $scope.minYear; i--){
+        for (var i = $scope.currentYear; i >= $scope.minYear; i--) {
             $scope.years.push(i);
         }
     });
