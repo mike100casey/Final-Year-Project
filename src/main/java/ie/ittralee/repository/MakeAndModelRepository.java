@@ -12,7 +12,6 @@ import ie.ittralee.domain.MakeAndModel;
 
 public interface MakeAndModelRepository extends CrudRepository<MakeAndModel, Long>{
 
-    List<MakeAndModel> findAll();
     List<MakeAndModel> findByMakeId(Long makeId);
     MakeAndModel findByMakeIdAndModel(Long makeId, String model);
 }

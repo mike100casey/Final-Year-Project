@@ -37,19 +37,8 @@ angular.module('fYPApp')
                 });
             }
         };
-
-        $("[name='my-checkbox']").bootstrapSwitch();
-        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-            if (state == true) {
-                $('#carDetails').show();
-                $scope.userType = "driver";
-            } else {
-                $('#carDetails').hide();
-                $scope.userType = "passenger";
-            }
-        });
-
         $scope.car = {};
+
         $scope.getMakes = function () {
             $http.get('/api/dropdown/makes').
                 success(function (data, status, headers, config) {
@@ -63,13 +52,27 @@ angular.module('fYPApp')
         $scope.getModels = function (make) {
             $http.get('/api/dropdown/models/' + make).
                 success(function (data, status, headers, config) {
-                    $scope.models = data.makeandmodel;
+                    $scope.models = data.MakeAndModel;
                 }).
                 error(function (data, status, headers, config) {
-                    console.log(config);
+                    console.log(data);
                 });
         };
         $scope.getMakes();
+
+
+        $("[name='my-checkbox']").bootstrapSwitch();
+        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
+            if (state == true) {
+                $('#carDetails').show();
+                $scope.userType = "driver";
+            } else {
+                $('#carDetails').hide();
+                $scope.userType = "passenger";
+            }
+        });
+
+
 
         $scope.years = [];
         $scope.currentYear = (new Date).getFullYear();

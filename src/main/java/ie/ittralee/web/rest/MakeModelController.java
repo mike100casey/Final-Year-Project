@@ -43,14 +43,14 @@ public class MakeModelController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/models/{make}", method = RequestMethod.GET)
+    @RequestMapping(value = "/models/{makeId}", method = RequestMethod.GET)
     @PreAuthorize("permitAll")
     public
     @ResponseBody
-    JSONObject sendModels(@PathVariable("make") Long Id, HttpServletResponse response) {
+    JSONObject sendModels(@PathVariable("makeId") Long Id, HttpServletResponse response) {
         JSONObject makeAndModelAsJson = new JSONObject();
         List<MakeAndModel> makeAndModelsList = makeAndModelRepository.findByMakeId(Id);
-        makeAndModelAsJson.put("makeandmodel", makeAndModelsList);
+        makeAndModelAsJson.put("MakeAndModel", makeAndModelsList);
         return makeAndModelAsJson;
     }
 

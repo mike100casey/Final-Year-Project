@@ -42,11 +42,8 @@ angular.module('fYPApp')
             });
         };
 
-        //$(function() {
-        //    $('#datetimepicker1').datetimepicker({
-        //        language: 'pt-BR'
-        //    });
-        //});
+        $(".date-input").datepicker({
+        });
 
 
     });

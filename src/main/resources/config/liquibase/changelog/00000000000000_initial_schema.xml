@@ -140,6 +140,7 @@
             </column>
         </createTable>
 
+
         <createTable tableName = "makeandmodel">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -152,11 +153,7 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="makeId"
-                                 baseTableName="makeandmodel"
-                                 constraintName="fk_makeID"
-                                 referencedColumnNames="id"
-                                 referencedTableName="makes"/>
+
         <!--    -->
 
         <createTable tableName="jhi_persistent_audit_event">
@@ -200,20 +197,7 @@
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
 
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/makes.csv"
-                  separator=";"
-                  tableName="makes"><!-- domain class-->
-            <column name="activated" type="boolean"/>
-            <column name="created_date" type="timestamp"/>
-        </loadData>
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/models.csv"
-                  separator=";"
-                  tableName="makeandmodel" >
-            <column name="activated" type="boolean"/>
-            <column name="created_date" type="timestamp"/>
-        </loadData>
+
 
     </changeSet>
 

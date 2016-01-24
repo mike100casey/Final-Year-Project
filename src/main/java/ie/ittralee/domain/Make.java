@@ -3,14 +3,13 @@ package ie.ittralee.domain;
 /**
  * Created by Michael on 11/17/2015.
  */
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+@Entity
 @Table(name = "makes")
 public class Make implements Serializable{
 
