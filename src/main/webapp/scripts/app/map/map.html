@@ -1,59 +1,69 @@
 <div class="col-md-12">
     <div class="col-md-5 ">
-    <form>
-        <div id="myRoute" class="list-group-item">
-            <h5><b>Please fill in the following form to display route</b></h5>&#xA0;
-            <fieldset class="main-block">
-                <label >Departing</label>
-                <input type="text" id="source" name="source" class="form-control"  ng-model="journey.source" maxlength="60"
-                       ng-minlength=1 ng-maxlength=50 ng-autocomplete  placeholder="Enter Departure (address)" required
-                       data-toggle="tooltip" data-placement="top" data-original-title="Enter a specific departure point that's convenient for passengers.">&#xA0;
-                <div ng-show="form.source.$dirty && form.source.$invalid">
-                    <p class="help-block" ng-show="form.source.$error.required" >
-                        Source is required.
-                    </p>
-                    <p class="help-block" ng-show="form.source.$error.maxlength" >
-                        Source cannot be longer than 50 characters
-                    </p>
-                </div>
-            </fieldset>
-            <fieldset class="main-block">
-                <label>Arriving</label>
-                <input type="text" id="destination" name="destination" class="form-control" ng-model="journey.destination" maxlength="60"
-                       ng-autocomplete ng-minlength=1 ng-maxlength=50 placeholder="Enter Arrival (address)" ng-pattern="/^[a-z0-9]*$/" required
-                       data-toggle="tooltip" data-placement=top data-original-title="Enter a specific arrival point.">&#xA0;
+        <form>
+            <div id="myRoute" class="list-group-item">
+                <h5><b>Please fill in the following form to display route</b></h5>&#xA0;
+                <fieldset class="main-block">
+                    <label>Departing</label>
+                    <input type="text" id="source" name="source" class="form-control" ng-model="journey.source"
+                           maxlength="60"
+                           ng-minlength=1 ng-maxlength=50 ng-autocomplete placeholder="Enter Departure (address)"
+                           required
+                           data-toggle="tooltip" data-placement="top"
+                           data-original-title="Enter a specific departure point that's convenient for passengers.">&#xA0;
+                    <div ng-show="form.source.$dirty && form.source.$invalid">
+                        <p class="help-block" ng-show="form.source.$error.required">
+                            Source is required.
+                        </p>
 
-                <div ng-show="form.destination.$dirty && form.destination.$invalid">
-                    <p class="help-block" ng-show="form.destination.$error.required" >
-                        Destination is required.
-                    </p>
-                    <p class="help-block" ng-show="form.destination.$error.maxlength" >
-                        Destination cannot be longer than 50 characters
-                    </p><br>&#xA0;
-                </div>
-                <label id="distanceLabel"></label>
-            </fieldset>
-            <fieldset>
-                <div class="well">
-                    <div class="form-group input-group">
-                        <label class="input-group-btn" for="date-fld2">
+                        <p class="help-block" ng-show="form.source.$error.maxlength">
+                            Source cannot be longer than 50 characters
+                        </p>
+                    </div>
+                </fieldset>
+                <fieldset class="main-block">
+                    <label>Arriving</label>
+                    <input type="text" id="destination" name="destination" class="form-control"
+                           ng-model="journey.destination" maxlength="60"
+                           ng-autocomplete ng-minlength=1 ng-maxlength=50 placeholder="Enter Arrival (address)"
+                           ng-pattern="/^[a-z0-9]*$/" required
+                           data-toggle="tooltip" data-placement=top
+                           data-original-title="Enter a specific arrival point.">&#xA0;
+
+                    <div ng-show="form.destination.$dirty && form.destination.$invalid">
+                        <p class="help-block" ng-show="form.destination.$error.required">
+                            Destination is required.
+                        </p>
+
+                        <p class="help-block" ng-show="form.destination.$error.maxlength">
+                            Destination cannot be longer than 50 characters
+                        </p><br>&#xA0;
+                    </div>
+
+                </fieldset>
+                <fieldset>
+                    <div class="">
+                        <div class="form-group input-group">
+                            <label class="input-group-btn" for="date-fld2">
                     <span class="btn btn-default" type="button">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                        </label>
-                        <input type="text" class="form-control date-input" id="date-fld2" />
+                            </label>
+                            <input type="text" class="form-control date-input" id="date-fld2"/>
+                        </div>
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            <input id="timepicker" class="form-control" data-provide="timepicker" data-minute-step="1" type="text"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        </div>
                     </div>
-
-                </div>
-            </fieldset>
-            <br>
-            <fieldset class="main-block">
-
-                <button type="submit"  class="btn btn-primary" ng-click="calcRoute();">Search</button>
-
-            </fieldset>
-        </div>
-    </form>
+                </fieldset>
+                <label id="distanceLabel">Travel Distance</label>
+                <br>
+                <fieldset class="main-block">
+                    <button type="submit" class="btn btn-primary" ng-click="calcRoute();">Search</button>
+                </fieldset>
+            </div>
+        </form>
     </div>
     <div class="col-md-7">
         <my-map id="map_canvas"></my-map>

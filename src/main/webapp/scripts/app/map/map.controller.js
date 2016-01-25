@@ -24,7 +24,6 @@ angular.module('fYPApp')
                         distance += response.routes[0].legs[i].distance.value / 1000;
                     }
                     var dist = Math.round(distance * 100) / 100 + " KM";
-                    //document.getElementById('distanceLabel').innerHTML = dist;
                 }
             });
 
@@ -42,8 +41,10 @@ angular.module('fYPApp')
             });
         };
 
-        $(".date-input").datepicker({
-        });
+        $(".date-input").datepicker({});
+        $('#timepicker').timepicker({});
+
+
 
 
     });
