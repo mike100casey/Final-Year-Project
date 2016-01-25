@@ -3,6 +3,39 @@
 angular.module('fYPApp')
     .controller('MapController', function ($scope, $log, $filter, $http, Principal, $document, $state, $timeout, Auth) {
 
+        var username = null;
+        Principal.identity().then(function(account) {
+            $scope.account = account;
+            username = account.login;
+            $scope.isAuthenticated = Principal.isAuthenticated;
+        });
+
+
+        $scope.journey = {};
+        $scope.journey.source = "";
+        $scope.journey.destination = "";
+        $scope.addUsername = function() {
+            $scope.journey.username = username;
+        };
+
+        $scope.display = function() {
+            $log.log(JSON.stringify($scope.journey));
+        };
+
+        $scope.processForm = function() {
+            $http.post("/api/journey/registerPassengerJourney", $scope.journey).
+                success(function(data, status, headers, config){
+                    $scope.success = 'OK';;
+                })
+                .error(function(response) {
+                    $scope.success = null;
+                    if (response.status === 500) {
+                        $scope.error = 'ERROR';
+                    }
+                });
+        };
+
+
         $scope.calcRoute = function() {
             var MyDirectionsDisplay = new google.maps.DirectionsRenderer({ 'map': map, 'draggable': true});
             var start = angular.element('#source').val();

@@ -3,12 +3,12 @@
 angular.module('fYPApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('map', {
+            .state('passengerMap', {
                 parent: 'site',
                 url: '/map',
                 data: {
                     authorities: [],
-                    pageTitle: 'Map'
+                    pageTitle: 'passenger Map'
                 },
                 views: {
                     'content@': {
