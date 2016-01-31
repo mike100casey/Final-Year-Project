@@ -154,6 +154,8 @@
         </createTable>
 
 
+
+
         <!--    -->
 
         <createTable tableName="jhi_persistent_audit_event">

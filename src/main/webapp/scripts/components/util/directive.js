@@ -1,4 +1,5 @@
 /**
+ *
  * Created by Michael on 11/24/2015.
  */
 angular.module('fYPApp.directive.map', [])
@@ -24,14 +25,15 @@ angular.module('fYPApp.directive.map', [])
                 });
                 map.mapTypes.set("OSM", new google.maps.ImageMapType({
                     getTileUrl: function(coord, zoom) {
-                        // See above example if you need smooth wrapping at 180th meridian
                         return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
                     },
                     tileSize: new google.maps.Size(256, 256),
                     name: "OpenStreetMap",
                     maxZoom: 11}));
-            }//Link
-        }; //return
+            }
+        };
+
+
         //return {
         //    restrict: 'E',
         //    replace: true,

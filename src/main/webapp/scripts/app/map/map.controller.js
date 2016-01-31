@@ -22,10 +22,10 @@ angular.module('fYPApp')
             $log.log(JSON.stringify($scope.journey));
         };
 
-        $scope.processForm = function() {
+        $scope.sendForm = function() {
             $http.post("/api/journey/registerPassengerJourney", $scope.journey).
                 success(function(data, status, headers, config){
-                    $scope.success = 'OK';;
+                    $scope.success = 'OK';
                 })
                 .error(function(response) {
                     $scope.success = null;
@@ -57,21 +57,22 @@ angular.module('fYPApp')
                         distance += response.routes[0].legs[i].distance.value / 1000;
                     }
                     var dist = Math.round(distance * 100) / 100 + " KM";
-                }
-            });
-
-            var MyDirectionsService = new google.maps.DirectionsService();
-            MyDirectionsService.route( request, function(response, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                    MyDirectionsDisplay.setDirections(response);
-                    var distance = 0;
-                    for(var i = 0; i < response.routes[0].legs.length; i++){
-                        distance += response.routes[0].legs[i].distance.value / 1000;
-                    }
-                    var dist = Math.round(distance * 100) / 100 + " KM";
                     document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
                 }
             });
+
+           //var MyDirectionsService = new google.maps.DirectionsService();
+           // MyDirectionsService.route( request, function(response, status) {
+           //     if (status == google.maps.DirectionsStatus.OK) {
+           //         MyDirectionsDisplay.setDirections(response);
+           //         var distance = 0;
+           //         for(var i = 0; i < response.routes[0].legs.length; i++){
+           //             distance += response.routes[0].legs[i].distance.value / 1000;
+           //         }
+           //         var dist = Math.round(distance * 100) / 100 + " KM";
+           //
+           //     }
+           // });
         };
 
         $(".date-input").datepicker({});

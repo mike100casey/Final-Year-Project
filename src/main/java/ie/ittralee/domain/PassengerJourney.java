@@ -3,6 +3,7 @@ package ie.ittralee.domain;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,8 +12,9 @@ import java.util.Date;
  * Created by Michael on 1/25/2016.
  */
 
+@SuppressWarnings("serial")
 @Entity
-@Table(name = "PassengerJourney")
+@Table(name = "Passenger_Journey")
 public class PassengerJourney {
 
     @Id
@@ -20,7 +22,7 @@ public class PassengerJourney {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId", nullable = false, updatable = false)
+    @JoinColumn(name="user_Id", nullable=false, updatable=false)
     private User user;
 
     private String source;
