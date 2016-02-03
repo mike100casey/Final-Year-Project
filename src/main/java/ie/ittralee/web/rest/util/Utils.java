@@ -1,7 +1,10 @@
 package ie.ittralee.web.rest.util;
 
+import ie.ittralee.domain.PassengerJourney;
+import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,5 +27,13 @@ public class Utils {
         json.put("Status","FAIL");
         json.put("Body",errors);
         return json;
+    }
+
+    public static List<PassengerJourneyDTO> convertToJourneyRequestPage(List<PassengerJourney> content) {
+        List<PassengerJourneyDTO> dtos = new ArrayList<PassengerJourneyDTO>();
+        for(PassengerJourney journeyRequest: content){
+            dtos.add(journeyRequest.toDTO());
+        }
+        return dtos;
     }
 }

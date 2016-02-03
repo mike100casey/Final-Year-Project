@@ -9,6 +9,8 @@ angular.module('fYPApp.directive.map', [])
             replace: true,
             template: '<div></div>',
             link: function(scope, element, attrs) {
+                var directionsService = new google.maps.DirectionsService;
+                var directionsDisplay = new google.maps.DirectionsRenderer;
                 var element = document.getElementById("map_canvas");
                 var mapTypeIds = [];
                 for(var type in google.maps.MapTypeId) {
@@ -23,6 +25,7 @@ angular.module('fYPApp.directive.map', [])
                         mapTypeIds: mapTypeIds
                     }
                 });
+
                 map.mapTypes.set("OSM", new google.maps.ImageMapType({
                     getTileUrl: function(coord, zoom) {
                         return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
@@ -31,6 +34,7 @@ angular.module('fYPApp.directive.map', [])
                     name: "OpenStreetMap",
                     maxZoom: 11}));
             }
+
         };
 
 

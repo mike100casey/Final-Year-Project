@@ -4,6 +4,10 @@ import ie.ittralee.domain.PassengerJourney;
 import ie.ittralee.repository.PassengerJourneyRepository;
 import ie.ittralee.repository.UserRepository;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
+import ie.ittralee.web.rest.util.Utils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -38,6 +42,13 @@ public class JourneyService {
     public void createPassengerRequest(PassengerJourneyDTO journeyRequestDto) {
         PassengerJourney journeyRequest = journeyRequestDto.toEntity(userRepository.findByLogin(journeyRequestDto.getUsername()));
         passengerJourneyRepository.save(journeyRequest);
+    }
+
+    public Page<PassengerJourneyDTO> getAllJourneyRequests(Pageable page) {
+        Page<PassengerJourney> journeyRequests = passengerJourneyRepository.findAll(page);
+        Page<PassengerJourneyDTO> passengerJourneyDTOs = new PageImpl<PassengerJourneyDTO>(Utils.convertToJourneyRequestPage
+            (journeyRequests.getContent()), page, journeyRequests.getTotalElements());
+        return passengerJourneyDTOs;
     }
 
     public List<String> validatePassengerJourney(

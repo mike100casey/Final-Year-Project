@@ -23,9 +23,6 @@
 
 </head>
 <body ng-app="fYPApp">
-<!--[if lt IE 9]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
 
 <div ui-view="navbar" ng-cloak=""></div>
 <div class="container">
@@ -36,25 +33,10 @@
     </div>
 </div>
 
+<!-- bring in the google maps library-->
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&callback" async defer></script>
 
 
-<!-- bring in the google maps library -->
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&callback"></script>
-
-
-
-
-<!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
-<script>
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-    e.src='//www.google-analytics.com/analytics.js';
-    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    ga('create','UA-XXXXX-X');ga('send','pageview');
-</script>-->
-
-<!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
 <script src="bower_components/modernizr/modernizr.js"></script>
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -74,14 +56,14 @@
 <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
 <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
 <script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
-<!-- endbower -->
+<!-- Time and Date -->
 <script src="bower_components/bootstrap/dist/js/bootstrap-switch.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap-datepicker.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap-timepicker.js"></script>
-<!-- endbuild -->
+<!-- end -->
 
 
-<!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
+<!-- scripts/app.js -->
 <script src="scripts/app/app.js"></script>
 <script src="scripts/app/app.constants.js"></script>
 <script src="scripts/components/auth/auth.service.js"></script>
@@ -124,8 +106,12 @@
 <script src="scripts/app/account/register/register.js"></script>
 <script src="scripts/app/account/register/register.controller.js"></script>
 
+<!-- My scripts/app.js -->
 <script src="scripts/app/map/map.js"></script>
 <script src="scripts/app/map/map.controller.js"></script>
+<script src="scripts/app/search/findPassengerRequests.js"></script>
+<script src="scripts/app/search/FindRequestController.js"></script>
+
 
 <script src="scripts/app/account/settings/settings.js"></script>
 <script src="scripts/app/account/settings/settings.controller.js"></script>

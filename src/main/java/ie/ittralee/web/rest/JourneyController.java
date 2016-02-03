@@ -5,6 +5,8 @@ import ie.ittralee.service.JourneyService;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,11 @@ public class JourneyController {
         else{
             return Utils.returnErrors(errors);
         }
+    }
+
+    @RequestMapping(value = "/allJourneyRequests", method = RequestMethod.GET)
+    Page<PassengerJourneyDTO> findAllJourneyRequests(Pageable page) {
+        return journeyService.getAllJourneyRequests(page);
     }
 
 

@@ -48,9 +48,9 @@ public class MakeModelController {
     @PreAuthorize("permitAll")
     public
     @ResponseBody
-    JSONObject sendModels(@PathVariable("makeId") Long Id, HttpServletResponse response) {
+    JSONObject sendModels(@PathVariable("makeId") Long makeId, HttpServletResponse response) {
         JSONObject makeAndModelAsJson = new JSONObject();
-        List<MakeAndModel> makeAndModelsList = makeAndModelRepository.findByMakeId(Id);
+        List<MakeAndModel> makeAndModelsList = makeAndModelRepository.findByMakeId(makeId);
         makeAndModelAsJson.put("MakeAndModel", makeAndModelsList);
         return makeAndModelAsJson;
     }

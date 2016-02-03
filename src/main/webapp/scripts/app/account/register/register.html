@@ -27,10 +27,16 @@
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
 
                 <div class="form-group" ng-show="!success">
-                    <input id="my-checkbox" type="checkbox" name="my-checkbox" checked="checked">
+                    <input id="my-checkbox" type="checkbox" name="my-checkbox" checked="checked" >
                 </div>
 
                 <div class="form-group">
+                    <label for="login">User Type</label>
+                    <input type="text" class="form-control" id="UserType" name="UserType" placeholder="Your UserType"
+                           ng-model="registerAccount.usertype" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/"
+                           required>
+
+
                     <label for="login">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="Your username"
                            ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/"
@@ -138,9 +144,10 @@
                     <div class="row">
                         <div class="col-sm-5">
                             <label>Make</label>
-                            <select class="form-control" name="make" ng-model="car.makes" ng-minlength=1 required ng-change="getModels(car.makes)">
+                            <select class="form-control" name="make" ng-model="car.makes" ng-minlength=1 required
+                                    ng-change="getModels(car.makes)">
                                 <option value="" disabled selected>Select make</option>
-                                <option ng-repeat="make in makes" value="{{make.id}}" >{{make.make}}</option>
+                                <option ng-repeat="make in makes" value="{{make.id}}">{{make.make}}</option>
                             </select>
                         </div>
                         <div class="col-sm-5">
@@ -161,7 +168,7 @@
                     </div>
                 </div>
 
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Register</button>
+                <button type="submit"  class="btn btn-primary">Register</button>
             </form>
             <p></p>
 

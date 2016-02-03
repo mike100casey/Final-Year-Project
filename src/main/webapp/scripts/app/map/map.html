@@ -44,11 +44,12 @@
                     <div class="">
                         <div class="form-group input-group">
                             <label class="input-group-btn" for="date-fld2">
-                    <span class="btn btn-default" type="button">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+                                <span class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
                             </label>
-                            <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"/>
+                            <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
+                                   ng-click="calcRoute();display();"/>
                         </div>
                         <div class="input-group bootstrap-timepicker timepicker">
                             <input id="timepicker" class="form-control" data-provide="timepicker"
@@ -60,8 +61,7 @@
                 <label id="distanceLabel">Travel Distance</label>
                 <br>
                 <fieldset class="main-block">
-                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid"
-                            ng-click="calcRoute();display();">Search
+                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Register
                     </button>
                     <!--<button ng-show="success" ui-sref="home" class="btn btn-primary">GO to home page</button>-->
                 </fieldset>
@@ -72,7 +72,7 @@
         <p>Journey registered <a ui-sref="home" class="alert-link">GO to home page</a></p>
     </div>
 
-    <div class="col-md-7" ng-hide="success" >
+    <div class="col-md-7" ng-hide="success">
         <my-map id="map_canvas"></my-map>
     </div>
 </div>

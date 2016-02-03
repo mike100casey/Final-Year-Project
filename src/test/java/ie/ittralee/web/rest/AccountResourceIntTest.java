@@ -148,6 +148,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
+            "passenger",
             "joe@example.com",      // e-mail
             true,                   // activated
             "en",                   // langKey
@@ -172,6 +173,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Funky",                // firstName
             "One",                  // lastName
+                "passenger",
             "funky@example.com",    // e-mail
             true,                   // activated
             "en",                   // langKey
@@ -196,6 +198,7 @@ public class AccountResourceIntTest {
             "password",         // password
             "Bob",              // firstName
             "Green",            // lastName
+                "passenger",
             "invalid",          // e-mail <-- invalid
             true,               // activated
             "en",               // langKey
@@ -221,6 +224,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Alice",                // firstName
             "Something",            // lastName
+                "passenger",
             "alice@example.com",    // e-mail
             true,                   // activated
             "en",                   // langKey
@@ -228,7 +232,7 @@ public class AccountResourceIntTest {
         );
 
         // Duplicate login, different e-mail
-        UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
+        UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(), u.getUsertype(),
             "alicejr@example.com", true, u.getLangKey(), u.getAuthorities());
 
         // Good user
@@ -258,6 +262,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "John",                 // firstName
             "Doe",                  // lastName
+                "passenger",
             "john@example.com",     // e-mail
             true,                   // activated
             "en",                   // langKey
@@ -265,7 +270,7 @@ public class AccountResourceIntTest {
         );
 
         // Duplicate e-mail, different login
-        UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
+        UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(), u.getUsertype(),
             u.getEmail(), true, u.getLangKey(), u.getAuthorities());
 
         // Good user
@@ -294,6 +299,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Bad",                  // firstName
             "Guy",                  // lastName
+                "passenger",
             "badguy@example.com",   // e-mail
             true,                   // activated
             "en",                   // langKey

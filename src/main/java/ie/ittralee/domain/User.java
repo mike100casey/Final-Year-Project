@@ -67,6 +67,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_date", nullable = true)
     private ZonedDateTime resetDate = null;
 
+    @Size(max = 10)
+    @Column(name = "usertype", length = 10)
+    private String usertype;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -183,6 +187,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.persistentTokens = persistentTokens;
     }
 
+    public String getUsertype() {
+        return usertype;
+    }
+
+    public void setUsertype(String usertype) {
+        this.usertype = usertype;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -216,6 +228,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", user type='" + usertype + '\'' +
             "}";
     }
 }

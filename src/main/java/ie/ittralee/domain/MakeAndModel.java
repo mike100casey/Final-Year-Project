@@ -1,6 +1,7 @@
 package ie.ittralee.domain;
 
 /**
+ *
  * Created by Michael on 11/17/2015.
  */
 import java.io.Serializable;
