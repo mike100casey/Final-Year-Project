@@ -26,8 +26,12 @@ public class PassengerJourney {
     private User user;
 
     private String source;
+    private double sourceLat;
+    private double sourceLng;
 
     private String destination;
+    private double destinationLat;
+    private double destinationLng;
 
     private Date date;
 
@@ -49,12 +53,44 @@ public class PassengerJourney {
         this.source = source;
     }
 
+    public double getSourceLat() {
+        return sourceLat;
+    }
+
+    public void setSourceLat(double sourceLat) {
+        this.sourceLat = sourceLat;
+    }
+
+    public double getSourceLng() {
+        return sourceLng;
+    }
+
+    public void setSourceLng(double sourceLng) {
+        this.sourceLng = sourceLng;
+    }
+
     public String getDestination() {
         return destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public double getDestinationLat() {
+        return destinationLat;
+    }
+
+    public void setDestinationLat(double destinationLat) {
+        this.destinationLat = destinationLat;
+    }
+
+    public double getDestinationLng() {
+        return destinationLng;
+    }
+
+    public void setDestinationLng(double destinationLng) {
+        this.destinationLng = destinationLng;
     }
 
     public Date getDate() {
@@ -79,7 +115,11 @@ public class PassengerJourney {
         dto.setId(this.getId());
         dto.setUsername(this.getUser().getLogin());
         dto.setSource(this.getSource());
+        dto.setSourceLat(this.getSourceLat());
+        dto.setSourceLng(this.getSourceLng());
         dto.setDestination(this.getDestination());
+        dto.setDestinationLat(this.getDestinationLat());
+        dto.setDestinationLng(this.getDestinationLng());
         dto.setDate(formatter.format(this.getDate()));
         dto.setTime(this.getTime());
         return dto;
