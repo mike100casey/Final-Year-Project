@@ -21,7 +21,6 @@ angular.module('fYPApp')
                     $scope.numPerPage = data.size;
                     $scope.total = data.totalElements;
                     $scope.maxSize = 5;
-
                 }).
                 error(function (data, status, headers, config) {
                     // log error
@@ -50,7 +49,7 @@ angular.module('fYPApp')
         });
         $scope.journeyRequests = $.getValues(0);
 
-        var sources = [];
+        var possibleRoutes = [];
         var uniqueNames = [];
         var sourceLat;
         var sourceLng;
@@ -63,14 +62,15 @@ angular.module('fYPApp')
             var destination = this.destination;
             destinationLat = this.destinationLat;
             destinationLng = this.destinationLng;
-            sources.push(this.source, this.destination);
-            $.each(sources, function (i, el) {
+            possibleRoutes.push(this.source, this.destination);
+            $.each(possibleRoutes, function (i, el) {
                 if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
             });
         });
 
-        function permutator(inputArr) {
+        function routeGenerator(inputArr) {
             var results = [];
+
             function permute(arr, memo) {
                 var cur, memo = memo || [];
                 for (var i = 0; i < arr.length; i++) {
@@ -83,10 +83,12 @@ angular.module('fYPApp')
                 }
                 return results;
             }
+
             return permute(inputArr);
         }
 
-        var combinations = permutator(uniqueNames);
+        var combinations = routeGenerator(uniqueNames);
+
         var printArray = function (arr) {
             if (typeof(arr) == "object") {
                 for (var i = 0; i < arr.length; i++) {
@@ -95,28 +97,42 @@ angular.module('fYPApp')
             }
             else document.write(arr);
         };
-        printArray(combinations.join("<br>"));
+        printArray(combinations[0].join("<br>"));
 
-        //var names = ["Mike","Matt","Nancy","Adam","Jenny","Nancy","Carl"];
-        //var uniqueNames = [];
-        //$.each(names, function(i, el){
-        //    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-        //});
-        //console.log(uniqueNames);
+        var list = combinations[0];
 
-        //function getCombinations(chars) {
-        //    var result = [];
-        //    var f = function(prefix, chars) {
-        //        for (var i = 0; i < chars.length; i++) {
-        //            result.push(prefix + chars[i]);
-        //            f(prefix + chars[i], chars.slice(i + 1));
-        //        }
-        //    }
-        //    f('', chars);
-        //    return result;
-        //}
-        //var combinations = getCombinations(sources);
-        //document.write(combinations.join("<br>"));
+        var origin1 = list;
+
+        var destinationA = list;
+
+
+        var geocoder = new google.maps.Geocoder;
+
+        var service = new google.maps.DistanceMatrixService;
+        service.getDistanceMatrix({
+            origins: origin1,
+            destinations: destinationA,
+            travelMode: google.maps.TravelMode.DRIVING
+        }, function (response, status) {
+            var originList = response.originAddresses;
+            var destinationList = response.destinationAddresses;
+            var output = new Array();
+            for (var i = 0; i < 1; i++) {
+                var results = response.rows[i].elements;
+                for (var j = 0; j < results.length; j++) {
+                    //var result = response.rows[i].elements;
+                    result += results[j].duration.text;
+                    //if (!output[i]) output[i] = [];
+                    var result = originList[i] + ' to ' + destinationList[j] +
+                        ': ' + results[j].distance.text + ' in ' +
+                        results[j].duration.text + '<br>';
+
+                }
+                console.log(result);
+                document.write('<br>' + result + '<br>');
+            }
+        });
+
 
         function distance(lat1, lon1, lat2, lon2, unit) {
             var radlat1 = Math.PI * lat1 / 180
@@ -136,51 +152,93 @@ angular.module('fYPApp')
             return Math.round(dist * 100) / 100 + " Miles<br>"
         }
 
-        document.write(distance(parseFloat(sourceLat), parseFloat(sourceLng), parseFloat(destinationLat), parseFloat(destinationLng), ""));
+        //document.write("<br>" + distance(parseFloat(sourceLat), parseFloat(sourceLng), parseFloat(destinationLat), parseFloat(destinationLng), ""));
 
 
-        $scope.waypts = [];
-        var wayPointsArr = [];
-        for (var i = 0; i <= combinations.length - 1; i++) {
-            var waypointsObj = ({"location": combinations[i], "stopover": true});
-            $scope.waypts.push(waypointsObj);
-
-        }
-        console.log(JSON.stringify(wayPointsArr));
-
-        $scope.removeRoute = function () {
-            $state.reload();
-        };
-
-        var start;
-        var end;
-        $scope.add = function (value) {
-            start = $scope.journey.source;
-            end = $scope.journey.driverDestination;
-        };
-
-        $scope.calcRoute = function () {
-            var myDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
-            var request = {
-                origin: start,
-                destination: end,
-                waypoints: $scope.waypts,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
-            var myDirectionsService = new google.maps.DirectionsService();
-            myDirectionsService.route(request, function (response, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                    myDirectionsDisplay.setDirections(response);
-                    var distance = 0;
-                    for (var i = 0; i < response.routes[0].legs.length; i++) {
-                        distance += response.routes[0].legs[i].distance.value / 1000;
-                    }
-                    var dist = Math.round(distance * 100) / 100 + " KM";
-                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
-                    //document.write(dist);
-                }
-            });
-        };
+        //$scope.waypts = [];
+        //var wayPointsArr = [];
+        //for (var i = 0; i <= combinations.length - 1; i++) {
+        //    var waypointsObj = ({"location": combinations[i], "stopover": true});
+        //    $scope.waypts.push(waypointsObj);
+        //
+        //}
+        //console.log(JSON.stringify(wayPointsArr));
+        //
+        //$scope.removeRoute = function () {
+        //    $state.reload();
+        //};
+        //
+        //var start;
+        //var end;
+        //$scope.add = function (value) {
+        //    start = $scope.journey.source;
+        //    end = $scope.journey.driverDestination;
+        //};
+        //
+        //$scope.calcRoute = function () {
+        //    var myDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
+        //    var request = {
+        //        origin: start,
+        //        destination: end,
+        //        waypoints: $scope.waypts,
+        //        travelMode: google.maps.TravelMode.DRIVING
+        //    };
+        //    var myDirectionsService = new google.maps.DirectionsService();
+        //    myDirectionsService.route(request, function (response, status) {
+        //        if (status == google.maps.DirectionsStatus.OK) {
+        //            myDirectionsDisplay.setDirections(response);
+        //            var distance = 0;
+        //            for (var i = 0; i < response.routes[0].legs.length; i++) {
+        //                distance += response.routes[0].legs[i].distance.value / 1000;
+        //            }
+        //            var dist = Math.round(distance * 100) / 100 + " KM";
+        //            //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
+        //            //document.write(dist);
+        //        }
+        //    });
+        //};
 
 
     });
+//function getCombinations(chars) {
+//    var result = [];
+//    var f = function(prefix, chars) {
+//        for (var i = 0; i < chars.length; i++) {
+//            result.push(prefix + chars[i]);
+//            f(prefix + chars[i], chars.slice(i + 1));
+//        }
+//    }
+//    f('', chars);
+//    return result;
+//}
+
+//function sets(input, size){
+//    var results = [], result, mask, total = Math.pow(2, input.length);
+//    for(mask = 0; mask < total; mask++){
+//        result = [];
+//        i = input.length - 1;
+//        do{
+//            if( (mask & (1 << i)) !== 0){
+//                result.push(input[i]);
+//            }
+//        }while(i--);
+//        if( result.length >= size){
+//            results.push(result);
+//        }
+//    }
+//
+//    return results;
+//}
+//var combinations = sets(uniqueNames, 4);
+//document.write(combinations.join("<br>"));
+
+//var combinations2 = routeGenerator(combinations);
+//var printArray = function (arr) {
+//    if (typeof(arr) == "object") {
+//        for (var i = 0; i < arr.length; i++) {
+//            printArray(arr[i]);
+//        }
+//    }
+//    else document.write(arr);
+//};
+//printArray(combinations2.join("<br>"));

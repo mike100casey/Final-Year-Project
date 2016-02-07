@@ -78,16 +78,14 @@
                     <table id="journeyTable" class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Source</th>
-                            <th>Destination</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Options</th>
+                            <th>Route</th>
+
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="journey in journeyRequests">
-                            <td id="tdSource">{{journey.source}}</td>
+                        <tr ng-repeat="journey in combinations">
+                            <td>{{journey}}</td>
+                           <!-- <td id="tdSource">{{journey.source}}</td>
                             <td class="hidden-xs">{{journey.destination}}</td>
                             <td>{{journey.date | date : 'd/M/yy'}}</td>
                             <td>{{journey.time}}</td>
