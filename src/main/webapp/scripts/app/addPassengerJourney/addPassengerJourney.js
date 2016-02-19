@@ -12,7 +12,7 @@ angular.module('fYPApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/map/map.html',
+                        templateUrl: 'scripts/app/addPassengerJourney/addPassengerJourney.html',
                         controller: 'MapController'
                     }
                 },

@@ -12,11 +12,13 @@ angular.module('fYPApp')
             $scope.isAuthenticated = Principal.isAuthenticated;
         });
 
+        $(".date-input").datepicker({});
+        $('#timepicker').timepicker({});
+
         $scope.showJourneyRequests = function (pageNumber) {
             $http.get('/api/journey/allJourneyRequests?page=' + pageNumber).
                 success(function (data, status, headers, config) {
                     $scope.journeyRequests = data.content;
-                    //callback($scope.journeyRequests);
                     $scope.currentPage = data.number + 1;
                     $scope.numPerPage = data.size;
                     $scope.total = data.totalElements;
@@ -28,138 +30,322 @@ angular.module('fYPApp')
         };
         $scope.showJourneyRequests(0);
 
-        $(".date-input").datepicker({});
-        $('#timepicker').timepicker({});
-        var body = JSON.stringify({
-            "name": "Archie"
+        $scope.journeyRequests = [];
+        jQuery.extend({
+            getValues: function (pageNumber) {
+                var result = null;
+                $.ajax({
+                    url: '/api/journey/allJourneyRequests?page=' + pageNumber,
+                    type: 'get',
+                    dataType: 'JSON',
+                    async: false,
+                    success: function (data) {
+                        result = data;
+                    }
+                });
+                return result;
+            }
         });
-        var body1 = {};
+        $scope.journeyRequests = $.getValues(0);
 
+        var allNodes = [];
+        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+            //sourceNodes.push({"name": this.source, "source_id": this.id});.push(,
+            allNodes.push(this.source);
+            allNodes.push(this.destination);
+        });
+
+        var destinationNodes = [];
+        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+            destinationNodes.push(this.destination);
+        });
+
+        var startNodes = [];
+        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+            startNodes.push(this.source);
+        });
+
+        function routeGenerator(inputArr) {
+            var results = [];
+
+            function permute(arr, memo) {
+                var cur, memo = memo || [];
+                for (var i = 0; i < arr.length; i++) {
+                    cur = arr.splice(i, 1);
+                    if (arr.length === 0) {
+                        results.push(memo.concat(cur));
+                    }
+                    permute(arr.slice(), memo.concat(cur));
+                    arr.splice(i, 0, cur[0]);
+                }
+                return results;
+            }
+
+            return permute(inputArr);
+        }
+
+        var printArray = function (arr) {
+            if (typeof(arr) == "object") {
+                for (var i = 0; i < arr.length; i++) {
+                    printArray(arr[i]);
+                }
+            }
+            else console.log(arr);
+        };
+
+        var combinations = routeGenerator(allNodes);
+
+        var numbers = [];
+        var uniqueNumbers = [];
+        $scope.removeDestinationsFromStart = function () {
+            for (var z = 0; z < combinations.length; z++) {
+                for (var i = 0; i < combinations[z].length; i++) {
+                    for (var j = 0; j < destinationNodes.length; j++) {
+                        if (combinations[z][0].indexOf(destinationNodes[j]) !== -1) {
+                            numbers.push(z);
+                            $.each(numbers, function (i, el) {
+                                if ($.inArray(el, uniqueNumbers) === -1) uniqueNumbers.push(el);
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+        $scope.removeDestinationsFromStart();
+        var arrayWithoutDestinationsAtStart = $.grep(combinations, function (n, i) {
+            return $.inArray(i, uniqueNumbers) == -1;
+        });
+
+        var len = arrayWithoutDestinationsAtStart[0].length - 1;
+        console.log(startNodes.toString());
+
+        var sourceNumbers = [];
+        var uniqueNumbersToRemove = [];
+        $scope.removeSourcesFromEnd = function () {
+            for (var z = 0; z < arrayWithoutDestinationsAtStart.length; z++) {
+                for (var i = 0; i < arrayWithoutDestinationsAtStart[z].length; i++) {
+                    for (var j = 0; j < startNodes.length; j++) {
+                        if (arrayWithoutDestinationsAtStart[z][len].indexOf(startNodes[j]) !== -1) {
+                            sourceNumbers.push(z);
+                            $.each(sourceNumbers, function (i, el) {
+                                if ($.inArray(el, uniqueNumbersToRemove) === -1) uniqueNumbersToRemove.push(el);
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+
+        $scope.removeSourcesFromEnd();
+        var arrayWithoutSourcesAtEnd = $.grep(arrayWithoutDestinationsAtStart, function (n, i) {
+            return $.inArray(i, uniqueNumbersToRemove) == -1;
+        });
+
+        //console.log(combinations[0].length);
+
+        printArray(arrayWithoutSourcesAtEnd.join("<br>"));
+        var x = new Array();
+        $scope.waypts = [];
+        for (var i = 0; i <  1; i++) {
+            for (var j = 0; j < arrayWithoutSourcesAtEnd[arrayWithoutSourcesAtEnd.length - 1].length; j++) {
+                //for (var k = 0; k < 1; k++) {
+                    $scope.waypts.push(
+                        x.push({
+                            location: arrayWithoutSourcesAtEnd[0][j],
+                            stopover: true
+                        }));
+                //}
+            }
+        }
+        console.log(JSON.stringify(x));
+        $scope.calcRoute = function () {
+            var myDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
+            var request = {
+                origin: "Cahirciveen, Kerry",
+                destination: "Limerick, Ireland",
+                waypoints: $scope.waypts,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            var myDirectionsService = new google.maps.DirectionsService();
+            myDirectionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    myDirectionsDisplay.setDirections(response);
+                    var distance = 0;
+                    for (var i = 0; i < response.routes[0].legs.length; i++) {
+                        distance += response.routes[0].legs[i].distance.value / 1000;
+                    }
+                    var dist = Math.round(distance * 100) / 100 + " KM";
+                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
+                    console.log(dist);
+                }
+            });
+        };
+
+
+        var source = JSON.stringify({
+            "name": "Tralee"
+
+        });
         $scope.postRoute = function () {
-
             $.ajax({
                 url: "http://localhost:7474/db/data/node ",
                 type: "POST",
-                data: body,
+                data: source,
                 contentType: "application/json"
             })
                 .done(function (result) {
-                    console.log(result);
-
+                    //console.log(result);
+                    console.log("Success");
                 })
                 .fail(function (error) {
                     console.log(error.statusText);
                 });
         };
-        $scope.getRoute = function () {
+        var dis = 34;
 
+        var query = "CREATE (s1:Town { name : 'Abbeyfeale'})" +
+            "CREATE (s2:Town { name : 'Tralee'})" +
+            "CREATE (s3:Town { name : 'Castleisland'})" +
+            "CREATE (s4:Town { name : 'Listowel'})" +
+            "CREATE (s5:Town { name : 'Newcastle'})" +
+            "CREATE (s6:Town { name : 'Knocknagosel'})" +
+            "CREATE (s1)-[:Goes_To]->(s2) " +
+            "CREATE (s1)-[:Goes_To ]->(s3) " +
+            "CREATE (s1)-[:Goes_To ]->(s4) " +
+            "CREATE (s1)-[:Goes_To ]->(s5) " +
+            "CREATE (s1)-[:Goes_To ]->(s4) " +
+            "CREATE (s1)-[:Goes_To ]->(s6) " +
+            "CREATE (s2)-[:Goes_To ]->(s3) " +
+            "CREATE (s2)-[:Goes_To ]->(s4) " +
+            "CREATE (s2)-[:Goes_To ]->(s6) ";
+
+
+        var query1 = "MATCH ({ name: 'Abbeyfeale' })-[:contains*0..]->(parentDir)-[:leaf]->(file) RETURN file";
+        var query2 = "MATCH (a)        WHERE a.name='Tralee'        RETURN size((a)-->()-->()) AS fof";
+
+        $scope.getRoute = function () {
+            $scope.node = [];
+            var serverURL = "http://localhost:7474/db/data";
             $.ajax({
-                url: "http://localhost:7474/db/data/cypher",
-                accepts: "application/json; charset=UTF-8",
-                dataType: "json",
-                data: {
-                    "query": "start n  = node(1) return n",
-                    "params": {}
-                },
                 type: "POST",
-                success: function (data, xhr, status) {
-                    $scope.node = data;
-                    console.log(JSON.stringify($scope.node));
+                url: serverURL + "/cypher",
+                accepts: "application/json",
+                dataType: "json",
+                contentType: "application/json",
+                headers: {
+                    "X-Stream": "true"
                 },
-                error: function (xhr, err, msg) {
-                    console.log(xhr);
-                    console.log(err);
-                    console.log(msg);
+                data: JSON.stringify({
+                    "query": query2,
+
+                    //"query": "CREATE (a:Person { name:'Tom Hanks', born:1956 })-[r:ACTED_IN ]->(m:Movie { title:'Forrest Gump',released:1994 })"+
+                    //   "CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m",
+                    //"query": " UNWIND { props } AS map  CREATE (n) SET n = map",
+                    // "query": "START n=node(*) match n-[r?]-() where r is null return n",
+                    //START a=node(...), b=node(...) CREATE UNIQUE a-[r:CONNECTED_TO]-b SET r.weight = coalesce(r.weight?, 0) + 1
+                    // "query" : " CREATE (n:Destination { props }) ",
+                    //"query" : " START n=node:nameIdx(name='Abbeyfeale')return id(n)",
+
+                    //"query" : " START n=node(*) WHERE n.name = 'Tralee' return id(n)",
+
+                    //"query" : " CREATE (jdoe {name:'John Doe'})-[r:friend]->(mj {name:'Mary Joe'}) return r, jdoe, mj",;
+                    //"query" : " START n=node(*) where n.name = 'Bob' return n",
+                    //"query" : "START first = node(18), second = node(19) CREATE first-[r:CONNECTED_TO]->second SET r.weight = "+dis +" return r",
+                    // "query" : "start n = node(*) return n;",
+                    "params": {
+                        //"props": destinationNodes
+                    }
+                }),
+                success: function (data, textStatus, jqXHR) {
+
+                    console.log(JSON.stringify(data));
+                },
+                error: function (jqXHR, textStatus) {
+                    console.log(textStatus);
                 }
-            });
+            });//end of ajax
         };
 
-        //var neo4j = require('neo4j');
-        //var db = new neo4j.GraphDatabase('http://username:password@localhost:7474');
-
+        $scope.delRelations = function () {
+            $scope.node = [];
+            var serverURL = "http://localhost:7474/db/data";
+            $.ajax({
+                type: "POST",
+                url: serverURL + "/cypher",
+                accepts: "application/json",
+                dataType: "json",
+                contentType: "application/json",
+                headers: {
+                    "X-Stream": "true"
+                },
+                data: JSON.stringify({
+                    "query": "START r=rel(*) delete r", "params": {}
+                }),
+                success: function (data, textStatus, jqXHR) {
+                    console.log(JSON.stringify(data));
+                },
+                error: function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                }
+            });//end of ajax
+        };
+        $scope.delNodes = function () {
+            $scope.node = [];
+            var serverURL = "http://localhost:7474/db/data";
+            $.ajax({
+                type: "POST",
+                url: serverURL + "/cypher",
+                accepts: "application/json",
+                dataType: "json",
+                contentType: "application/json",
+                headers: {
+                    "X-Stream": "true"
+                },
+                data: JSON.stringify({
+                    "query": " START n=node(*) delete n", "params": {}
+                }),
+                success: function (data, textStatus, jqXHR) {
+                    console.log(JSON.stringify(data));
+                },
+                error: function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                }
+            });//end of ajax
+        };
 
 
         //$scope.getRoute = function () {
-        //
-        //    $http.get('localhost:7474/db/data/node/1').
-        //        success(function (data, status, headers, config) {
-        //            $scope.node = data.content;
-        //            console.log($scope.node);
-        //
-        //        }).
-        //        error(function (data, status, headers, config) {
-        //            // log error
-        //        });
+        //    $scope.node = [];
+        //    $.ajax({
+        //        url: "http://localhost:7474/db/data/cypher",
+        //        // url: "http://localhost:7474/db/data/node/2/relationships/cypher",
+        //        accepts: "application/json; charset=UTF-8",
+        //        dataType: "json",
+        //        data: {
+        //            "query": "start n  = node(*) return n",
+        //            //"query":"MATCH (*) RETURN node.property",
+        //            "params": {}
+        //        },
+        //        type: "POST",
+        //        success: function (data, xhr, status) {
+        //            //$scope.node = data.data[0][0].data;
+        //            for (var i = 0; i < data.data.length; i++) {
+        //                $scope.node.push(data.data[i][0].data.name);
+        //            }
+        //            console.log(JSON.stringify($scope.node));
+        //            //console.log(JSON.stringify(data));
+        //        },
+        //        error: function (xhr, err, msg) {
+        //            console.log(xhr);
+        //            console.log(err);
+        //            console.log(msg);
+        //        }
+        //    });
         //};
 
 
-        // $scope.journeyRequests = [];
-        // jQuery.extend({
-        //     getValues: function (pageNumber) {
-        //         var result = null;
-        //         $.ajax({
-        //             url: '/api/journey/allJourneyRequests?page=' + pageNumber,
-        //             type: 'get',
-        //             dataType: 'JSON',
-        //             async: false,
-        //             success: function (data) {
-        //                 result = data;
-        //             }
-        //         });
-        //         return result;
-        //     }
-        // });
-        // $scope.journeyRequests = $.getValues(0);
-        //
-        // var possibleRoutes = [];
-        // var uniqueNames = [];
-        // var sourceLat;
-        // var sourceLng;
-        // var destinationLat;
-        // var destinationLng;
-        // $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-        //     var source = this.source;
-        //     sourceLat = this.sourceLat;
-        //     sourceLng = this.sourceLng;
-        //     var destination = this.destination;
-        //     destinationLat = this.destinationLat;
-        //     destinationLng = this.destinationLng;
-        //     possibleRoutes.push(this.source, this.destination);
-        //     $.each(possibleRoutes, function (i, el) {
-        //         if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-        //     });
-        // });
-        //
-        // function routeGenerator(inputArr) {
-        //     var results = [];
-        //
-        //     function permute(arr, memo) {
-        //         var cur, memo = memo || [];
-        //         for (var i = 0; i < arr.length; i++) {
-        //             cur = arr.splice(i, 1);
-        //             if (arr.length === 0) {
-        //                 results.push(memo.concat(cur));
-        //             }
-        //             permute(arr.slice(), memo.concat(cur));
-        //             arr.splice(i, 0, cur[0]);
-        //         }
-        //         return results;
-        //     }
-        //
-        //     return permute(inputArr);
-        // }
-        //
-        // var combinations = routeGenerator(uniqueNames);
-        //
-        // var printArray = function (arr) {
-        //     if (typeof(arr) == "object") {
-        //         for (var i = 0; i < arr.length; i++) {
-        //             printArray(arr[i]);
-        //         }
-        //     }
-        //     else document.write(arr);
-        // };
-        // printArray(combinations.join("<br>"));
         //
         //
         // var geocoder = new google.maps.Geocoder;
@@ -200,27 +386,6 @@ angular.module('fYPApp')
         //         }
         //     });
         ////}
-        //
-        //
-        // function distance(lat1, lon1, lat2, lon2, unit) {
-        //     var radlat1 = Math.PI * lat1 / 180
-        //     var radlat2 = Math.PI * lat2 / 180
-        //     var theta = lon1 - lon2
-        //     var radtheta = Math.PI * theta / 180
-        //     var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-        //     dist = Math.acos(dist)
-        //     dist = dist * 180 / Math.PI
-        //     dist = dist * 60 * 1.1515
-        //     if (unit == "K") {
-        //         dist = dist * 1.609344
-        //     }
-        //     if (unit == "N") {
-        //         dist = dist * 0.8684
-        //     }
-        //     return Math.round(dist * 100) / 100 + " Miles<br>"
-        // }
-
-        //document.write("<br>" + distance(parseFloat(sourceLat), parseFloat(sourceLng), parseFloat(destinationLat), parseFloat(destinationLng), ""));
 
 
         //$scope.waypts = [];
@@ -243,28 +408,7 @@ angular.module('fYPApp')
         //    end = $scope.journey.driverDestination;
         //};
         //
-        //$scope.calcRoute = function () {
-        //    var myDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
-        //    var request = {
-        //        origin: start,
-        //        destination: end,
-        //        waypoints: $scope.waypts,
-        //        travelMode: google.maps.TravelMode.DRIVING
-        //    };
-        //    var myDirectionsService = new google.maps.DirectionsService();
-        //    myDirectionsService.route(request, function (response, status) {
-        //        if (status == google.maps.DirectionsStatus.OK) {
-        //            myDirectionsDisplay.setDirections(response);
-        //            var distance = 0;
-        //            for (var i = 0; i < response.routes[0].legs.length; i++) {
-        //                distance += response.routes[0].legs[i].distance.value / 1000;
-        //            }
-        //            var dist = Math.round(distance * 100) / 100 + " KM";
-        //            //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
-        //            //document.write(dist);
-        //        }
-        //    });
-        //};
+        //
 
 
     });

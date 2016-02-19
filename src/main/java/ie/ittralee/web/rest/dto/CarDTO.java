@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 public class CarDTO {
 
     @NotNull
-    private String userName;
+    private String username;
 
     @NotNull
-    private Long makeAndModel;
+    private Long makeandmodel;
 
     @NotNull
     @Min(value = 1920)
@@ -23,19 +23,19 @@ public class CarDTO {
     private int year;
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) {
+        this.username = username;
     }
 
     public Long getMakeAndModel() {
-        return makeAndModel;
+        return makeandmodel;
     }
 
-    public void setMakeAndModel(Long makeAndModel) {
-        this.makeAndModel = makeAndModel;
+    public void setMakeAndModel(Long makeandmodel) {
+        this.makeandmodel = makeandmodel;
     }
 
     public int getYear() {

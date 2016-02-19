@@ -34,7 +34,7 @@ public class Car implements Serializable{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="makeAndModelId", nullable=false)
-    private MakeAndModel makeAndModel;
+    private MakeAndModel makeandmodel;
 
     private int year;
 
@@ -46,10 +46,10 @@ public class Car implements Serializable{
         this.user = user;
     }
     public MakeAndModel getMakeAndModel() {
-        return makeAndModel;
+        return makeandmodel;
     }
-    public void setMakeAndModel(MakeAndModel makeAndModel) {
-        this.makeAndModel = makeAndModel;
+    public void setMakeAndModel(MakeAndModel makeandmodel) {
+        this.makeandmodel = makeandmodel;
     }
 
     public Long getId() {

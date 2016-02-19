@@ -15,6 +15,7 @@ angular.module('fYPApp')
                 rememberMe: $scope.rememberMe
             }).then(function () {
                 $scope.authenticationError = false;
+                $rootScope.$broadcast('username');
                 if ($rootScope.previousStateName === 'register') {
                     $state.go('home');
                 } else {

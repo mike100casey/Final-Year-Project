@@ -1,19 +1,26 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('RegisterController', function ($scope, $timeout, Auth, $http) {
+    .controller('RegisterController', function ($scope,Principal, $timeout, Auth, $http) {
+
+        $scope.$on('username', function(){
+            Principal.identity().then(function(account) {
+                $scope.account = account;
+                $scope.me = account.login;
+                $scope.registerAccount.login = $scope.me;
+            });
+        });
+
         $scope.success = null;
         $scope.error = null;
+        $scope.carError = null;
+        $scope.userType = "driver";
         $scope.doNotMatch = null;
         $scope.errorUserExists = null;
         $scope.registerAccount = {};
         $timeout(function () {
             angular.element('[ng-model="registerAccount.login"]').focus();
         });
-
-        $scope.userType = "driver";
-        $scope.registerAccount.userType = "driver";
-        $scope.car = {};
 
         $scope.getMakes = function () {
             $http.get('/api/dropdown/makes').
@@ -36,35 +43,30 @@ angular.module('fYPApp')
         };
         $scope.getMakes();
 
-        $("[name='my-checkbox']").bootstrapSwitch();
-        $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-            if (state == true) {
-                $('#carDetails').show();
-                $scope.userType = "driver";
-                $scope.registerAccount.userType = "driver";
-            } else {
-                $('#carDetails').hide();
-                $scope.userType = "passenger";
-                $scope.registerAccount.userType = "passenger";
-                alert($scope.registerAccount.userType);
-            }
-        });
-
+        $scope.car = {};
+        $scope.isDriver = true;
         $scope.years = [];
         $scope.currentYear = (new Date).getFullYear();
-        $scope.minYear = 1980;
-
-        for (var i = $scope.currentYear; i >= $scope.minYear; i--) {
+        $scope.minYear = 1960;
+        for(var i = $scope.currentYear; i >= $scope.minYear; i--){
             $scope.years.push(i);
         }
+        $(' a #radioBtn').on('click', function(){
+            var sel = $(this).data('title');
+            var tog = $(this).data('toggle');
+            $('#'+tog).prop('value', sel);
+
+            $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+            $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+        });
 
         $scope.registerCar = function(){
             if($scope.userType == "driver")
             {
                 var carData = {
                     'userName': $scope.registerAccount.login,
-                    'makeAndModel': $scope.car.model,
-                    'year':$scope.car.year
+                        'makeAndModel': $scope.car.model,
+                        'year':$scope.car.year
                 };
                 $http.post('/api/car/registration',carData).
                     success(function(data, status, headers, config){

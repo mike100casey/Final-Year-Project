@@ -9,7 +9,7 @@
 angular.module('fYPApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('findPassengers', {
+            .state('postedJourneys', {
                 parent: 'site',
                 url: '/findPassengers',
                 data: {

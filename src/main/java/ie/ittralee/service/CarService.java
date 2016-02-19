@@ -8,10 +8,14 @@ import ie.ittralee.repository.MakeAndModelRepository;
 import ie.ittralee.repository.MakesRepository;
 import ie.ittralee.repository.UserRepository;
 import ie.ittralee.web.rest.dto.CarDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +25,8 @@ import java.util.List;
  * Created by Michael on 1/30/2016.
  */
 
+@Service
+@Transactional
 public class CarService {
 
     @Autowired

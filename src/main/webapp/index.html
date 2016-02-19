@@ -28,9 +28,9 @@
 <div class="container">
     <div class="" ui-view="content"></div>
 
-    <div class="footer">
-        <p translate="footer">This is your footer</p>
-    </div>
+    <!--<div class="footer">-->
+        <!--<p translate="footer">This is your footer</p>-->
+    <!--</div>-->
 </div>
 
 <!-- bring in the google maps library-->
@@ -49,6 +49,11 @@
 <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+<script src="bower_components/angular-translate/angular-translate.min.js"></script>
+<script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+<script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js"></script>
+
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="bower_components/json3/lib/json3.js"></script>
@@ -60,6 +65,7 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap-switch.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap-datepicker.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap-timepicker.js"></script>
+
 <!-- end -->
 
 
@@ -95,6 +101,7 @@
 <script src="scripts/components/alert/alert.directive.js"></script>
 <script src="scripts/components/util/parse-links.service.js"></script>
 <script src="scripts/components/util/dateutil.service.js"></script>
+
 <script src="scripts/app/account/account.js"></script>
 <script src="scripts/app/account/activate/activate.js"></script>
 <script src="scripts/app/account/activate/activate.controller.js"></script>
@@ -107,8 +114,8 @@
 <script src="scripts/app/account/register/register.controller.js"></script>
 
 <!-- My scripts/app.js -->
-<script src="scripts/app/map/map.js"></script>
-<script src="scripts/app/map/map.controller.js"></script>
+<script src="scripts/app/addPassengerJourney/addPassengerJourney.js"></script>
+<script src="scripts/app/addPassengerJourney/addPassengerJourneyController.js"></script>
 <script src="scripts/app/search/findPassengerRequests.js"></script>
 <script src="scripts/app/search/FindRequestController.js"></script>
 

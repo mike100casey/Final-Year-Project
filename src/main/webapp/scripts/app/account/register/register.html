@@ -27,16 +27,19 @@
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
 
                 <div class="form-group" ng-show="!success">
-                    <input id="my-checkbox" type="checkbox" name="my-checkbox" checked="checked" >
+
+                    <label>User Type&#xA0;&#xA0;</label>
+
+                    <div id="radioBtn" class="btn-group">
+                        <a class="btn btn-primary btn-sm active" name="optradio" data-toggle="user" data-title="driver"
+                           ng-click="isDriver = true; userType = 'driver'" checked>Driver</a>
+                        <a class="btn btn-primary btn-sm notActive" name="optradio" data-toggle="user"
+                           data-title="passenger"
+                           ng-click="isDriver = false; userType = 'passenger'">Passenger</a>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="login">User Type</label>
-                    <input type="text" class="form-control" id="UserType" name="UserType" placeholder="Your UserType"
-                           ng-model="registerAccount.usertype" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/"
-                           required>
-
-
                     <label for="login">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="Your username"
                            ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/"
@@ -139,13 +142,12 @@
                 </div>
 
                 <!-- Car registration -->
-                <div id="carDetails" class="form-group list-group" ng-show="!success">
-                    <h3 class="list-group-item active">Car Details</h3>&#xA0;
-                    <div class="row">
+                <div class="form-group list-group" ng-switch="isDriver" ng-show="!success">
+                    <h3 ng-switch-when="true" class="list-group-item active smallerText">Car Details</h3>&#xA0;
+                    <div class="row" ng-switch-when="true">
                         <div class="col-sm-5">
                             <label>Make</label>
-                            <select class="form-control" name="make" ng-model="car.makes" ng-minlength=1 required
-                                    ng-change="getModels(car.makes)">
+                            <select class="form-control" name="make" ng-model="car.make" ng-minlength=1 required ng-change="getModels(car.make)">
                                 <option value="" disabled selected>Select make</option>
                                 <option ng-repeat="make in makes" value="{{make.id}}">{{make.make}}</option>
                             </select>
@@ -157,7 +159,6 @@
                                 <option ng-repeat="model in models" value="{{model.id}}">{{model.model}}</option>
                             </select>
                         </div>
-
                         <div class="col-sm-2">
                             <label>Year</label>
                             <select class="form-control" name="model" ng-model="car.year" ng-minlength=1 required>
@@ -168,7 +169,7 @@
                     </div>
                 </div>
 
-                <button type="submit"  class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary">Register</button>
             </form>
             <p></p>
 

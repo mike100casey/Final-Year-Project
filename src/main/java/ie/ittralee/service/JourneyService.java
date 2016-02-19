@@ -40,14 +40,17 @@ public class JourneyService {
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     public void createPassengerRequest(PassengerJourneyDTO journeyRequestDto) {
-        PassengerJourney journeyRequest = journeyRequestDto.toEntity(userRepository.findByLogin(journeyRequestDto.getUsername()));
+        PassengerJourney journeyRequest = journeyRequestDto.toEntity(
+                            userRepository.findByLogin(journeyRequestDto.getUsername()));
         passengerJourneyRepository.save(journeyRequest);
     }
 
     public Page<PassengerJourneyDTO> getAllJourneyRequests(Pageable page) {
         Page<PassengerJourney> journeyRequests = passengerJourneyRepository.findAll(page);
-        Page<PassengerJourneyDTO> passengerJourneyDTOs = new PageImpl<PassengerJourneyDTO>(Utils.convertToJourneyRequestPage
-            (journeyRequests.getContent()), page, journeyRequests.getTotalElements());
+        Page<PassengerJourneyDTO> passengerJourneyDTOs = new PageImpl<PassengerJourneyDTO>(
+            Utils.convertToJourneyRequestPage (journeyRequests.getContent()),
+                                                page,
+                                                journeyRequests.getTotalElements());
         return passengerJourneyDTOs;
     }
 

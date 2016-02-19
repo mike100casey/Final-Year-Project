@@ -143,9 +143,9 @@ module.exports = function (grunt) {
                             js: ['concat', 'uglifyjs'],
                             css: ['cssmin', useminAutoprefixer] // Let cssmin concat files so it corrects relative paths to fonts and images
                         },
-                            post: {}
-                        }
+                        post: {}
                     }
+                }
             }
         },
         usemin: {
@@ -229,7 +229,7 @@ module.exports = function (grunt) {
                     cwd: 'src/main/webapp',
                     dest: '<%= yeoman.dist %>/assets/fonts',
                     src: [
-                      'bower_components/bootstrap/fonts/*.*'
+                        'bower_components/bootstrap/fonts/*.*'
                     ]
                 }]
             },
@@ -255,11 +255,11 @@ module.exports = function (grunt) {
                 }]
             },
             generateOpenshiftDirectory: {
-                    expand: true,
-                    dest: 'deploy/openshift',
-                    src: [
-                        'pom.xml',
-                        'src/main/**'
+                expand: true,
+                dest: 'deploy/openshift',
+                src: [
+                    'pom.xml',
+                    'src/main/**'
                 ]
             }
         },
