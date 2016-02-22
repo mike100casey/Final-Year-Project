@@ -1,25 +1,25 @@
-<table class="table table-bordered table-hover success">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Username</th>
-        <th>Source</th>
-        <th>Destination</th>
-        <th>Date</th>
-        <th>Time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
-        <td >{{pj.id}}</td>
-        <td>{{pj.username}}</td>
-        <td>{{pj.source}}</td>
-        <td>{{pj.destination}}</td>
-        <td>{{pj.date}}</td>
-        <td>{{pj.time}}</td>
-    </tr>
-    </tbody>
-</table>
+<!--<table class="table table-bordered table-hover success">-->
+    <!--<thead>-->
+    <!--<tr>-->
+        <!--<th>Id</th>-->
+        <!--<th>Username</th>-->
+        <!--<th>Source</th>-->
+        <!--<th>Destination</th>-->
+        <!--<th>Date</th>-->
+        <!--<th>Time</th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">-->
+        <!--<td >{{pj.id}}</td>-->
+        <!--<td>{{pj.username}}</td>-->
+        <!--<td>{{pj.source}}</td>-->
+        <!--<td>{{pj.destination}}</td>-->
+        <!--<td>{{pj.date}}</td>-->
+        <!--<td>{{pj.time}}</td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+<!--</table>-->
 
 <!--<div class="col-md-12">-->
     <!--<form name="form" ng-hide="success" ng-submit="sendForm()" role="form" novalidate show-validation>-->
@@ -100,10 +100,9 @@
     <!--</div>-->
 <!--</div>-->
 
-<!--<button class="btn btn-primary" ng-click="postRoute();">Add</button>-->
-
-<!--<button class="btn btn-primary" ng-click="getRoute();">get</button>-->
-<!--<button class="btn btn-primary" ng-click="delRelations();">de rel</button>-->
-<!--<button class="btn btn-primary" ng-click="delNodes();">del nodes</button>-->
-<!--<br><br><br><br>-->
+<button class="btn btn-primary" ng-click="postRoute();">Add</button>
+<button class="btn btn-primary" ng-click="getRoute();">get</button>
+<button class="btn btn-primary" ng-click="delRelations();">de rel</button>
+<button class="btn btn-primary" ng-click="delNodes();">del nodes</button>
+<br><br><br><br>
 

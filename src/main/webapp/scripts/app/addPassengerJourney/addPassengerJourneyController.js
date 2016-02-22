@@ -10,6 +10,9 @@ angular.module('fYPApp')
             $scope.isAuthenticated = Principal.isAuthenticated;
         });
 
+        $(".date-input").datepicker({});
+        $('#timepicker').timepicker({});
+
         $scope.journey = {};
         $scope.journey.source = "";
         $scope.journey.destination = "";
@@ -18,7 +21,7 @@ angular.module('fYPApp')
         };
 
         $scope.display = function () {
-            $log.log(JSON.stringify($scope.journey));
+            $log.log(JSON.stringify(roundedDistance +  $scope.journey.source + $scope.journey.destination));
         };
 
         $scope.sendForm = function () {
@@ -34,6 +37,7 @@ angular.module('fYPApp')
                 });
         };
 
+        var roundedDistance = 0;
         $scope.calcRoute = function () {
             var MyDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
             var start = angular.element('#source').val();
@@ -63,14 +67,123 @@ angular.module('fYPApp')
                     for (var i = 0; i < response.routes[0].legs.length; i++) {
                         distance += response.routes[0].legs[i].distance.value / 1000;
                     }
-                    var dist = Math.round(distance * 100) / 100 + " KM";
-                    document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
+                    roundedDistance = Math.round(distance * 100) / 100 + " KM";
+                    document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + roundedDistance;
                 }
             });
         };
 
-        $(".date-input").datepicker({});
-        $('#timepicker').timepicker({});
+        $scope.journeyRequests = [];
+        jQuery.extend({
+            getValues: function (pageNumber) {
+                var result = null;
+                $.ajax({
+                    url: '/api/journey/allJourneyRequests?page=' + pageNumber,
+                    type: 'get',
+                    dataType: 'JSON',
+                    async: false,
+                    success: function (data) {
+                        result = data;
+                    }
+                });
+                return result;
+            }
+        });
+        $scope.journeyRequests = $.getValues(0);
+
+        var startNodes = [];
+        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+            startNodes.push(this.source);
+        });
+        var destinationNodes = [];
+        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+            destinationNodes.push(this.destination);
+        });
+
+        $scope.connectToSourceNodes = function () {
+            for (var m = 0; m < startNodes.length; m++) {
+                var serverURL = "http://localhost:7474/db/data";
+                $.ajax({
+                    type: "POST",
+                    url: serverURL + "/cypher",
+                    accepts: "application/json",
+                    dataType: "json",
+                    contentType: "application/json",
+                    headers: {
+                        "X-Stream": "true"
+                    },
+                    data: JSON.stringify({
+                        "query": "MATCH (a:Source),(b:Source)  WHERE a.name = '" + angular.element('#source').val() +
+                                    "' AND b.name = '" + startNodes[m]  + "'   CREATE (a)-[r:To]->(b)  RETURN r",
+                        "params": { }
+                    }),
+                    success: function (data, textStatus, jqXHR) {
+                        console.log(JSON.stringify(data));
+                    },
+                    error: function (jqXHR, textStatus) {
+                        console.log(textStatus);
+                    }
+                });
+            }
+        };
+        $scope.connectToDestinationNodes = function () {
+            for (var m = 1; m < destinationNodes.length; m++) {
+                var serverURL = "http://localhost:7474/db/data";
+                $.ajax({
+                    type: "POST",
+                    url: serverURL + "/cypher",
+                    accepts: "application/json",
+                    dataType: "json",
+                    contentType: "application/json",
+                    headers: {
+                        "X-Stream": "true"
+                    },
+                    data: JSON.stringify({
+                        "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[m] +
+                        "' AND b.name = '" +  angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b)  RETURN r",
+                        "params": { }
+                    }),
+                    success: function (data, textStatus, jqXHR) {
+                        console.log(JSON.stringify(data));
+                    },
+                    error: function (jqXHR, textStatus) {
+                        console.log(textStatus);
+                    }
+                });
+            }
+        };
+
+
+        $scope.createNodes = function () {
+            var serverURL = "http://localhost:7474/db/data";
+            $.ajax({
+                type: "POST",
+                url: serverURL + "/cypher",
+                accepts: "application/json",
+                dataType: "json",
+                contentType: "application/json",
+                headers: {
+                    "X-Stream": "true"
+                },
+                data: JSON.stringify({
+                    "query" : " CREATE (s1:Source {source}) CREATE (d1:Destination {destination}) CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance +"'",
+                    "params": {
+                        "source" : {
+                            "name" : angular.element('#source').val()
+                        },
+                        "destination" : {
+                            "name" : angular.element('#destination').val()
+                        }
+                    }
+                }),
+                success: function (data, textStatus, jqXHR) {
+                    console.log(JSON.stringify(data));
+                },
+                error: function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                }
+            });
+        };
 
 
     });

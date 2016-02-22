@@ -91,8 +91,8 @@ angular.module('fYPApp')
                 }
             }
             else console.log(arr);
+            //document.write(arr);
         };
-
         var combinations = routeGenerator(allNodes);
 
         var numbers = [];
@@ -118,7 +118,7 @@ angular.module('fYPApp')
         });
 
         var len = arrayWithoutDestinationsAtStart[0].length - 1;
-        console.log(startNodes.toString());
+        //console.log(startNodes.toString());
 
         var sourceNumbers = [];
         var uniqueNumbersToRemove = [];
@@ -143,23 +143,57 @@ angular.module('fYPApp')
             return $.inArray(i, uniqueNumbersToRemove) == -1;
         });
 
-        //console.log(combinations[0].length);
-
-        printArray(arrayWithoutSourcesAtEnd.join("<br>"));
-        var x = new Array();
+        //console.log(destinationNodes.length);
+        //rintArray(arrayWithoutSourcesAtEnd.join("<br>"));
+        var x = [];
         $scope.waypts = [];
-        for (var i = 0; i <  1; i++) {
+        for (var i = 0; i < 1; i++) {
             for (var j = 0; j < arrayWithoutSourcesAtEnd[arrayWithoutSourcesAtEnd.length - 1].length; j++) {
                 //for (var k = 0; k < 1; k++) {
-                    $scope.waypts.push(
-                        x.push({
-                            location: arrayWithoutSourcesAtEnd[0][j],
-                            stopover: true
-                        }));
+                $scope.waypts.push(
+                    x.push({
+                        location: arrayWithoutSourcesAtEnd[0][j],
+                        stopover: true
+                    }));
                 //}
             }
         }
-        console.log(JSON.stringify(x));
+
+
+        $scope.createNodes = function () {
+            for (var m = 0; m < 1; m++) {
+                var serverURL = "http://localhost:7474/db/data";
+                $.ajax({
+                    type: "POST",
+                    url: serverURL + "/cypher",
+                    accepts: "application/json",
+                    dataType: "json",
+                    contentType: "application/json",
+                    headers: {
+                        "X-Stream": "true"
+                    },
+                    data: JSON.stringify({
+                        "query": " CREATE (s1:Source {source}) CREATE (d1:Destination {destination}) CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance + "'",
+                        "params": {
+                            "source": {
+                                "name": angular.element('#source').val()
+                            },
+                            "destination": {
+                                "name": angular.element('#destination').val()
+                            }
+                        }
+                    }),
+                    success: function (data, textStatus, jqXHR) {
+                        console.log(JSON.stringify(data));
+                    },
+                    error: function (jqXHR, textStatus) {
+                        console.log(textStatus);
+                    }
+                });
+            }
+        };
+
+
         $scope.calcRoute = function () {
             var myDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
             var request = {
@@ -184,26 +218,8 @@ angular.module('fYPApp')
         };
 
 
-        var source = JSON.stringify({
-            "name": "Tralee"
-
-        });
-        $scope.postRoute = function () {
-            $.ajax({
-                url: "http://localhost:7474/db/data/node ",
-                type: "POST",
-                data: source,
-                contentType: "application/json"
-            })
-                .done(function (result) {
-                    //console.log(result);
-                    console.log("Success");
-                })
-                .fail(function (error) {
-                    console.log(error.statusText);
-                });
-        };
-        var dis = 34;
+        var q = "CREATE (a:Person { name:'Tom Hanks', born:1956 })-[r:ACTED_IN ]->(m:Movie { title:'Forrest Gump',released:1994 })" +
+            "CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m";
 
         var query = "CREATE (s1:Town { name : 'Abbeyfeale'})" +
             "CREATE (s2:Town { name : 'Tralee'})" +
@@ -221,9 +237,9 @@ angular.module('fYPApp')
             "CREATE (s2)-[:Goes_To ]->(s4) " +
             "CREATE (s2)-[:Goes_To ]->(s6) ";
 
-
-        var query1 = "MATCH ({ name: 'Abbeyfeale' })-[:contains*0..]->(parentDir)-[:leaf]->(file) RETURN file";
-        var query2 = "MATCH (a)        WHERE a.name='Tralee'        RETURN size((a)-->()-->()) AS fof";
+        var dis = 34;
+        var query1 = "MATCH ({ name: 'Abbeyfeale' })-[:contains*0..]->(parentDir)-[:leaf]->(Town) RETURN Town";
+        var query2 = "MATCH (a) WHERE a.name='Tralee' RETURN size((a)-->()-->()) AS fof";
 
         $scope.getRoute = function () {
             $scope.node = [];
@@ -238,24 +254,24 @@ angular.module('fYPApp')
                     "X-Stream": "true"
                 },
                 data: JSON.stringify({
-                    "query": query2,
-
+                    //"query": query2,
                     //"query": "CREATE (a:Person { name:'Tom Hanks', born:1956 })-[r:ACTED_IN ]->(m:Movie { title:'Forrest Gump',released:1994 })"+
-                    //   "CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m",
+                    //"CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m",
                     //"query": " UNWIND { props } AS map  CREATE (n) SET n = map",
-                    // "query": "START n=node(*) match n-[r?]-() where r is null return n",
+                    //"query": "START n=node(*) match n-[r?]-() where r is null return n",
                     //START a=node(...), b=node(...) CREATE UNIQUE a-[r:CONNECTED_TO]-b SET r.weight = coalesce(r.weight?, 0) + 1
-                    // "query" : " CREATE (n:Destination { props }) ",
+                    "query": " CREATE (n:Destination { props }) ",
                     //"query" : " START n=node:nameIdx(name='Abbeyfeale')return id(n)",
-
                     //"query" : " START n=node(*) WHERE n.name = 'Tralee' return id(n)",
-
                     //"query" : " CREATE (jdoe {name:'John Doe'})-[r:friend]->(mj {name:'Mary Joe'}) return r, jdoe, mj",;
-                    //"query" : " START n=node(*) where n.name = 'Bob' return n",
+                    //"query" : " START n=node(*) where n.name = 'Tralee' return n",
                     //"query" : "START first = node(18), second = node(19) CREATE first-[r:CONNECTED_TO]->second SET r.weight = "+dis +" return r",
                     // "query" : "start n = node(*) return n;",
                     "params": {
-                        //"props": destinationNodes
+                        "props": {
+                            "position": "Developer",
+                            "name": "Andres"
+                        }
                     }
                 }),
                 success: function (data, textStatus, jqXHR) {
@@ -263,7 +279,8 @@ angular.module('fYPApp')
                     console.log(JSON.stringify(data));
                 },
                 error: function (jqXHR, textStatus) {
-                    console.log(textStatus);
+
+                    console.log(jqXHR);
                 }
             });//end of ajax
         };
@@ -412,6 +429,7 @@ angular.module('fYPApp')
 
 
     });
+
 //function getCombinations(chars) {
 //    var result = [];
 //    var f = function(prefix, chars) {
