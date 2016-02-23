@@ -21,7 +21,7 @@ angular.module('fYPApp')
         };
 
         $scope.display = function () {
-            $log.log(JSON.stringify(roundedDistance +  $scope.journey.source + $scope.journey.destination));
+            $log.log(JSON.stringify(roundedDistance + $scope.journey.source + $scope.journey.destination));
         };
 
         $scope.sendForm = function () {
@@ -38,7 +38,7 @@ angular.module('fYPApp')
         };
 
         var roundedDistance = 0;
-        $scope.calcRoute = function () {
+        $scope.calculateRoute = function () {
             var MyDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
             var start = angular.element('#source').val();
             var end = angular.element('#destination').val();
@@ -58,7 +58,6 @@ angular.module('fYPApp')
                 destination: end,
                 travelMode: google.maps.TravelMode.DRIVING
             };
-
             var MyDirectionsService = new google.maps.DirectionsService();
             MyDirectionsService.route(request, function (response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
@@ -101,7 +100,7 @@ angular.module('fYPApp')
         });
 
         $scope.connectToSourceNodes = function () {
-            for (var m = 0; m < startNodes.length; m++) {
+            for (var m = 1; m < startNodes.length; m++) {
                 var serverURL = "http://localhost:7474/db/data";
                 $.ajax({
                     type: "POST",
@@ -114,8 +113,8 @@ angular.module('fYPApp')
                     },
                     data: JSON.stringify({
                         "query": "MATCH (a:Source),(b:Source)  WHERE a.name = '" + angular.element('#source').val() +
-                                    "' AND b.name = '" + startNodes[m]  + "'   CREATE (a)-[r:To]->(b)  RETURN r",
-                        "params": { }
+                        "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceDistances[m] + "' RETURN r",
+                        "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
                         console.log(JSON.stringify(data));
@@ -140,8 +139,8 @@ angular.module('fYPApp')
                     },
                     data: JSON.stringify({
                         "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[m] +
-                        "' AND b.name = '" +  angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b)  RETURN r",
-                        "params": { }
+                        "' AND b.name = '" + angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationDistances[m] + "' RETURN r",
+                        "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
                         console.log(JSON.stringify(data));
@@ -166,13 +165,13 @@ angular.module('fYPApp')
                     "X-Stream": "true"
                 },
                 data: JSON.stringify({
-                    "query" : " CREATE (s1:Source {source}) CREATE (d1:Destination {destination}) CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance +"'",
+                    "query": " CREATE (s1:Source {source}) CREATE (d1:Destination {destination}) CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance + "'",
                     "params": {
-                        "source" : {
-                            "name" : angular.element('#source').val()
+                        "source": {
+                            "name": angular.element('#source').val()
                         },
-                        "destination" : {
-                            "name" : angular.element('#destination').val()
+                        "destination": {
+                            "name": angular.element('#destination').val()
                         }
                     }
                 }),
@@ -183,6 +182,53 @@ angular.module('fYPApp')
                     console.log(textStatus);
                 }
             });
+        };
+
+        var sourceDistances = [];
+        $scope.getSourceDistances = function () {
+            for (var i = 0; i < startNodes.length; i++) {
+                var start = angular.element('#source').val();
+                var request = {
+                    origin: start,
+                    destination: startNodes[i],
+                    waypoints: $scope.waypts,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+                var myDirectionsService = new google.maps.DirectionsService();
+                myDirectionsService.route(request, function (response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        var distance = 0;
+                        for (var i = 0; i < response.routes[0].legs.length; i++) {
+                            distance += response.routes[0].legs[i].distance.value / 1000;
+                        }
+                        var roundedDistance = Math.round(distance * 100) / 100 + " KM";
+                        sourceDistances.push(roundedDistance);
+                    }
+                });
+            }
+        };
+        var destinationDistances = [];
+        $scope.getDestinationDistances = function () {
+            for (var i = 0; i < destinationNodes.length; i++) {
+                var end = angular.element('#destination').val();
+                var request = {
+                    origin: destinationNodes[i],
+                    destination: end,
+                    waypoints: $scope.waypts,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+                var myDirectionsService = new google.maps.DirectionsService();
+                myDirectionsService.route(request, function (response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        var distance = 0;
+                        for (var i = 0; i < response.routes[0].legs.length; i++) {
+                            distance += response.routes[0].legs[i].distance.value / 1000;
+                        }
+                        var roundedDistance = Math.round(distance * 100) / 100 + " KM";
+                        destinationDistances.push(roundedDistance);
+                    }
+                });
+            }
         };
 
 

@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="col-md-5 ">
-        <form name="form" ng-hide="success" ng-submit="sendForm();connectToSourceNodes();" role="form" novalidate show-validation>
+        <form name="form" ng-hide="success" ng-submit="sendForm();createNodes();" role="form" novalidate show-validation>
             <div id="myRoute" class="list-group-item">
                 <h5><b>Please fill in the following form to display route</b></h5>&#xA0;
                 <fieldset class="main-block">
@@ -26,7 +26,7 @@
                     <input type="text" id="destination" name="destination" class="form-control"
                            ng-model="journey.destination" maxlength="70"
                            ng-autocomplete ng-minlength=1 ng-maxlength=70 placeholder="Enter Arrival (address)"
-                           required data-toggle="tooltip" data-placement=top ng-click="addUsername()"
+                           required data-toggle="tooltip" data-placement=top ng-click="addUsername();getSourceDistances();"
                            data-original-title="Enter a specific arrival point.">&#xA0;
 
                     <div ng-show="form.destination.$dirty && form.destination.$invalid">
@@ -49,10 +49,10 @@
                                 </span>
                             </label>
                             <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
-                                   ng-click="calcRoute();"/>
+                                   ng-click="calculateRoute();getDestinationDistances();"/>
                         </div>
                         <div class="input-group bootstrap-timepicker timepicker">
-                            <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="connectToDestinationNodes();"
+                            <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="connectToSourceNodes();connectToDestinationNodes();"
                                    ng-model="journey.time" data-minute-step="1" type="text"/>
                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
