@@ -49,19 +49,19 @@
                                 </span>
                             </label>
                             <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
-                                   ng-click="sourceToSourceDistances();"/>
+                                   ng-click="calculateRoute();sourceToSourceDistances();"/>
                         </div>
                         <div class="input-group bootstrap-timepicker timepicker">
-                            <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="sourceToSource();"
+                            <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="sourceToSourceEdges();"
                                    ng-model="journey.time" data-minute-step="1" type="text"/>
                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
                     </div>
                 </fieldset>
-                <label id="distanceLabel">Travel Distance</label>
+                <!--<label id="distanceLabel">Travel Distance</label>-->
                 <br>
                 <fieldset class="main-block">
-                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Register
+                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Post
                     </button>
                 </fieldset>
             </div>

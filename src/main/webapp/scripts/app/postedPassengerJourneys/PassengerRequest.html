@@ -1,0 +1,22 @@
+<table class="table table-bordered table-hover success">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Posted By</th>
+        <th>Source</th>
+        <th>Destination</th>
+        <th>Date</th>
+        <th>Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
+        <td >{{pj.id}}</td>
+        <td>{{pj.username}}</td>
+        <td>{{pj.source}}</td>
+        <td>{{pj.destination}}</td>
+        <td>{{pj.date}}</td>
+        <td>{{pj.time}}</td>
+    </tr>
+    </tbody>
+</table>

@@ -18,7 +18,7 @@ angular.module('fYPApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/search/PassengerRequest.html',
+                        templateUrl: 'scripts/app/postedPassengerJourneys/PassengerRequest.html',
                         controller: 'FindRequestController'
                     }
                 },
