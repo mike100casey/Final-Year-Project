@@ -49,10 +49,10 @@
                                 </span>
                             </label>
                             <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
-                                   ng-click="DestinationToDestinationDistances();sourceToSourceDistances();"/>
+                                   ng-click="sourceToSourceDistances();"/>
                         </div>
                         <div class="input-group bootstrap-timepicker timepicker">
-                            <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="DestinationToDestination();sourceToSource();"
+                            <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="sourceToSource();"
                                    ng-model="journey.time" data-minute-step="1" type="text"/>
                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
