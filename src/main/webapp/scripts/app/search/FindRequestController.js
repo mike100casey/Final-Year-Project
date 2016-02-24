@@ -48,12 +48,7 @@ angular.module('fYPApp')
         });
         $scope.journeyRequests = $.getValues(0);
 
-        //var allNodes = [];
-        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-        //    //sourceNodes.push({"name": this.source, "source_id": this.id});.push(,
-        //    allNodes.push(this.source);
-        //    allNodes.push(this.destination);
-        //});
+
         //
         //var destinationNodes = [];
         //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
