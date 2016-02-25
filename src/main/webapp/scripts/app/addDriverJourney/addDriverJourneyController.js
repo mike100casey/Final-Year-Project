@@ -163,7 +163,7 @@ angular.module('fYPApp')
                     },
                     data: JSON.stringify({
                         "query": "MATCH (a:Source),(b:Source)  WHERE a.name = '" + angular.element('#source').val() +
-                        "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverSourceToSourceDistances[m] + "' RETURN r",
+                        "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverSourceToSourceDistances[m] + "'",
                         "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
@@ -196,7 +196,7 @@ angular.module('fYPApp')
                             }
                             var roundedDistance = Math.round(distance * 100) / 100;
                             sourceToSourceDistance.push(roundedDistance);
-                        }console.log(sourceToSourceDistance);
+                        }
                     });
                 }
             }
@@ -218,7 +218,63 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             "query": "MATCH (a:Source),(b:Source)  WHERE a.name = '" + startNodes[i] +
-                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToSourceDistance[k] + "' RETURN r ",
+                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToSourceDistance[k] + "'",
+                            "params": {}
+                        }),
+                        success: function (data, textStatus, jqXHR) {
+                            console.log(JSON.stringify(data));
+                        },
+                        error: function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                        }
+                    });
+                }
+            }
+        };
+
+//-----------------------sources to destinations----------------------
+        var sourceToDestinationDistances = [];
+        $scope.sourceToDestinationDistances = function () {
+            for (var i = 0; i < startNodes.length; i++) {
+                for (var m = 0; m < destinationNodes.length; m++) {
+                    var request = {
+                        origin: startNodes[i],
+                        destination: destinationNodes[m],
+                        waypoints: $scope.waypts,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
+                    var myDirectionsService = new google.maps.DirectionsService();
+                    myDirectionsService.route(request, function (response, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            var distance = 0;
+                            for (var i = 0; i < response.routes[0].legs.length; i++) {
+                                distance += response.routes[0].legs[i].distance.value / 1000;
+                            }
+                            var roundedDistance = Math.round(distance * 100) / 100;
+                            sourceToDestinationDistances.push(roundedDistance);
+                        }
+                    });
+                }
+            }
+        };
+        var j = -1;
+        $scope.allSourcesToDestinationEdges = function () {
+            for (var i = 0; i < startNodes.length; i++) {
+                for (var m = 0; m < destinationNodes.length; m++) {
+                    var serverURL = "http://localhost:7474/db/data";
+                    j++;
+                    $.ajax({
+                        type: "POST",
+                        url: serverURL + "/cypher",
+                        accepts: "application/json",
+                        dataType: "json",
+                        contentType: "application/json",
+                        headers: {
+                            "X-Stream": "true"
+                        },
+                        data: JSON.stringify({
+                            "query": "MATCH (a:Source),(b:Destination)  WHERE a.name = '" + startNodes[i] +
+                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToDestinationDistances[j] + "'",
                             "params": {}
                         }),
                         success: function (data, textStatus, jqXHR) {
@@ -270,7 +326,7 @@ angular.module('fYPApp')
                     },
                     data: JSON.stringify({
                         "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[m] +
-                        "' AND b.name = '" + angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverDestinationToDestinationDistances[m] + "' RETURN r",
+                        "' AND b.name = '" + angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverDestinationToDestinationDistances[m] + "'",
                         "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
@@ -280,6 +336,118 @@ angular.module('fYPApp')
                         console.log(textStatus);
                     }
                 });
+            }
+        };
+
+//-----------------------destination to destinations----------------------
+        var destinationToDestinationDistances = [];
+        $scope.destinationToDestinationDistances = function () {
+            for (var i = 0; i < destinationNodes.length; i++) {
+                for (var m = 0; m < destinationNodes.length; m++) {
+                    var request = {
+                        origin: destinationNodes[i],
+                        destination: destinationNodes[m],
+                        waypoints: $scope.waypts,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
+                    var myDirectionsService = new google.maps.DirectionsService();
+                    myDirectionsService.route(request, function (response, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            var distance = 0;
+                            for (var i = 0; i < response.routes[0].legs.length; i++) {
+                                distance += response.routes[0].legs[i].distance.value / 1000;
+                            }
+                            var roundedDistance = Math.round(distance * 100) / 100;
+                            destinationToDestinationDistances.push(roundedDistance);
+                        }
+                    });
+                }
+            }
+        };
+        var l = -1;
+        $scope.destinationToDestinationEdges = function () {
+            for (var i = 0; i < destinationNodes.length; i++) {
+                for (var m = 0; m < destinationNodes.length; m++) {
+                    var serverURL = "http://localhost:7474/db/data";
+                    l++;
+                    $.ajax({
+                        type: "POST",
+                        url: serverURL + "/cypher",
+                        accepts: "application/json",
+                        dataType: "json",
+                        contentType: "application/json",
+                        headers: {
+                            "X-Stream": "true"
+                        },
+                        data: JSON.stringify({
+                            "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[i] +
+                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToDestinationDistances[l] + "'",
+                            "params": {}
+                        }),
+                        success: function (data, textStatus, jqXHR) {
+                            console.log(JSON.stringify(data));
+                        },
+                        error: function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                        }
+                    });
+                }
+            }
+        };
+
+//-----------------------destination to sources----------------------
+        var destinationToSourceDistances = [];
+        $scope.allDestinationToSourceDistances = function () {
+            for (var i = 0; i < destinationNodes.length; i++) {
+                for (var m = 0; m < startNodes.length; m++) {
+                    var request = {
+                        origin: destinationNodes[i],
+                        destination: startNodes[m],
+                        waypoints: $scope.waypts,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
+                    var myDirectionsService = new google.maps.DirectionsService();
+                    myDirectionsService.route(request, function (response, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            var distance = 0;
+                            for (var i = 0; i < response.routes[0].legs.length; i++) {
+                                distance += response.routes[0].legs[i].distance.value / 1000;
+                            }
+                            var roundedDistance = Math.round(distance * 100) / 100;
+                            destinationToSourceDistances.push(roundedDistance);
+                        }
+                    });
+                }
+            }
+        };
+        var a = -1;
+        $scope.allDestinationToSourceEdges = function () {
+            for (var i = 0; i < destinationNodes.length; i++) {
+                for (var m = 0; m < startNodes.length; m++) {
+                    var serverURL = "http://localhost:7474/db/data";
+                    a++;
+                    $.ajax({
+                        type: "POST",
+                        url: serverURL + "/cypher",
+                        accepts: "application/json",
+                        dataType: "json",
+                        contentType: "application/json",
+                        headers: {
+                            "X-Stream": "true"
+                        },
+                        data: JSON.stringify({
+                            "query": "MATCH (a:Destination),(b:Source)  WHERE a.name = '" + destinationNodes[i] +
+                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToSourceDistances[a] + "'",
+                            "params": {}
+                        }),
+                        success: function (data, textStatus, jqXHR) {
+                            console.log(JSON.stringify(data));
+                        },
+                        error: function (jqXHR, textStatus) {
+                            console.log(textStatus);
+                        }
+                    });
+                }
             }
         };
 

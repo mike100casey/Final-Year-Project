@@ -71,8 +71,20 @@
     </form>
 
 </div>
+<button class="btn btn-primary" ng-click="driverSourceToSourceDistances(); ">driver source dist</button>
+<button class="btn btn-primary" ng-click="driverSourceToAllSourceEdges(); ">driver source edges</button>
 
-<button class="btn btn-primary" ng-click="sourceToSourceDistances();  ">get distances</button>
-<button class="btn btn-primary" ng-click="sourceToSourceEdges(); ">add edges</button>
-<!--<button class="btn btn-primary" ng-click="delRelations();">de rel</button>driverSourceToSourceDistances();driverDestinationToAllDestinationDistances();-->
-<!--<button class="btn btn-primary" ng-click="delNodes();">del nodes</button>driverSourceToAllSourceEdges(); driverDestinationToDestinationEdges(); -->
+<button class="btn btn-primary" ng-click="driverDestinationToAllDestinationDistances(); ">driver dest dist</button>
+<button class="btn btn-primary" ng-click="driverDestinationToDestinationEdges(); ">driver dest edges</button>
+
+<button class="btn btn-primary" ng-click="sourceToSourceDistances();  ">s2s dist</button>
+<button class="btn btn-primary" ng-click="sourceToSourceEdges(); ">s2s edges</button>
+
+<button class="btn btn-primary" ng-click="destinationToDestinationDistances(); ">d2d dist</button>
+<button class="btn btn-primary" ng-click="destinationToDestinationEdges(); ">d2d edges</button>
+
+<button class="btn btn-primary" ng-click="allDestinationToSourceDistances(); ">d2s dist</button>
+<button class="btn btn-primary" ng-click="allDestinationToSourceEdges(); ">d2s edges</button>
+
+<button class="btn btn-primary" ng-click="sourceToDestinationDistances(); ">s2d dist</button>
+<button class="btn btn-primary" ng-click="allSourcesToDestinationEdges(); ">s2d edges</button>
