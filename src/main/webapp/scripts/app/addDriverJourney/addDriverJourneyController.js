@@ -30,6 +30,8 @@ angular.module('fYPApp')
             }
         });
         $scope.journeyRequests = $.getValues(0);
+        $scope.waypts = [];
+        var my_delay = 5000;
 
         var startNodes = [];
         $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
@@ -163,11 +165,15 @@ angular.module('fYPApp')
                     },
                     data: JSON.stringify({
                         "query": "MATCH (a:Source),(b:Source)  WHERE a.name = '" + angular.element('#source').val() +
-                        "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverSourceToSourceDistances[m] + "'",
+                        "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverSourceToSourceDistances[m] + "' return r",
                         "params": {}
                     }),
+                    beforeSend : function( xhr ) {
+                        setTimeout (10000 );
+                    },
                     success: function (data, textStatus, jqXHR) {
                         console.log(JSON.stringify(data));
+                        setTimeout ($.ajax, 1000 );
                     },
                     error: function (jqXHR, textStatus) {
                         console.log(textStatus);
@@ -180,7 +186,7 @@ angular.module('fYPApp')
         var sourceToSourceDistance = [];
         $scope.sourceToSourceDistances = function () {
             for (var i = 0; i < startNodes.length; i++) {
-                for (var m = 0; m < startNodes.length; m++) {
+                for (var m = 0; m <startNodes.length; m++) {
                     var request = {
                         origin: startNodes[i],
                         destination: startNodes[m],
@@ -194,8 +200,8 @@ angular.module('fYPApp')
                             for (var i = 0; i < response.routes[0].legs.length; i++) {
                                 distance += response.routes[0].legs[i].distance.value / 1000;
                             }
-                            var roundedDistance = Math.round(distance * 100) / 100;
-                            sourceToSourceDistance.push(roundedDistance);
+                            var roundedDistance = (Math.round(distance * 100) / 100);
+                            sourceToSourceDistance.push(roundedDistance);console.log(sourceToSourceDistance);
                         }
                     });
                 }
@@ -203,6 +209,7 @@ angular.module('fYPApp')
         };
         var k = -1;
         $scope.sourceToSourceEdges = function () {
+            console.log(sourceToSourceDistance);
             for (var i = 0; i < startNodes.length; i++) {
                 for (var m = 0; m < startNodes.length; m++) {
                     var serverURL = "http://localhost:7474/db/data";
@@ -218,11 +225,12 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             "query": "MATCH (a:Source),(b:Source)  WHERE a.name = '" + startNodes[i] +
-                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToSourceDistance[k] + "'",
+                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToSourceDistance[k] + "' return r",
                             "params": {}
                         }),
                         success: function (data, textStatus, jqXHR) {
                             console.log(JSON.stringify(data));
+                            setTimeout ($.ajax, 5000 );
                         },
                         error: function (jqXHR, textStatus) {
                             console.log(textStatus);
@@ -231,6 +239,7 @@ angular.module('fYPApp')
                 }
             }
         };
+
 
 //-----------------------sources to destinations----------------------
         var sourceToDestinationDistances = [];
@@ -251,7 +260,7 @@ angular.module('fYPApp')
                                 distance += response.routes[0].legs[i].distance.value / 1000;
                             }
                             var roundedDistance = Math.round(distance * 100) / 100;
-                            sourceToDestinationDistances.push(roundedDistance);
+                            sourceToDestinationDistances.push(roundedDistance);console.log(sourceToDestinationDistances);
                         }
                     });
                 }
@@ -274,11 +283,12 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             "query": "MATCH (a:Source),(b:Destination)  WHERE a.name = '" + startNodes[i] +
-                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToDestinationDistances[j] + "'",
+                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + sourceToDestinationDistances[j] + "'return r",
                             "params": {}
                         }),
                         success: function (data, textStatus, jqXHR) {
                             console.log(JSON.stringify(data));
+                            setTimeout ($.ajax, 5000 );
                         },
                         error: function (jqXHR, textStatus) {
                             console.log(textStatus);
@@ -326,11 +336,13 @@ angular.module('fYPApp')
                     },
                     data: JSON.stringify({
                         "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[m] +
-                        "' AND b.name = '" + angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverDestinationToDestinationDistances[m] + "'",
+                        "' AND b.name = '" + angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" +
+                        driverDestinationToDestinationDistances[m] + "' return r",
                         "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
                         console.log(JSON.stringify(data));
+                        setTimeout ($.ajax, 5000 );
                     },
                     error: function (jqXHR, textStatus) {
                         console.log(textStatus);
@@ -381,11 +393,13 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[i] +
-                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToDestinationDistances[l] + "'",
+                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" +
+                            destinationToDestinationDistances[l] + "' return r",
                             "params": {}
                         }),
                         success: function (data, textStatus, jqXHR) {
                             console.log(JSON.stringify(data));
+                            setTimeout ($.ajax, 5000 );
                         },
                         error: function (jqXHR, textStatus) {
                             console.log(textStatus);
@@ -406,6 +420,7 @@ angular.module('fYPApp')
                         waypoints: $scope.waypts,
                         travelMode: google.maps.TravelMode.DRIVING
                     };
+                    //console.log(i + "" + m);
                     var myDirectionsService = new google.maps.DirectionsService();
                     myDirectionsService.route(request, function (response, status) {
                         if (status == google.maps.DirectionsStatus.OK) {
@@ -414,7 +429,7 @@ angular.module('fYPApp')
                                 distance += response.routes[0].legs[i].distance.value / 1000;
                             }
                             var roundedDistance = Math.round(distance * 100) / 100;
-                            destinationToSourceDistances.push(roundedDistance);
+                            destinationToSourceDistances.push(roundedDistance);console.log(status);
                         }
                     });
                 }
@@ -437,11 +452,13 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             "query": "MATCH (a:Destination),(b:Source)  WHERE a.name = '" + destinationNodes[i] +
-                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToSourceDistances[a] + "'",
+                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" +
+                            destinationToSourceDistances[a] + "' return r",
                             "params": {}
                         }),
                         success: function (data, textStatus, jqXHR) {
                             console.log(JSON.stringify(data));
+                            setTimeout ($.ajax, 5000 );
                         },
                         error: function (jqXHR, textStatus) {
                             console.log(textStatus);
