@@ -67,7 +67,7 @@ angular.module('fYPApp')
                         distance += response.routes[0].legs[i].distance.value / 1000;
                     }
                     roundedDistance = Math.round(distance * 100) / 100;
-                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + roundedDistance;
+                    document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + roundedDistance;
                 }
             });
         };
@@ -117,13 +117,15 @@ angular.module('fYPApp')
                 },
                 data: JSON.stringify({
                     "query": "CREATE (s1:Source {source}) CREATE (d1:Destination {destination}) " +
-                    "CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance + "'",
+                    "CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance + "' return r",
                     "params": {
                         "source": {
-                            "name": angular.element('#source').val()
+                            "name": angular.element('#source').val(),
+                            "id": "1"
                         },
                         "destination": {
-                            "name": angular.element('#destination').val()
+                            "name": angular.element('#destination').val(),
+                            "id": "1"
                         }
                     }
                 }),

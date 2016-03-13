@@ -210,9 +210,10 @@ angular.module('fYPApp')
 //        }
 //    });
 //};
+
 // var geocoder = new google.maps.Geocoder;
 // var service = new google.maps.DistanceMatrixService;
-//
+
 ////for (var k = 0; k < combinations.length - 1; k++) {
 //     var list = combinations[3];
 //
@@ -300,6 +301,7 @@ angular.module('fYPApp')
 //
 //    return results;
 //}
+
 //var combinations = sets(uniqueNames, 4);
 //document.write(combinations.join("<br>"));
 
@@ -318,12 +320,12 @@ angular.module('fYPApp')
 //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
 //    destinationNodes.push(this.destination);
 //});
-//
+
 //var startNodes = [];
 //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
 //    startNodes.push(this.source);
 //});
-//
+
 //function routeGenerator(inputArr) {
 //    var results = [];
 //
@@ -342,7 +344,7 @@ angular.module('fYPApp')
 //
 //    return permute(inputArr);
 //}
-//
+
 //var printArray = function (arr) {
 //    if (typeof(arr) == "object") {
 //        for (var i = 0; i < arr.length; i++) {
@@ -353,13 +355,13 @@ angular.module('fYPApp')
 //    //document.write(arr);
 //};
 //var combinations = routeGenerator(allNodes);
-//
+
 //var numbers = [];
 //var uniqueNumbers = [];
 //$scope.removeDestinationsFromStart = function () {
 //    for (var z = 0; z < combinations.length; z++) {
 //        for (var i = 0; i < combinations[z].length; i++) {
-//            for (var j = 0; j < destinationNodes.length; j++) {
+//            for (var j = 0; j < nNodes.length; j++) {
 //                if (combinations[z][0].indexOf(destinationNodes[j]) !== -1) {
 //                    numbers.push(z);
 //                    $.each(numbers, function (i, el) {
@@ -375,7 +377,7 @@ angular.module('fYPApp')
 //var arrayWithoutDestinationsAtStart = $.grep(combinations, function (n, i) {
 //    return $.inArray(i, uniqueNumbers) == -1;
 //});
-//
+
 //var len = arrayWithoutDestinationsAtStart[0].length - 1;
 ////console.log(startNodes.toString());
 //
@@ -396,7 +398,7 @@ angular.module('fYPApp')
 //        }
 //    }
 //};
-//
+
 //$scope.removeSourcesFromEnd();
 //var arrayWithoutSourcesAtEnd = $.grep(arrayWithoutDestinationsAtStart, function (n, i) {
 //    return $.inArray(i, uniqueNumbersToRemove) == -1;
