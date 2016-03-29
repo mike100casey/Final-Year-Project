@@ -680,29 +680,27 @@ angular.module('fYPApp')
                     "X-Stream": "true"
                 },
                 data: JSON.stringify({
-                    "query": "START from=node(6), to=node(7)MATCH paths = (from)-[:To*]->(to) WITH REDUCE(dist = 0, rel in rels(paths) | dist + rel.weight) AS distance, paths RETURN nodes(paths), distance",
-                   // query:  "start from=node(6), to=node(7) MATCH (from)-[r:To*]->(to) RETURN r",
+                    "query": "START from=node(6),to=node(7) " +
+                    "MATCH paths = allShortestPaths((from)-[:To*]->(to)) " +
+                    "WITH REDUCE(dist = 0, rel in rels(paths) | dist + rel.weight) AS distance, paths" +
+                    " RETURN nodes(paths), distance",
                     "params": {}
                 }),
                 success: function (data, textStatus, jqXHR) {
-                    //console.log(data);
                     for(var m=0; m < data.data.length ; m++) {
                         for(var i=0; i < data.data[0][0].length ; i++){
                             console.log(JSON.stringify(data.data[m][0][i].data.name));
-                            //console.log(JSON.stringify(data.data[m][0][i].data.journeyId));
                         }
-
-                        console.log(JSON.stringify(data.data[m][1]));
                     }
                 },
                 error: function (jqXHR, textStatus) {
                     console.log(textStatus);
                 }
             });
-
         };
-
-
-
+        //query:"START node1=node(6),node2=node(12),node3=node(13),node4=node(3),node5=node(7) MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4-[r4:To]->node5 RETURN TOINT(r1.weight) + TOINT(r2.weight) + TOINT(r3.weight) + TOINT(r4.weight)",
+        //console.log(JSON.stringify(data.data[m][1]));
+        //console.log(JSON.stringify(data.data[m][0][i].data.journeyId));
+        //console.log(JSON.stringify(data.data[0][0]));
 
     });

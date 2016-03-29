@@ -182,38 +182,38 @@ angular.module('fYPApp')
 
 
     });
-//$scope.getRoute = function () {
-//    $scope.node = [];
-//    $.ajax({
-//        url: "http://localhost:7474/db/data/cypher",
-//        // url: "http://localhost:7474/db/data/node/2/relationships/cypher",
-//        accepts: "application/json; charset=UTF-8",
-//        dataType: "json",
-//        data: {
-//            "query": "start n  = node(*) return n",
-//            //"query":"MATCH (*) RETURN node.property",
-//            "params": {}
-//        },
-//        type: "POST",
-//        success: function (data, xhr, status) {
-//            //$scope.node = data.data[0][0].data;
-//            for (var i = 0; i < data.data.length; i++) {
-//                $scope.node.push(data.data[i][0].data.name);
-//            }
-//            console.log(JSON.stringify($scope.node));
-//            //console.log(JSON.stringify(data));
-//        },
-//        error: function (xhr, err, msg) {
-//            console.log(xhr);
-//            console.log(err);
-//            console.log(msg);
-//        }
-//    });
-//};
+$scope.getRoute = function () {
+    $scope.node = [];
+    $.ajax({
+        url: "http://localhost:7474/db/data/cypher",
+        // url: "http://localhost:7474/db/data/node/2/relationships/cypher",
+        accepts: "application/json; charset=UTF-8",
+        dataType: "json",
+        data: {
+            "query": "start n  = node(*) return n",
+            //"query":"MATCH (*) RETURN node.property",
+            "params": {}
+        },
+        type: "POST",
+        success: function (data, xhr, status) {
+            //$scope.node = data.data[0][0].data;
+            for (var i = 0; i < data.data.length; i++) {
+                $scope.node.push(data.data[i][0].data.name);
+            }
+            console.log(JSON.stringify($scope.node));
+            //console.log(JSON.stringify(data));
+        },
+        error: function (xhr, err, msg) {
+            console.log(xhr);
+            console.log(err);
+            console.log(msg);
+        }
+    });
+};
 
 // var geocoder = new google.maps.Geocoder;
 // var service = new google.maps.DistanceMatrixService;
-
+//
 ////for (var k = 0; k < combinations.length - 1; k++) {
 //     var list = combinations[3];
 //
@@ -248,7 +248,7 @@ angular.module('fYPApp')
 //             document.write('<br>' + result + '<br>');
 //         }
 //     });
-////}
+//}
 
 //$scope.waypts = [];
 //var wayPointsArr = [];
@@ -269,153 +269,153 @@ angular.module('fYPApp')
 //    start = $scope.journey.source;
 //    end = $scope.journey.driverDestination;
 //};
-//
-//
 
-//function getCombinations(chars) {
-//    var result = [];
-//    var f = function(prefix, chars) {
-//        for (var i = 0; i < chars.length; i++) {
-//            result.push(prefix + chars[i]);
-//            f(prefix + chars[i], chars.slice(i + 1));
-//        }
-//    }
-//    f('', chars);
-//    return result;
-//}
 
-//function sets(input, size){
-//    var results = [], result, mask, total = Math.pow(2, input.length);
-//    for(mask = 0; mask < total; mask++){
-//        result = [];
-//        i = input.length - 1;
-//        do{
-//            if( (mask & (1 << i)) !== 0){
-//                result.push(input[i]);
-//            }
-//        }while(i--);
-//        if( result.length >= size){
-//            results.push(result);
-//        }
-//    }
-//
-//    return results;
-//}
 
-//var combinations = sets(uniqueNames, 4);
-//document.write(combinations.join("<br>"));
+function getCombinations(chars) {
+    var result = [];
+    var f = function(prefix, chars) {
+        for (var i = 0; i < chars.length; i++) {
+            result.push(prefix + chars[i]);
+            f(prefix + chars[i], chars.slice(i + 1));
+        }
+    }
+    f('', chars);
+    return result;
+}
 
-//var combinations2 = routeGenerator(combinations);
-//var printArray = function (arr) {
-//    if (typeof(arr) == "object") {
-//        for (var i = 0; i < arr.length; i++) {
-//            printArray(arr[i]);
-//        }
-//    }
-//    else document.write(arr);
-//};
-//printArray(combinations2.join("<br>"));
+function sets(input, size){
+    var results = [], result, mask, total = Math.pow(2, input.length);
+    for(mask = 0; mask < total; mask++){
+        result = [];
+        i = input.length - 1;
+        do{
+            if( (mask & (1 << i)) !== 0){
+                result.push(input[i]);
+            }
+        }while(i--);
+        if( result.length >= size){
+            results.push(result);
+        }
+    }
 
-//var destinationNodes = [];
-//$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-//    destinationNodes.push(this.destination);
-//});
+    return results;
+}
 
-//var startNodes = [];
-//$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-//    startNodes.push(this.source);
-//});
+var combinations = sets(uniqueNames, 4);
+document.write(combinations.join("<br>"));
 
-//function routeGenerator(inputArr) {
-//    var results = [];
-//
-//    function permute(arr, memo) {
-//        var cur, memo = memo || [];
-//        for (var i = 0; i < arr.length; i++) {
-//            cur = arr.splice(i, 1);
-//            if (arr.length === 0) {
-//                results.push(memo.concat(cur));
-//            }
-//            permute(arr.slice(), memo.concat(cur));
-//            arr.splice(i, 0, cur[0]);
-//        }
-//        return results;
-//    }
-//
-//    return permute(inputArr);
-//}
+var combinations2 = routeGenerator(combinations);
+var printArray = function (arr) {
+    if (typeof(arr) == "object") {
+        for (var i = 0; i < arr.length; i++) {
+            printArray(arr[i]);
+        }
+    }
+    else document.write(arr);
+};
+printArray(combinations2.join("<br>"));
 
-//var printArray = function (arr) {
-//    if (typeof(arr) == "object") {
-//        for (var i = 0; i < arr.length; i++) {
-//            printArray(arr[i]);
-//        }
-//    }
-//    else console.log(arr);
-//    //document.write(arr);
-//};
-//var combinations = routeGenerator(allNodes);
+var destinationNodes = [];
+$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+    destinationNodes.push(this.destination);
+});
 
-//var numbers = [];
-//var uniqueNumbers = [];
-//$scope.removeDestinationsFromStart = function () {
-//    for (var z = 0; z < combinations.length; z++) {
-//        for (var i = 0; i < combinations[z].length; i++) {
-//            for (var j = 0; j < nNodes.length; j++) {
-//                if (combinations[z][0].indexOf(destinationNodes[j]) !== -1) {
-//                    numbers.push(z);
-//                    $.each(numbers, function (i, el) {
-//                        if ($.inArray(el, uniqueNumbers) === -1) uniqueNumbers.push(el);
-//                    });
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//};
-//$scope.removeDestinationsFromStart();
-//var arrayWithoutDestinationsAtStart = $.grep(combinations, function (n, i) {
-//    return $.inArray(i, uniqueNumbers) == -1;
-//});
+var startNodes = [];
+$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+    startNodes.push(this.source);
+});
 
-//var len = arrayWithoutDestinationsAtStart[0].length - 1;
-////console.log(startNodes.toString());
-//
-//var sourceNumbers = [];
-//var uniqueNumbersToRemove = [];
-//$scope.removeSourcesFromEnd = function () {
-//    for (var z = 0; z < arrayWithoutDestinationsAtStart.length; z++) {
-//        for (var i = 0; i < arrayWithoutDestinationsAtStart[z].length; i++) {
-//            for (var j = 0; j < startNodes.length; j++) {
-//                if (arrayWithoutDestinationsAtStart[z][len].indexOf(startNodes[j]) !== -1) {
-//                    sourceNumbers.push(z);
-//                    $.each(sourceNumbers, function (i, el) {
-//                        if ($.inArray(el, uniqueNumbersToRemove) === -1) uniqueNumbersToRemove.push(el);
-//                    });
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//};
+function routeGenerator(inputArr) {
+    var results = [];
+    function permute(arr, memo) {
+        var cur, memo = memo || [];
+        for (var i = 0; i < arr.length; i++) {
+            cur = arr.splice(i, 1);
+            if (arr.length === 0) {
+                results.push(memo.concat(cur));
+            }
+            permute(arr.slice(), memo.concat(cur));
+            arr.splice(i, 0, cur[0]);
+        }
+        return results;
+    }
+    return permute(inputArr);
+}
 
-//$scope.removeSourcesFromEnd();
-//var arrayWithoutSourcesAtEnd = $.grep(arrayWithoutDestinationsAtStart, function (n, i) {
-//    return $.inArray(i, uniqueNumbersToRemove) == -1;
-//});
-//
-////console.log(destinationNodes.length);
-////printArray(arrayWithoutSourcesAtEnd.join("<br>"));
-//var x = [];
-//$scope.waypts = [];
-//for (var i = 0; i < 1; i++) {
-//    for (var j = 0; j < arrayWithoutSourcesAtEnd[arrayWithoutSourcesAtEnd.length - 1].length; j++) {
-//        //for (var k = 0; k < 1; k++) {
-//        $scope.waypts.push(
-//            x.push({
-//                location: arrayWithoutSourcesAtEnd[0][j],
-//                stopover: true
-//            }));
-//        //}
-//    }
-//}
+var printArray = function (arr) {
+    if (typeof(arr) == "object") {
+        for (var i = 0; i < arr.length; i++) {
+            printArray(arr[i]);
+        }
+    }
+    else console.log(arr);
+    //document.write(arr);
+};
+var combinations = routeGenerator(allNodes);
+
+var numbers = [];
+var uniqueNumbers = [];
+$scope.removeDestinationsFromStart = function () {
+    for (var z = 0; z < combinations.length; z++) {
+        for (var i = 0; i < combinations[z].length; i++) {
+            for (var j = 0; j < destinationNodes.length; j++) {
+                if (combinations[z][0].indexOf(destinationNodes[j]) !== -1) {
+                    numbers.push(z);
+                    $.each(numbers, function (i, el) {
+                        if ($.inArray(el, uniqueNumbers) === -1) uniqueNumbers.push(el);
+                    });
+                    break;
+                }
+            }
+        }
+    }
+};
+
+$scope.removeDestinationsFromStart();
+
+var arrayWithoutDestinationsAtStart = $.grep(combinations, function (n, i) {
+    return $.inArray(i, uniqueNumbers) == -1;
+});
+
+var len = arrayWithoutDestinationsAtStart[0].length - 1;
+//console.log(startNodes.toString());
+
+var sourceNumbers = [];
+var uniqueNumbersToRemove = [];
+$scope.removeSourcesFromEnd = function () {
+    for (var z = 0; z < arrayWithoutDestinationsAtStart.length; z++) {
+        for (var i = 0; i < arrayWithoutDestinationsAtStart[z].length; i++) {
+            for (var j = 0; j < startNodes.length; j++) {
+                if (arrayWithoutDestinationsAtStart[z][len].indexOf(startNodes[j]) !== -1) {
+                    sourceNumbers.push(z);
+                    $.each(sourceNumbers, function (i, el) {
+                        if ($.inArray(el, uniqueNumbersToRemove) === -1) uniqueNumbersToRemove.push(el);
+                    });
+                    break;
+                }
+            }
+        }
+    }
+};
+
+$scope.removeSourcesFromEnd();
+var arrayWithoutSourcesAtEnd = $.grep(arrayWithoutDestinationsAtStart, function (n, i) {
+    return $.inArray(i, uniqueNumbersToRemove) == -1;
+});
+
+//console.log(destinationNodes.length);
+//printArray(arrayWithoutSourcesAtEnd.join("<br>"));
+var x = [];
+$scope.waypts = [];
+for (var i = 0; i < 1; i++) {
+    for (var j = 0; j < arrayWithoutSourcesAtEnd[arrayWithoutSourcesAtEnd.length - 1].length; j++) {
+        //for (var k = 0; k < 1; k++) {
+        $scope.waypts.push(
+            x.push({
+                location: arrayWithoutSourcesAtEnd[0][j],
+                stopover: true
+            }));
+        //}
+    }
+}
