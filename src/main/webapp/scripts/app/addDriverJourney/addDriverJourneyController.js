@@ -31,7 +31,6 @@ angular.module('fYPApp')
         });
         $scope.journeyRequests = $.getValues(0);
         $scope.waypts = [];
-        var my_delay = 5000;
 
         var startNodes = [];
         $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
@@ -49,7 +48,6 @@ angular.module('fYPApp')
 
         var distance = 0;
         $scope.calculateRoute = function () {
-            //var MyDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
             var start = angular.element('#source').val();
             var end = angular.element('#destination').val();
 
@@ -67,7 +65,7 @@ angular.module('fYPApp')
                         distance += response.routes[0].legs[i].distance.value / 1000;
                     }
                     distance = Math.round(distance * 100) / 100;
-                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + roundedDistance;
+                    document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + roundedDistance;
                 }
             });
         };
@@ -703,9 +701,6 @@ angular.module('fYPApp')
                 }
             });
         };
-        //query:"START node1=node(6),node2=node(12),node3=node(13),node4=node(3),node5=node(7) MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4-[r4:To]->node5 RETURN TOINT(r1.weight) + TOINT(r2.weight) + TOINT(r3.weight) + TOINT(r4.weight)",
-        //console.log(JSON.stringify(data.data[m][1]));
-        //console.log(JSON.stringify(data.data[m][0][i].data.journeyId));
-        //console.log(JSON.stringify(data.data[0][0]));nodes(paths),
+
 
     });

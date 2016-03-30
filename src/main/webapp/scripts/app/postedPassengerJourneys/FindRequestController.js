@@ -216,9 +216,13 @@ angular.module('fYPApp')
         startNodes.push("4");
         startNodes.push("12");
         var node_ids = [];
+        var oneStopDistance = [];
         var twoStopDistances = [];
-        var arrayWithoutSourcesAtEnd = [];
         var threeStopDistances = [];
+        var arrayWithoutSourcesAtEnd = [];
+
+
+        var arrayLength;
 
         $scope.paths = function () {
             var numbers = [];
@@ -268,8 +272,11 @@ angular.module('fYPApp')
                 return $.inArray(i, uniqueNumbersToRemove) == -1;
             });
 
-            var arrayLength = node_ids.length;
+            arrayLength = node_ids.length;
             if (arrayLength == 2) {
+                if (oneStopDistance.length > 0) {
+                    oneStopDistance.splice(0, oneStopDistance.length)
+                }
                 var serverURL = "http://localhost:7474/db/data";
                 $.ajax({
                     type: "POST",
@@ -286,6 +293,7 @@ angular.module('fYPApp')
                         "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
+                        oneStopDistance.push(parseInt(data.data[0][0]));
                         console.log(JSON.stringify(data.data[0][0]));
                     },
                     error: function (jqXHR, textStatus) {
@@ -331,6 +339,9 @@ angular.module('fYPApp')
                 }
             }
             else if (arrayLength == 6) {
+                if (threeStopDistances.length > 0) {
+                    threeStopDistances.splice(0, threeStopDistances.length)
+                }
                 for (var k = 0; k < arrayWithoutSourcesAtEnd.length; k++) {
                     serverURL = "http://localhost:7474/db/data";
                     $.ajax({
@@ -365,6 +376,7 @@ angular.module('fYPApp')
                     });
                 }
             }
+            else {}
         };
 
         function getMinIndex(arr) {
@@ -379,11 +391,43 @@ angular.module('fYPApp')
             return index;
         }
 
+        $scope.waypoints = [];
         $scope.minIndex = function () {
-            var idx = getMinIndex(twoStopDistances);
-            console.log(idx);
-            console.log(JSON.stringify(arrayWithoutSourcesAtEnd[idx][0]));
+            var node_id_array = ["0", "1", "2", "3", "4", "5", "12", "13"];
+            var town_array = ["Foynes, Ireland", "Askeaton, Ireland", "Kanturk, Ireland",
+                "Dromcollogher, Ireland", "Listowel, Ireland", "Newcastle West, Ireland",
+                "Cahirciveen, Ireland", "Killorglin, Ireland"];
 
+            var idx;
+            var arrayLength = node_ids.length;
+
+            if (arrayLength == 2){
+                idx = getMinIndex(oneStopDistance);
+                console.log(oneStopDistance[idx]);
+                document.getElementById("combinedJourneyDistance").innerHTML = "Journey distance from" +
+                    " Tralee to Limerick with selected stops is " + oneStopDistance[idx] + " km";
+            }
+            if (arrayLength == 4){
+                idx = getMinIndex(twoStopDistances);
+                console.log(twoStopDistances[idx]);
+                document.getElementById("combinedJourneyDistance").innerHTML = "Journey distance from" +
+                    " Tralee to Limerick with selected stops is " + twoStopDistances[idx] + " km";
+            }
+            if (arrayLength == 6) {
+                idx = getMinIndex(threeStopDistances);
+                console.log(threeStopDistances[idx]);
+                document.getElementById("combinedJourneyDistance").innerHTML = "Journey distance from" +
+                    " Tralee to Limerick with selected stops is " + threeStopDistances[idx] + " km";
+            }
+            console.log(idx);
+
+            for (var i = 0; i < arrayWithoutSourcesAtEnd[idx].length; i++) {
+                for (var j = 0; j < node_id_array.length; j++) {
+                    if (arrayWithoutSourcesAtEnd[idx][i].localeCompare(node_id_array[j]) == 0) {
+                        $scope.waypoints.push(town_array[j]);
+                    }
+                }
+            }
         };
 
         $scope.selection = [];

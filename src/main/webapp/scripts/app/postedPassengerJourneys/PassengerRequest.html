@@ -1,25 +1,108 @@
-<table class="table table-bordered table-hover success">
-    <thead>
-    <tr>
-        <th>Add</th>
-        <th>Posted By</th>
-        <th>Source</th>
-        <th>Destination</th>
-        <th>Date</th>
-        <th>Time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
-        <td ><input id="{{pj.id}}" type="checkbox" ng-checked="selection.indexOf(pj.id) > -1" ng-click="toggleSelection(pj.id)"></td>
-        <td>{{pj.username}}</td>
-        <td>{{pj.source}}</td>
-        <td>{{pj.destination}}</td>
-        <td>{{pj.date}}</td>
-        <td>{{pj.time}}</td>
-    </tr>
-    </tbody>
-</table>
-<div><button class="btn btn-primary" ng-click="paths();"></button>Paths</div>
-<div><button class="btn btn-primary" ng-click="minIndex();"></button>index</div>
+<div class="col-md-12">
+    <div class="col-md-5">
 
+        <form name="form" ng-hide="success" ng-submit="sendForm()" role="form" novalidate show-validation>
+
+            <div>
+                <label>Source</label>
+                <input type="text" id="source" name="source" class="form-control"
+                       maxlength="70" ng-minlength=1 ng-maxlength=70 ng-autocomplete ng-model="journey.source"
+                       placeholder="Enter Departure (address)"
+                       required data-toggle="tooltip" data-placement="top">
+
+                <div ng-show="form.source.$dirty && form.source.$invalid">
+                    <p class="help-block" ng-show="form.source.$error.required">Source is required. </p>
+
+                    <p class="help-block" ng-show="form.source.$error.maxlength">Source cannot be longer than 70
+                        characters</p>
+                </div>
+            </div>
+            <div>
+                <label>Destination</label>
+                <input type="text" id="destination" name="destination" class="form-control input-group"
+                       ng-model="journey.driverDestination"
+                       maxlength="70" ng-autocomplete ng-minlength=1 ng-maxlength=70
+                       placeholder="Enter Arrival (address)"
+                       required data-toggle="tooltip" data-placement="top">
+
+                <div ng-show="form.destination.$dirty && form.destination.$invalid">
+                    <p class="help-block" ng-show="form.destination.$error.required">
+                        Destination is required.
+                    </p>
+
+                    <p class="help-block" ng-show="form.destination.$error.maxlength">
+                        Destination cannot be longer than 70 characters
+                    </p><br>&#xA0;
+                </div>
+            </div>
+            <div>
+                <label>Date</label>
+
+                <div class="form-group input-group">
+                    <label class="input-group-btn" for="date-fld2">
+                    <span class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </label>
+                    <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
+                           ng-click="calculateRoute();"/>
+                </div>
+            </div>
+            <div>
+                <label>Time</label>
+
+                <div class="input-group bootstrap-timepicker timepicker">
+                    <input id="timepicker" class="form-control" data-provide="timepicker" ng-click=""
+                           ng-model="journey.time" data-minute-step="1" type="text"/>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+            </div>
+            <br>
+
+            <div>
+                <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Post</button>
+            </div>
+
+
+        </form>
+
+    </div>
+    <div class="col-md-7">
+        <label>Available passengers</label>
+        <table class="table table-bordered table-hover success">
+            <thead>
+            <tr>
+                <th>Add</th>
+                <th>Posted By</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
+                <td><input id="{{pj.id}}" type="checkbox" ng-checked="selection.indexOf(pj.id) > -1"
+                           ng-click="toggleSelection(pj.id)"></td>
+                <td>{{pj.username}}</td>
+                <td>{{pj.source}}</td>
+                <td>{{pj.destination}}</td>
+                <td>{{pj.date}}</td>
+                <td>{{pj.time}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <p id="distanceLabel">Journey distance from Tralee to Limerick is 100 Km</p>
+
+        <div>
+            <button class="btn btn-primary" ng-click="paths();">Add Stops</button>
+            <button class="btn btn-primary" ng-click="minIndex();">Get Distance</button>
+        </div>
+        <br>
+        <div>
+            <p id="combinedJourneyDistance"></p>
+        </div>
+
+
+    </div>
+</div>
