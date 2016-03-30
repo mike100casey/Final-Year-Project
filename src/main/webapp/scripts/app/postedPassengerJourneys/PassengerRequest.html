@@ -1,7 +1,7 @@
 <table class="table table-bordered table-hover success">
     <thead>
     <tr>
-        <th>Id</th>
+        <th>Add</th>
         <th>Posted By</th>
         <th>Source</th>
         <th>Destination</th>
@@ -11,7 +11,7 @@
     </thead>
     <tbody>
     <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
-        <td >{{pj.id}}</td>
+        <td ><input id="{{pj.id}}" type="checkbox" ng-checked="selection.indexOf(pj.id) > -1" ng-click="toggleSelection(pj.id)"></td>
         <td>{{pj.username}}</td>
         <td>{{pj.source}}</td>
         <td>{{pj.destination}}</td>
@@ -20,3 +20,6 @@
     </tr>
     </tbody>
 </table>
+<div><button class="btn btn-primary" ng-click="paths();"></button>Paths</div>
+<div><button class="btn btn-primary" ng-click="minIndex();"></button>index</div>
+
