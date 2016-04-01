@@ -3,17 +3,17 @@
 angular.module('fYPApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('driverPost', {
+            .state('postedJourneys', {
                 parent: 'site',
-                url: '/driverPost',
+                url: '/postedJourneys',
                 data: {
                     authorities: [],
-                    pageTitle: 'Driver Post'
+                    pageTitle: 'Posted Journeys'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/addDriverJourney/addDriverJourney.html',
-                        controller: 'DriverJourneyController'
+                        templateUrl: 'scripts/app/addDriverJourney1/addDriverJourney1.html',
+                        controller: 'DriverJourneyController1'
                     }
                 },
                 resolve: {

@@ -8,7 +8,7 @@ angular.module('fYPApp')
                 url: '/map',
                 data: {
                     authorities: [],
-                    pageTitle: 'passenger Map'
+                    pageTitle: 'Add Passenger Journey'
                 },
                 views: {
                     'content@': {

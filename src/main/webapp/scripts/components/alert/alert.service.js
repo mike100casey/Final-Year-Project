@@ -19,7 +19,7 @@ angular.module('fYPApp')
                 info: info,
                 warning : warning
             },
-            
+
             toast = this.toast,
             alertId = 0, // unique id for each alert. Starts from 0.
             alerts = [],
@@ -93,7 +93,7 @@ angular.module('fYPApp')
                     close: function (alerts) {
                         return exports.closeAlert(this.id, alerts);
                     }
-                }
+                };
                 if(!alert.scoped) {
                     alerts.push(alert);
                 }

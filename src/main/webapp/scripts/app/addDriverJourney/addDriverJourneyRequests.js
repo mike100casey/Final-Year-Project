@@ -9,17 +9,17 @@
 angular.module('fYPApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('postedJourneys', {
+            .state('addDriverJourneys', {
                 parent: 'site',
                 url: '/findPassengers',
                 data: {
                     roles: [],
-                    pageTitle: 'findPassengers.title'
+                    pageTitle: 'add Driver Journeys'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/postedPassengerJourneys/PassengerRequest.html',
-                        controller: 'FindRequestController'
+                        templateUrl: 'scripts/app/addDriverJourney/addDriverJourney.html',
+                        controller: 'addDriverJourneyController'
                     }
                 },
                 resolve: {

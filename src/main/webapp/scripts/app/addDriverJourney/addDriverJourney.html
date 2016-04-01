@@ -1,7 +1,9 @@
 <div class="col-md-12">
-    <form name="form" ng-hide="success" ng-submit="sendForm()" role="form" novalidate show-validation>
-        <div class="col-md-12">
-            <div class="col-md-3">
+    <div class="col-md-4">
+
+        <form name="form" ng-hide="success" ng-submit="sendForm()" role="form" novalidate show-validation>
+
+            <div>
                 <label>Source</label>
                 <input type="text" id="source" name="source" class="form-control"
                        maxlength="70" ng-minlength=1 ng-maxlength=70 ng-autocomplete ng-model="journey.source"
@@ -15,13 +17,13 @@
                         characters</p>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div>
                 <label>Destination</label>
-                <input type="text" id="destination" name="destination" class="form-control"
-                       ng-model="journey.driverDestination"
+                <input type="text" id="destination" name="destination" class="form-control input-group"
+                       ng-model="journey.destination"
                        maxlength="70" ng-autocomplete ng-minlength=1 ng-maxlength=70
                        placeholder="Enter Arrival (address)"
-                       required data-toggle="tooltip" data-placement="top" >
+                       required data-toggle="tooltip" data-placement="top">
 
                 <div ng-show="form.destination.$dirty && form.destination.$invalid">
                     <p class="help-block" ng-show="form.destination.$error.required">
@@ -33,8 +35,9 @@
                     </p><br>&#xA0;
                 </div>
             </div>
-            <div class="col-md-2">
+            <div>
                 <label>Date</label>
+
                 <div class="form-group input-group">
                     <label class="input-group-btn" for="date-fld2">
                     <span class="btn btn-default" type="button">
@@ -42,43 +45,96 @@
                     </span>
                     </label>
                     <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
-                        ng-click="calculateRoute();"/>
+                           ng-click="calculateRoute();"/>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div>
                 <label>Time</label>
+
                 <div class="input-group bootstrap-timepicker timepicker">
                     <input id="timepicker" class="form-control" data-provide="timepicker" ng-click=""
                            ng-model="journey.time" data-minute-step="1" type="text"/>
                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Post
-                </button>
+            <br>
+
+            <div>
+                <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Post</button>
             </div>
+
+
+        </form>
+
+    </div>
+    <div class="col-md-5">
+        <label>Available passengers</label>
+        <table class="table table-bordered table-hover success">
+            <thead>
+            <tr>
+                <th>Add</th>
+                <th>user</th>
+                <th>Source</th>
+                <th>Destination</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
+                <td><input id="{{pj.id}}" type="checkbox" ng-checked="selection.indexOf(pj.id) > -1"
+                           ng-click="toggleSelection(pj.id); isStopping = true;">
+
+                </td>
+                <td>{{pj.username}}</td>
+                <td>{{pj.source}}</td>
+                <td>{{pj.destination}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+        <label id="distanceLabel"></label>
+
+        <div>
+            <button class="btn btn-primary" ng-click="paths();">Add Stops</button>
+            <button class="btn btn-primary" ng-click="minIndex();">Distance</button>
         </div>
-    </form>
+        <br>
+
+
+    </div>
+    <div class="col-md-3">
+        <div><label>New driver route distance
+            <label id="ord" ng-show="isOld;">{{oldJourneyDistance}}</label>
+            <label id="knew" ng-show="isKnew;">{{newJourneyDistance}}</label> km</label>
+
+            <p>{{journey.source}}</p>
+
+            <p ng-repeat="pt in displayWaypoints" ng-show="isStopping;">&#xA0;{{pt}}</p>
+
+            <p>{{journey.destination}}</p>
+        </div>
+    </div>
 </div>
+
 <!--&lt;!&ndash;<div><label>Driver source to passenger sources </label> <span><button class="btn btn-primary" ng-click="driverSourceToSourceDistances(); "></button></span></div>&ndash;&gt;-->
 <!--<div><label>Driver source to passenger sources edges </label> <span><button class="btn btn-primary" ng-click="driverSourceToAllSourceEdges(); "></button></span></div>-->
 <!--&lt;!&ndash;<div><label>Driver destination to passenger destination </label> <span><button class="btn btn-primary" ng-click="driverDestinationToAllDestinationDistances(); "></button></span></div>&ndash;&gt;-->
 <!--<div><label>Driver destination to passenger destination edges </label> <span><button class="btn btn-primary" ng-click="driverDestinationToDestinationEdges(); "></button></span></div>-->
 <!--&lt;!&ndash;<div><label>Source to Source distance </label> <span><button class="btn btn-primary" ng-click="sourceToSourceDistances() "></button></span></div>&ndash;&gt;-->
 <!--<div><label>Source to Source edges </label>-->
-    <!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges1(); "></button></span>-->
-    <!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges2(); "></button></span>-->
-    <!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges3(); "></button></span>-->
-    <!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges4(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges1(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges2(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges3(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges4(); "></button></span>-->
 <!--</div>-->
 <!--&lt;!&ndash;<div><label>Destination to destination distance </label> <span><button class="btn btn-primary" ng-click="destinationToDestinationDistances(); "></button></span></div>&ndash;&gt;-->
 
 
 <!--<div><label>Destination to destination edges </label>-->
-    <!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges1(); "></button></span>-->
-    <!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges2(); "></button></span>-->
-    <!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges3(); "></button></span>-->
-    <!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges4(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges1(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges2(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges3(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges4(); "></button></span>-->
 <!--</div>-->
 
 

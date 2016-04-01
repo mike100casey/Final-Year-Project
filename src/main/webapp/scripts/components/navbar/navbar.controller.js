@@ -30,12 +30,7 @@ angular.module('fYPApp')
                 success(function (data, status, headers, config) {
                     //console.log(JSON.stringify(data));
                     $scope.make = data.make;
-                    if ($scope.make == "") {
-                        $scope.isDriver = false;
-                    }
-                    else {
-                        $scope.isDriver = true;
-                    }
+                    $scope.isDriver = $scope.make != "";
                 })
                 .error(function (data, status, headers, config) {
                     // log error
