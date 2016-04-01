@@ -7,6 +7,8 @@
 
 angular.module('fYPApp')
     .controller('FindRequestController', function ($scope, Principal, $timeout, Auth, $http, $filter, $log) {
+
+        var username = null;
         Principal.identity().then(function (account) {
             $scope.account = account;
             $scope.isAuthenticated = Principal.isAuthenticated;
@@ -81,8 +83,8 @@ angular.module('fYPApp')
             }
         };
 
+        $scope.oldJourneyDistance = 0;
         $scope.calculateRoute = function () {
-            var myDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
             var start = angular.element('#source').val();
             var end = angular.element('#destination').val();
 
@@ -95,85 +97,27 @@ angular.module('fYPApp')
             var myDirectionsService = new google.maps.DirectionsService();
             myDirectionsService.route(request, function (response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-                    myDirectionsDisplay.setDirections(response);
                     var distance = 0;
                     for (var i = 0; i < response.routes[0].legs.length; i++) {
                         distance += response.routes[0].legs[i].distance.value / 1000;
                     }
-                    var dist = Math.round(distance * 100) / 100 + " KM";
-                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + dist;
-                    console.log(dist);
+                    var dist = Math.round(distance * 100) / 100;
+                    $scope.oldJourneyDistance = dist;
+                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + start + " to " +
+                    //    end + " " + dist;
+                    //console.log(dist);
                 }
             });
         };
 
-        $scope.getRoute = function () {
-            $scope.node = [];
-            var serverURL = "http://localhost:7474/db/data";
-            $.ajax({
-                type: "POST",
-                url: serverURL + "/cypher",
-                accepts: "application/json",
-                dataType: "json",
-                contentType: "application/json",
-                headers: {
-                    "X-Stream": "true"
-                },
-                data: JSON.stringify({
-                    //"query": query2,
-                    //"query": "CREATE (a:Person { name:'Tom Hanks', born:1956 })-[r:ACTED_IN ]->(m:Movie { title:'Forrest Gump',released:1994 })"+
-                    //"CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m",
-                    //"query": " UNWIND { props } AS map  CREATE (n) SET n = map",
-                    //"query": "START n=node(*) match n-[r?]-() where r is null return n",
-                    //START a=node(...), b=node(...) CREATE UNIQUE a-[r:CONNECTED_TO]-b SET r.weight = coalesce(r.weight?, 0) + 1
-                    "query": " CREATE (n:Destination { props }) ",
-                    //"query" : " START n=node:nameIdx(name='Abbeyfeale')return id(n)",
-                    //"query" : " START n=node(*) WHERE n.name = 'Tralee' return id(n)",
-                    //"query" : " CREATE (jdoe {name:'John Doe'})-[r:friend]->(mj {name:'Mary Joe'}) return r, jdoe, mj",;
-                    //"query" : " START n=node(*) where n.name = 'Tralee' return n",
-                    //"query" : "START first = node(18), second = node(19) CREATE first-[r:CONNECTED_TO]->second SET r.weight = "+dis +" return r",
-                    // "query" : "start n = node(*) return n;",
-                    "params": {
-                        "props": {
-                            "position": "Developer",
-                            "name": "Andres"
-                        }
-                    }
-                }),
-                success: function (data, textStatus, jqXHR) {
 
-                    console.log(JSON.stringify(data));
-                },
-                error: function (jqXHR, textStatus) {
-
-                    console.log(jqXHR);
-                }
-            });//end of ajax
+        $scope.journey = {};
+        $scope.journey.source = "";
+        $scope.journey.destination = "";
+        $scope.addUsername = function () {
+            $scope.journey.username = username;
         };
 
-        $scope.delNodes = function () {
-            $scope.node = [];
-            var serverURL = "http://localhost:7474/db/data";
-            $.ajax({
-                type: "POST",
-                url: serverURL + "/cypher",
-                accepts: "application/json",
-                dataType: "json",
-                contentType: "application/json",
-                headers: {
-                    "X-Stream": "true"
-                },
-                data: JSON.stringify({
-                    "query": " START n=node(*) delete n", "params": {}
-                }),
-                success: function (data, textStatus, jqXHR) {
-                    console.log(JSON.stringify(data));
-                },
-                error: function (jqXHR, textStatus) {
-                    console.log(textStatus);
-                }
-            });//end of ajax
-        };
 
         function routeGenerator(inputArr) {
             var results = [];
@@ -392,7 +336,13 @@ angular.module('fYPApp')
         }
 
         $scope.waypoints = [];
+        $scope.displayWaypoints = [];
+        $scope.newJourneyDistance = 0;
         $scope.minIndex = function () {
+            if ($scope.waypoints.length > 0) {
+                $scope.waypoints.splice(0, $scope.waypoints.length);
+                $scope.displayWaypoints.splice(0, $scope.displayWaypoints.length);
+            }
             var node_id_array = ["0", "1", "2", "3", "4", "5", "12", "13"];
             var town_array = ["Foynes, Ireland", "Askeaton, Ireland", "Kanturk, Ireland",
                 "Dromcollogher, Ireland", "Listowel, Ireland", "Newcastle West, Ireland",
@@ -403,32 +353,37 @@ angular.module('fYPApp')
 
             if (arrayLength == 2){
                 idx = getMinIndex(oneStopDistance);
-                console.log(oneStopDistance[idx]);
-                document.getElementById("combinedJourneyDistance").innerHTML = "Journey distance from" +
-                    " Tralee to Limerick with selected stops is " + oneStopDistance[idx] + " km";
+                $scope.newJourneyDistance = oneStopDistance[idx];
             }
             if (arrayLength == 4){
                 idx = getMinIndex(twoStopDistances);
-                console.log(twoStopDistances[idx]);
-                document.getElementById("combinedJourneyDistance").innerHTML = "Journey distance from" +
-                    " Tralee to Limerick with selected stops is " + twoStopDistances[idx] + " km";
+                $scope.newJourneyDistance = twoStopDistances[idx];
             }
             if (arrayLength == 6) {
                 idx = getMinIndex(threeStopDistances);
-                console.log(threeStopDistances[idx]);
-                document.getElementById("combinedJourneyDistance").innerHTML = "Journey distance from" +
-                    " Tralee to Limerick with selected stops is " + threeStopDistances[idx] + " km";
+                $scope.newJourneyDistance = threeStopDistances[idx];
             }
-            console.log(idx);
-
+            $scope.waypoints.push($scope.journey.source);
             for (var i = 0; i < arrayWithoutSourcesAtEnd[idx].length; i++) {
                 for (var j = 0; j < node_id_array.length; j++) {
                     if (arrayWithoutSourcesAtEnd[idx][i].localeCompare(node_id_array[j]) == 0) {
                         $scope.waypoints.push(town_array[j]);
+                        $scope.displayWaypoints.push(town_array[j]);
                     }
                 }
             }
+            $scope.waypoints.push($scope.journey.destination);
+            if ($scope.waypoints.length > 0) {
+                $scope.isStopping = true;
+                $scope.isOld = false;
+                $scope.isKnew = true;
+            }
+
         };
+
+        $scope.isStopping = false;
+        $scope.isOld = true;
+        $scope.isKnew = false;
 
         $scope.selection = [];
         $scope.toggleSelection = function toggleSelection(id) {
@@ -472,7 +427,13 @@ angular.module('fYPApp')
                     node_ids.push("13");
                 }
             }
+            if ($scope.selection.length < 1) {
+                $scope.isStopping = false;
+                $scope.isOld = true;
+                $scope.isKnew = false;
+            }
         };
+
 
 
     });
@@ -659,3 +620,71 @@ angular.module('fYPApp')
 //        console.log(JSON.stringify(data.data[m][0][i].data.name));node6-[r6:To]->node7-[r7:To]-+ TOINT(r6.weight)+ TOINT(r7.weight)
 //    }
 //}
+
+//$scope.getRoute = function () {
+//    $scope.node = [];
+//    var serverURL = "http://localhost:7474/db/data";
+//    $.ajax({
+//        type: "POST",
+//        url: serverURL + "/cypher",
+//        accepts: "application/json",
+//        dataType: "json",
+//        contentType: "application/json",
+//        headers: {
+//            "X-Stream": "true"
+//        },
+//        data: JSON.stringify({
+//            //"query": query2,
+//            //"query": "CREATE (a:Person { name:'Tom Hanks', born:1956 })-[r:ACTED_IN ]->(m:Movie { title:'Forrest Gump',released:1994 })"+
+//            //"CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m",
+//            //"query": " UNWIND { props } AS map  CREATE (n) SET n = map",
+//            //"query": "START n=node(*) match n-[r?]-() where r is null return n",
+//            //START a=node(...), b=node(...) CREATE UNIQUE a-[r:CONNECTED_TO]-b SET r.weight = coalesce(r.weight?, 0) + 1
+//            "query": " CREATE (n:Destination { props }) ",
+//            //"query" : " START n=node:nameIdx(name='Abbeyfeale')return id(n)",
+//            //"query" : " START n=node(*) WHERE n.name = 'Tralee' return id(n)",
+//            //"query" : " CREATE (jdoe {name:'John Doe'})-[r:friend]->(mj {name:'Mary Joe'}) return r, jdoe, mj",;
+//            //"query" : " START n=node(*) where n.name = 'Tralee' return n",
+//            //"query" : "START first = node(18), second = node(19) CREATE first-[r:CONNECTED_TO]->second SET r.weight = "+dis +" return r",
+//            // "query" : "start n = node(*) return n;",
+//            "params": {
+//                "props": {
+//                    "position": "Developer",
+//                    "name": "Andres"
+//                }
+//            }
+//        }),
+//        success: function (data, textStatus, jqXHR) {
+//
+//            console.log(JSON.stringify(data));
+//        },
+//        error: function (jqXHR, textStatus) {
+//
+//            console.log(jqXHR);
+//        }
+//    });//end of ajax
+//};
+
+//$scope.delNodes = function () {
+//    $scope.node = [];
+//    var serverURL = "http://localhost:7474/db/data";
+//    $.ajax({
+//        type: "POST",
+//        url: serverURL + "/cypher",
+//        accepts: "application/json",
+//        dataType: "json",
+//        contentType: "application/json",
+//        headers: {
+//            "X-Stream": "true"
+//        },
+//        data: JSON.stringify({
+//            "query": " START n=node(*) delete n", "params": {}
+//        }),
+//        success: function (data, textStatus, jqXHR) {
+//            console.log(JSON.stringify(data));
+//        },
+//        error: function (jqXHR, textStatus) {
+//            console.log(textStatus);
+//        }
+//    });//end of ajax
+//};

@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <div class="col-md-5">
+    <div class="col-md-4">
 
         <form name="form" ng-hide="success" ng-submit="sendForm()" role="form" novalidate show-validation>
 
@@ -20,7 +20,7 @@
             <div>
                 <label>Destination</label>
                 <input type="text" id="destination" name="destination" class="form-control input-group"
-                       ng-model="journey.driverDestination"
+                       ng-model="journey.destination"
                        maxlength="70" ng-autocomplete ng-minlength=1 ng-maxlength=70
                        placeholder="Enter Arrival (address)"
                        required data-toggle="tooltip" data-placement="top">
@@ -67,42 +67,51 @@
         </form>
 
     </div>
-    <div class="col-md-7">
+    <div class="col-md-5">
         <label>Available passengers</label>
         <table class="table table-bordered table-hover success">
             <thead>
             <tr>
                 <th>Add</th>
-                <th>Posted By</th>
+                <th>user</th>
                 <th>Source</th>
                 <th>Destination</th>
-                <th>Date</th>
-                <th>Time</th>
+
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="pj in journeyRequests" ng-class="{even: $even, odd: $odd}">
                 <td><input id="{{pj.id}}" type="checkbox" ng-checked="selection.indexOf(pj.id) > -1"
-                           ng-click="toggleSelection(pj.id)"></td>
+                           ng-click="toggleSelection(pj.id); isStopping = true;">
+
+                </td>
                 <td>{{pj.username}}</td>
                 <td>{{pj.source}}</td>
                 <td>{{pj.destination}}</td>
-                <td>{{pj.date}}</td>
-                <td>{{pj.time}}</td>
+
             </tr>
             </tbody>
         </table>
-        <p id="distanceLabel">Journey distance from Tralee to Limerick is 100 Km</p>
+        <label id="distanceLabel"></label>
 
         <div>
             <button class="btn btn-primary" ng-click="paths();">Add Stops</button>
-            <button class="btn btn-primary" ng-click="minIndex();">Get Distance</button>
+            <button class="btn btn-primary" ng-click="minIndex();">Distance</button>
         </div>
         <br>
-        <div>
-            <p id="combinedJourneyDistance"></p>
+
+
+    </div>
+    <div class="col-md-3">
+        <div><label>New driver route distance
+            <label id="ord" ng-show="isOld;">{{oldJourneyDistance}}</label>
+            <label id="knew" ng-show="isKnew;">{{newJourneyDistance}}</label> km</label>
+
+            <p>{{journey.source}}</p>
+
+            <p ng-repeat="pt in displayWaypoints" ng-show="isStopping;">&#xA0;{{pt}}</p>
+
+            <p>{{journey.destination}}</p>
         </div>
-
-
     </div>
 </div>
