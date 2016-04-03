@@ -6,13 +6,21 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('addDriverJourneyController', function ($scope, Principal, $timeout, Auth, $http) {
+    .controller('addDriverJourneyController', function ($scope, Principal, $timeout, Auth, $http, $log) {
 
         var username = null;
         Principal.identity().then(function (account) {
             $scope.account = account;
+            username = account.login;
             $scope.isAuthenticated = Principal.isAuthenticated;
         });
+
+        $scope.journey = {};
+        $scope.journey.source = "";
+        $scope.journey.destination = "";
+        $scope.addUsername = function () {
+            $scope.journey.username = username;
+        };
 
         $(".date-input").datepicker({});
         $('#timepicker').timepicker({});
@@ -333,7 +341,7 @@ angular.module('fYPApp')
         };
 
 //-----------------------sources to destinations----------------------
-        var sourceToDestinationDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84,  53.11, 136.05, 123.79, 113.39, 40.12];
+        var sourceToDestinationDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
         $scope.sourceToDestinationDistances = function () {
             for (var i = 3; i < 4; i++) {
                 for (var m = 0; m < destinationNodes.length; m++) {
@@ -393,7 +401,7 @@ angular.module('fYPApp')
         };
 
 //-----------------------Driver destination to ALL destinations----------------------
-        var driverDestinationToDestinationDistances = [27.58, 52.98,42.58, 115.85 ];
+        var driverDestinationToDestinationDistances = [27.58, 52.98, 42.58, 115.85];
         $scope.driverDestinationToAllDestinationDistances = function () {
             for (var i = 0; i < destinationNodes.length; i++) {
                 var end = angular.element('#destination').val();
@@ -604,7 +612,7 @@ angular.module('fYPApp')
         };
 
 //-----------------------destination to sources----------------------
-        var destinationToSourceDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84,  53.11, 136.05, 123.79, 113.39, 40.12];
+        var destinationToSourceDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
         $scope.allDestinationToSourceDistances = function () {
             for (var i = 3; i < 4; i++) {
                 for (var m = 0; m < startNodes.length; m++) {
@@ -623,7 +631,8 @@ angular.module('fYPApp')
                                 distance += response.routes[0].legs[i].distance.value / 1000;
                             }
                             var roundedDistance = Math.round(distance * 100) / 100;
-                            destinationToSourceDistances.push(roundedDistance);console.log(roundedDistance);
+                            destinationToSourceDistances.push(roundedDistance);
+                            console.log(roundedDistance);
                         }
                     });
                 }
@@ -690,13 +699,6 @@ angular.module('fYPApp')
             });
         };
 
-        $scope.journey = {};
-        $scope.journey.source = "";
-        $scope.journey.destination = "";
-        $scope.addUsername = function () {
-            $scope.journey.username = username;
-        };
-
         function routeGenerator(inputArr) {
             var results = [];
 
@@ -715,6 +717,7 @@ angular.module('fYPApp')
 
             return permute(inputArr);
         }
+
         var printArray = function (arr) {
             if (typeof(arr) == "object") {
                 for (var i = 0; i < arr.length; i++) {
@@ -920,19 +923,33 @@ angular.module('fYPApp')
                 "Cahirciveen, Ireland", "Killorglin, Ireland"];
 
             var idx;
-            var arrayLength = node_ids.length;
+            arrayLength = node_ids.length;
 
             if (arrayLength == 2) {
                 idx = getMinIndex(oneStopDistance);
                 $scope.newJourneyDistance = oneStopDistance[idx];
+                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
+                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
             }
             if (arrayLength == 4) {
                 idx = getMinIndex(twoStopDistances);
                 $scope.newJourneyDistance = twoStopDistances[idx];
+                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
+                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
+                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
+                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
             }
             if (arrayLength == 6) {
                 idx = getMinIndex(threeStopDistances);
                 $scope.newJourneyDistance = threeStopDistances[idx];
+                $scope.newJourneyDistance = twoStopDistances[idx];
+                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
+                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
+                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
+                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
+                $scope.journey.waypoints5 = $scope.displayWaypoints[4];
+                $scope.journey.waypoints6 = $scope.displayWaypoints[5];
+
             }
             $scope.waypoints.push($scope.journey.source);
             for (var i = 0; i < arrayWithoutSourcesAtEnd[idx].length; i++) {
@@ -962,38 +979,38 @@ angular.module('fYPApp')
             if (idx > -1) {
                 $scope.selection.splice(idx, 1);
 
-                if (id == 19) {
+                if (id == 2) {
                     node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
                 }
-                if (id == 20) {
+                if (id == 3) {
                     node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
                 }
-                if (id == 21) {
+                if (id == 4) {
                     node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
                 }
-                if (id == 22) {
+                if (id == 5) {
                     node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
                 }
             }
             else {
                 $scope.selection.push(id);
-                if (id == 19) {
+                if (id == 2) {
                     node_ids.push("0");
                     node_ids.push("1");
                 }
-                if (id == 20) {
+                if (id == 3) {
                     node_ids.push("2");
                     node_ids.push("3");
                 }
-                if (id == 21) {
+                if (id == 4) {
                     node_ids.push("4");
                     node_ids.push("5");
                 }
-                if (id == 22) {
+                if (id == 5) {
                     node_ids.push("12");
                     node_ids.push("13");
                 }
@@ -1003,6 +1020,27 @@ angular.module('fYPApp')
                 $scope.isOld = true;
                 $scope.isKnew = false;
             }
+        };
+
+        $scope.sendForm = function () {
+            //$scope.journey.waypoints1 = $scope.displayWaypoints[0];
+            //$scope.journey.waypoints2 = $scope.displayWaypoints[1];
+            //$log.log(JSON.stringify($scope.journey.source + " " + $scope.journey.destination + " " +
+            //    $scope.journey.date + " " + $scope.journey.time + " " + $scope.journey.waypoints1 + " " + $scope.journey.waypoints1));
+
+            $log.log(JSON.stringify($scope.journey));
+
+            //$http.post("/api/journey/registerDriverJourney", $scope.journey)
+            //    .success(function (data, status, headers, config) {
+            //        $scope.success = 'OK';
+            //
+            //    })
+            //    .error(function (response) {
+            //        $scope.success = null;
+            //        if (response.status === 500) {
+            //            $scope.error = 'ERROR';
+            //        }
+            //    });
         };
 
 

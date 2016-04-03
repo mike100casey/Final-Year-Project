@@ -45,7 +45,7 @@
                     </span>
                     </label>
                     <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
-                           ng-click="calculateRoute();"/>
+                           ng-click="calculateRoute();addUsername();"/>
                 </div>
             </div>
             <div>
@@ -65,9 +65,12 @@
 
 
         </form>
+        <div class="alert alert-success" role="alert" ng-show="success">
+            <p>Journey registered <a ui-sref="home" class="alert-link">GO to home page</a></p>
+        </div>
 
     </div>
-    <div class="col-md-5">
+    <div class="col-md-5" ng-hide="success">
         <label>Available passengers</label>
         <table class="table table-bordered table-hover success">
             <thead>
@@ -102,7 +105,7 @@
 
 
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" ng-hide="success">
         <div><label>New driver route distance
             <label id="ord" ng-show="isOld;">{{oldJourneyDistance}}</label>
             <label id="knew" ng-show="isKnew;">{{newJourneyDistance}}</label> km</label>

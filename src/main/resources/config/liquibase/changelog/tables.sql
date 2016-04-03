@@ -13,6 +13,19 @@ CREATE TABLE fyp.passenger_journey (
   CONSTRAINT FK_PJ_USER FOREIGN KEY (user_Id) REFERENCES fyp.jhi_user (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+CREATE TABLE fyp.driver_journey (
+    id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    date datetime DEFAULT NULL,
+    destination varchar(255) DEFAULT NULL,
+    source varchar(255) DEFAULT NULL,
+    time varchar(255) DEFAULT NULL,
+    waypoints1 varchar(255) NOT NULL,
+    waypoints2 varchar(255) NOT NULL,
+    user_Id bigint(20) NOT NULL,
+    KEY FK_PJ_USER (user_Id),
+    CONSTRAINT FK_PJ_USER_DRIVER FOREIGN KEY (user_Id) REFERENCES fyp.jhi_user (id)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
 CREATE TABLE fyp.makes (
   id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   make varchar(255) NOT NULL

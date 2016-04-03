@@ -2,6 +2,7 @@ package ie.ittralee.web.rest;
 
 
 import ie.ittralee.service.JourneyService;
+import ie.ittralee.web.rest.dto.DriverJourneyDTO;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,22 @@ public class JourneyController {
     Page<PassengerJourneyDTO> findAllJourneyRequests(Pageable page) {
         return journeyService.getAllJourneyRequests(page);
     }
+
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value="/registerDriverJourney",method=RequestMethod.POST)
+    @PreAuthorize("permitAll")
+    public @ResponseBody JSONObject registerJourney(@RequestBody @Valid DriverJourneyDTO journeyDto, BindingResult result) {
+        List<String> errors = journeyService.validateDriverJourney(journeyDto, result);
+        if(errors.isEmpty()){
+            journeyService.createJourney(journeyDto);
+            return Utils.returnSuccess();
+        }
+        else{
+            return Utils.returnErrors(errors);
+        }
+    }
+
 
 
 }

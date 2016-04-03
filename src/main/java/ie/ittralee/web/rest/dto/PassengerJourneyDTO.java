@@ -135,8 +135,7 @@ public class PassengerJourneyDTO {
         passengerJourney.setDestinationLat(this.getDestinationLat());
         passengerJourney.setDestinationLng(this.getDestinationLng());
         try {
-            passengerJourney
-                .setDate(formatter.parse(this.getDate()));
+            passengerJourney.setDate(formatter.parse(this.getDate()));
         } catch (ParseException e) {
             e.printStackTrace();
         }

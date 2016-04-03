@@ -12,7 +12,7 @@ angular.module('fYPApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/addDriverJourney1/addDriverJourney1.html',
+                        templateUrl: 'scripts/app/showPostedJourneys/showPostedJourneys.html',
                         controller: 'DriverJourneyController1'
                     }
                 },
