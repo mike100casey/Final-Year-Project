@@ -4,7 +4,9 @@ import ie.ittralee.web.rest.dto.DriverJourneyDTO;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /***
@@ -28,8 +30,18 @@ public class DriverJourney {
     private String destination;
     private Date date;
     private String time;
-    private String waypoints1;
-    private String waypoints2;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "journeyId")
+    private List<Waypoints> waypts;
+
+    public List<Waypoints> getWaypts() {
+        return new ArrayList<>(waypts);
+    }
+
+    public void setWaypts(List<Waypoints> waypts) {
+        this.waypts = new ArrayList<>(waypts);
+    }
 
     public User getUser() {
         return user;
@@ -79,13 +91,6 @@ public class DriverJourney {
         this.time = time;
     }
 
-    public String getWaypoints1() {
-        return waypoints1;
-    }
-
-    public void setWaypoints1(String waypoints1) {
-        this.waypoints1 = waypoints1;
-    }
 
     public DriverJourneyDTO toDTO() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -96,19 +101,8 @@ public class DriverJourney {
         driverJourneyDto.setDestination(this.getDestination());
         driverJourneyDto.setDate(formatter.format(this.getDate()));
         driverJourneyDto.setTime(this.getTime());
-        driverJourneyDto.setWaypoints1(this.getWaypoints1());
-        driverJourneyDto.setWaypoints1(this.getWaypoints1());
-        driverJourneyDto.setWaypoints2(this.getWaypoints2());
-        driverJourneyDto.setWaypoints2(this.getWaypoints2());
+        driverJourneyDto.setWaypts(this.getWaypts());
         return driverJourneyDto;
     }
 
-
-    public String getWaypoints2() {
-        return waypoints2;
-    }
-
-    public void setWaypoints2(String waypoints2) {
-        this.waypoints2 = waypoints2;
-    }
 }

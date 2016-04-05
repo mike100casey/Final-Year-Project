@@ -928,28 +928,14 @@ angular.module('fYPApp')
             if (arrayLength == 2) {
                 idx = getMinIndex(oneStopDistance);
                 $scope.newJourneyDistance = oneStopDistance[idx];
-                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
-                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
             }
             if (arrayLength == 4) {
                 idx = getMinIndex(twoStopDistances);
                 $scope.newJourneyDistance = twoStopDistances[idx];
-                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
-                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
-                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
-                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
             }
             if (arrayLength == 6) {
                 idx = getMinIndex(threeStopDistances);
                 $scope.newJourneyDistance = threeStopDistances[idx];
-                $scope.newJourneyDistance = twoStopDistances[idx];
-                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
-                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
-                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
-                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
-                $scope.journey.waypoints5 = $scope.displayWaypoints[4];
-                $scope.journey.waypoints6 = $scope.displayWaypoints[5];
-
             }
             $scope.waypoints.push($scope.journey.source);
             for (var i = 0; i < arrayWithoutSourcesAtEnd[idx].length; i++) {
@@ -1023,24 +1009,42 @@ angular.module('fYPApp')
         };
 
         $scope.sendForm = function () {
-            //$scope.journey.waypoints1 = $scope.displayWaypoints[0];
-            //$scope.journey.waypoints2 = $scope.displayWaypoints[1];
-            //$log.log(JSON.stringify($scope.journey.source + " " + $scope.journey.destination + " " +
-            //    $scope.journey.date + " " + $scope.journey.time + " " + $scope.journey.waypoints1 + " " + $scope.journey.waypoints1));
+            var waypointObj = {'name':$scope.displayWaypoints[0]};
+            var waypointsArr = [];
+            waypointsArr.push(waypointObj);
+            $scope.journey.waypts = waypointsArr;
+            if (arrayLength == 2) {
+                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
+                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
+            }
+            if (arrayLength == 4) {
+                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
+                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
+                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
+                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
+            }
+            if (arrayLength == 6) {
+                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
+                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
+                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
+                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
+                $scope.journey.waypoints5 = $scope.displayWaypoints[4];
+                $scope.journey.waypoints6 = $scope.displayWaypoints[5];
 
+            }
             $log.log(JSON.stringify($scope.journey));
 
-            //$http.post("/api/journey/registerDriverJourney", $scope.journey)
-            //    .success(function (data, status, headers, config) {
-            //        $scope.success = 'OK';
-            //
-            //    })
-            //    .error(function (response) {
-            //        $scope.success = null;
-            //        if (response.status === 500) {
-            //            $scope.error = 'ERROR';
-            //        }
-            //    });
+            $http.post("/api/journey/registerDriverJourney", $scope.journey)
+                .success(function (data, status, headers, config) {
+                    $scope.success = 'OK';
+
+                })
+                .error(function (response) {
+                    $scope.success = null;
+                    if (response.status === 500) {
+                        $scope.error = 'ERROR';
+                    }
+                });
         };
 
 

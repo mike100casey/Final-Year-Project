@@ -5,6 +5,7 @@ import ie.ittralee.domain.PassengerJourney;
 import ie.ittralee.repository.DriverJourneyRepository;
 import ie.ittralee.repository.PassengerJourneyRepository;
 import ie.ittralee.repository.UserRepository;
+import ie.ittralee.repository.WaypointsRepository;
 import ie.ittralee.web.rest.dto.DriverJourneyDTO;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 import ie.ittralee.web.rest.util.Utils;
@@ -41,6 +42,9 @@ public class JourneyService {
 
     @Inject
     DriverJourneyRepository driverJourneyRepository;
+
+    @Inject
+    WaypointsRepository waypointsRepository;
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -80,6 +84,7 @@ public class JourneyService {
 
     public void createJourney(DriverJourneyDTO journeyDto) {
         DriverJourney journey = journeyDto.toEntity(userRepository.findByLogin(journeyDto.getUsername()));
+        waypointsRepository.save(journey.getWaypts());
         driverJourneyRepository.save(journey);
     }
 

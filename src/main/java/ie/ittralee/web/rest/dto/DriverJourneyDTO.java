@@ -2,6 +2,7 @@ package ie.ittralee.web.rest.dto;
 
 import ie.ittralee.domain.DriverJourney;
 import ie.ittralee.domain.User;
+import ie.ittralee.domain.Waypoints;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Digits;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,9 +41,15 @@ public class DriverJourneyDTO {
     @NotBlank(message = "Date is compulsory")
     private String time;
 
-    private String waypoints1;
+    private List<Waypoints> waypts;
 
-    private String waypoints2;
+    public List<Waypoints> getWaypts() {
+        return new ArrayList<>(waypts);
+    }
+
+    public void setWaypts(List<Waypoints> waypts) {
+        this.waypts = new ArrayList<>(waypts);
+    }
 
     public String getUsername() {
         return userName;
@@ -79,19 +87,15 @@ public class DriverJourneyDTO {
     public void setTime(String time) {
         this.time = time;
     }
-    public String getWaypoints1() {  return waypoints1;   }
-    public void setWaypoints1(String waypoints1) {  this.waypoints1 = waypoints1;  }
 
     public DriverJourney toEntity(User user){
-        @SuppressWarnings("unused")
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         DriverJourney journey = new DriverJourney();
         journey.setUser(user);
         journey.setSource(this.getSource());
         journey.setDestination(this.getDestination());
         journey.setTime(this.time);
-        journey.setWaypoints1(this.getWaypoints1());
-        journey.setWaypoints2(this.getWaypoints2());
+        journey.setWaypts(this.getWaypts());
         try {
             journey.setDate(formatter.parse(this.getDate()));
         } catch (ParseException e) {
@@ -100,11 +104,4 @@ public class DriverJourneyDTO {
         return journey;
     }
 
-    public String getWaypoints2() {
-        return waypoints2;
-    }
-
-    public void setWaypoints2(String waypoints2) {
-        this.waypoints2 = waypoints2;
-    }
 }
