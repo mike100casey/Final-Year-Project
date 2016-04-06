@@ -64,6 +64,11 @@ public class JourneyController {
         }
     }
 
+    @RequestMapping(value="/searchPassengerJourney",method=RequestMethod.POST)
+    public @ResponseBody Page<PassengerJourneyDTO> searchJourneyRequest(@RequestBody PassengerJourneyDTO passengerJourneyDto, Pageable page) {
+        return journeyService.getPassengerJourneySearchResults(passengerJourneyDto, page);
+    }
+
 
 
 }

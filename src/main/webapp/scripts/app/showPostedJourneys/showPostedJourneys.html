@@ -1,63 +1,21 @@
-<div class="col-md-12">
-    <form name="form" ng-hide="success" ng-submit="sendForm()" role="form" novalidate show-validation>
-        <div class="col-md-12">
-            <div class="col-md-3">
-                <label>Source</label>
-                <input type="text" id="source" name="source" class="form-control"
-                       maxlength="70" ng-minlength=1 ng-maxlength=70 ng-autocomplete ng-model="journey.source"
-                       placeholder="Enter Departure (address)"
-                       required data-toggle="tooltip" data-placement="top">
-
-                <div ng-show="form.source.$dirty && form.source.$invalid">
-                    <p class="help-block" ng-show="form.source.$error.required">Source is required. </p>
-
-                    <p class="help-block" ng-show="form.source.$error.maxlength">Source cannot be longer than 70
-                        characters</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label>Destination</label>
-                <input type="text" id="destination" name="destination" class="form-control"
-                       ng-model="journey.driverDestination"
-                       maxlength="70" ng-autocomplete ng-minlength=1 ng-maxlength=70
-                       placeholder="Enter Arrival (address)"
-                       required data-toggle="tooltip" data-placement="top" >
-
-                <div ng-show="form.destination.$dirty && form.destination.$invalid">
-                    <p class="help-block" ng-show="form.destination.$error.required">
-                        Destination is required.
-                    </p>
-
-                    <p class="help-block" ng-show="form.destination.$error.maxlength">
-                        Destination cannot be longer than 70 characters
-                    </p><br>&#xA0;
-                </div>
-            </div>
-            <div class="col-md-2">
-                <label>Date</label>
-                <div class="form-group input-group">
-                    <label class="input-group-btn" for="date-fld2">
-                    <span class="btn btn-default" type="button">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                    </label>
-                    <input type="text" class="form-control date-input" id="date-fld2" ng-model="journey.date"
-                        ng-click="calculateRoute();"/>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <label>Time</label>
-                <div class="input-group bootstrap-timepicker timepicker">
-                    <input id="timepicker" class="form-control" data-provide="timepicker" ng-click=""
-                           ng-model="journey.time" data-minute-step="1" type="text"/>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Post
-                </button>
-            </div>
-        </div>
-    </form>
+<div>
+    <label>Available Passenger Journeys </label>
+    <table class="table table-bordered table-hover success">
+        <thead>
+        <tr>
+            <th>username</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="passengerJourney in journeyRequests" ng-class="{even: $even, odd: $odd}">
+            <td>{{passengerJourney.username}}</td>
+            <td>{{passengerJourney.source}}</td>
+            <td>{{passengerJourney.destination}}</td>
+            <td>{{passengerJourney.date}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-

@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('addDriverJourneyController', function ($scope, Principal, $timeout, Auth, $http, $log) {
+    .controller('addDriverJourneyController', function ($scope, Principal, $timeout, Auth, $http, $log, $filter) {
 
         var username = null;
         Principal.identity().then(function (account) {
@@ -25,20 +25,20 @@ angular.module('fYPApp')
         $(".date-input").datepicker({});
         $('#timepicker').timepicker({});
 
-        $scope.showJourneyRequests = function (pageNumber) {
-            $http.get('/api/journey/allJourneyRequests?page=' + pageNumber).
-                success(function (data) {
-                    $scope.journeyRequests = data.content;
-                    $scope.currentPage = data.number + 1;
-                    $scope.numPerPage = data.size;
-                    $scope.total = data.totalElements;
-                    $scope.maxSize = 5;
-                }).
-                error(function (data, status, headers, config) {
-                    // log error
-                });
-        };
-        $scope.showJourneyRequests(0);
+        //$scope.showJourneyRequests = function (pageNumber) {
+        //    $http.get('/api/journey/allJourneyRequests?page=' + pageNumber).
+        //        success(function (data) {
+        //            $scope.journeyRequests = data.content;
+        //            $scope.currentPage = data.number + 1;
+        //            $scope.numPerPage = data.size;
+        //            $scope.total = data.totalElements;
+        //            $scope.maxSize = 5;
+        //        }).
+        //        error(function (data, status, headers, config) {
+        //            // log error
+        //        });
+        //};
+        //$scope.showJourneyRequests(0);
 
         $scope.journeyRequests = [];
         jQuery.extend({
@@ -74,6 +74,8 @@ angular.module('fYPApp')
             sourceAndDestination.push(this.destination);
         });
 
+
+//-----------------------Neo4j ----------------------------------------
         $scope.deleteEdges = function () {
             $scope.node = [];
             var serverURL = "http://localhost:7474/db/data";
@@ -187,7 +189,8 @@ angular.module('fYPApp')
         };
 
 //-----------------------source to sources------------------------------
-        //var sourceToSourceDistance = [0, 57.85, 37.74, 130.76, 57.44, 0, 60.18, 111.06, 38.08, 59.43, 0, 93.02, 131.42, 111.24, 92.32, 0];
+        //var sourceToSourceDistance = [0, 57.85, 37.74, 130.76, 57.44, 0, 60.18, 111.06, 38.08,
+        // 59.43, 0, 93.02, 131.42, 111.24, 92.32, 0];
         $scope.sourceToSourceDistances = function () {
             for (var i = 0; i < startNodes.length; i++) {
                 for (var m = 0; m < startNodes.length; m++) {
@@ -341,7 +344,8 @@ angular.module('fYPApp')
         };
 
 //-----------------------sources to destinations----------------------
-        var sourceToDestinationDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
+        var sourceToDestinationDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15,
+            49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
         $scope.sourceToDestinationDistances = function () {
             for (var i = 3; i < 4; i++) {
                 for (var m = 0; m < destinationNodes.length; m++) {
@@ -455,7 +459,8 @@ angular.module('fYPApp')
         };
 
 //-----------------------destination to destinations----------------------
-        //var destinationToDestinationDistances = [0, 38.3, 23, 96.33, 38, 0, 15.96, 83.72,22.66, 16.02, 0, 73.33, 95.93, 83.67, 73.27, 0];
+        //var destinationToDestinationDistances = [0, 38.3, 23, 96.33, 38, 0, 15.96, 83.72,22.66,
+        // 16.02, 0, 73.33, 95.93, 83.67, 73.27, 0];
         var destinationToDestinationDistances1 = [0, 38.3, 23, 96.33];
         $scope.destinationToDestinationDistances = function () {
             for (var i = 0; i < destinationNodes.length; i++) {
@@ -612,7 +617,8 @@ angular.module('fYPApp')
         };
 
 //-----------------------destination to sources----------------------
-        var destinationToSourceDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
+        var destinationToSourceDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43,
+            36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
         $scope.allDestinationToSourceDistances = function () {
             for (var i = 3; i < 4; i++) {
                 for (var m = 0; m < startNodes.length; m++) {
@@ -735,25 +741,38 @@ angular.module('fYPApp')
         startNode_Ids.push("0", "2", "4", "12");
 
         var node_ids = [];
+        var node_ids_singleArray = [];
         var oneStopDistance = [];
         var twoStopDistances = [];
         var threeStopDistances = [];
-        var arrayWithoutSourcesAtEnd = [];
+        var arrayWithoutSourcesAtEnd_DestinationAsStart = [];
         var arrayLength;
 
         $scope.paths = function () {
-            var numbers = [];
-            var uniqueNumbers = [];
+            //function toSingleArray() {
+            //    for(var i = 0; i < node_ids.length; i++ ){
+            //        for(var j = 0; j < node_ids[0].length; j++) {
+            //            node_ids_singleArray.push(node_ids[i][j])
+            //        }
+            //    }
+            //    $log.log(node_ids_singleArray);
+            //}
+            //
+            //toSingleArray();
 
-            var combinations = routeGenerator(node_ids);
+
+            var destinationNumbers = [];
+            var uniqueDestinationNumbers = [];
+
+            var routeCombinations = routeGenerator(node_ids);
             $scope.removeDestinationsFromStart = function () {
-                for (var z = 0; z < combinations.length; z++) {
-                    for (var i = 0; i < combinations[z].length; i++) {
+                for (var z = 0; z < routeCombinations.length; z++) {
+                    for (var i = 0; i < routeCombinations[z].length; i++) {
                         for (var j = 0; j < destinationNode_Ids.length; j++) {
-                            if (combinations[z][0].indexOf(destinationNode_Ids[j]) !== -1) {
-                                numbers.push(z);
-                                $.each(numbers, function (i, el) {
-                                    if ($.inArray(el, uniqueNumbers) === -1) uniqueNumbers.push(el);
+                            if (routeCombinations[z][0].indexOf(destinationNode_Ids[j]) !== -1) {
+                                destinationNumbers.push(z);
+                                $.each(destinationNumbers, function (i, el) {
+                                    if ($.inArray(el, uniqueDestinationNumbers) === -1) uniqueDestinationNumbers.push(el);
                                 });
                                 break;
                             }
@@ -762,8 +781,8 @@ angular.module('fYPApp')
                 }
             };
             $scope.removeDestinationsFromStart();
-            var arrayWithoutDestinationsAtStart = $.grep(combinations, function (n, i) {
-                return $.inArray(i, uniqueNumbers) == -1;
+            var arrayWithoutDestinationsAtStart = $.grep(routeCombinations, function (n, i) {
+                return $.inArray(i, uniqueDestinationNumbers) == -1;
             });
 
             var len = arrayWithoutDestinationsAtStart[0].length - 1;
@@ -785,7 +804,7 @@ angular.module('fYPApp')
                 }
             };
             $scope.removeSourcesFromEnd();
-            arrayWithoutSourcesAtEnd = $.grep(arrayWithoutDestinationsAtStart, function (n, i) {
+            arrayWithoutSourcesAtEnd_DestinationAsStart = $.grep(arrayWithoutDestinationsAtStart, function (n, i) {
                 return $.inArray(i, uniqueNumbersToRemove) == -1;
             });
 
@@ -823,7 +842,7 @@ angular.module('fYPApp')
                 if (twoStopDistances.length > 0) {
                     twoStopDistances.splice(0, twoStopDistances.length)
                 }
-                for (var i = 0; i < arrayWithoutSourcesAtEnd.length; i++) {
+                for (var i = 0; i < arrayWithoutSourcesAtEnd_DestinationAsStart.length; i++) {
                     serverURL = "http://localhost:7474/db/data";
                     $.ajax({
                         type: "POST",
@@ -836,10 +855,10 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             query: "START node1=node(6)," +
-                            "node2=node(" + arrayWithoutSourcesAtEnd[i][0] + ")," +
-                            "node3=node(" + arrayWithoutSourcesAtEnd[i][1] + ")," +
-                            "node4=node(" + arrayWithoutSourcesAtEnd[i][2] + ")," +
-                            "node5=node(" + arrayWithoutSourcesAtEnd[i][3] + ")," +
+                            "node2=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[i][0] + ")," +
+                            "node3=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[i][1] + ")," +
+                            "node4=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[i][2] + ")," +
+                            "node5=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[i][3] + ")," +
                             "node8=node(7)" +
                             "MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4-[r4:To]->node5-[r5:To]->node8 " +
                             "RETURN TOINT(r1.weight)+ TOINT(r2.weight) + TOINT(r3.weight) + TOINT(r4.weight)+ TOINT(r5.weight) ",
@@ -859,7 +878,7 @@ angular.module('fYPApp')
                 if (threeStopDistances.length > 0) {
                     threeStopDistances.splice(0, threeStopDistances.length)
                 }
-                for (var k = 0; k < arrayWithoutSourcesAtEnd.length; k++) {
+                for (var k = 0; k < arrayWithoutSourcesAtEnd_DestinationAsStart.length; k++) {
                     serverURL = "http://localhost:7474/db/data";
                     $.ajax({
                         type: "POST",
@@ -872,12 +891,12 @@ angular.module('fYPApp')
                         },
                         data: JSON.stringify({
                             query: "START node1=node(6)," +
-                            "node2=node(" + arrayWithoutSourcesAtEnd[k][0] + ")," +
-                            "node3=node(" + arrayWithoutSourcesAtEnd[k][1] + ")," +
-                            "node4=node(" + arrayWithoutSourcesAtEnd[k][2] + ")," +
-                            "node5=node(" + arrayWithoutSourcesAtEnd[k][3] + ")," +
-                            "node6=node(" + arrayWithoutSourcesAtEnd[k][4] + ")," +
-                            "node7=node(" + arrayWithoutSourcesAtEnd[k][5] + ")," +
+                            "node2=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[k][0] + ")," +
+                            "node3=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[k][1] + ")," +
+                            "node4=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[k][2] + ")," +
+                            "node5=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[k][3] + ")," +
+                            "node6=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[k][4] + ")," +
+                            "node7=node(" + arrayWithoutSourcesAtEnd_DestinationAsStart[k][5] + ")," +
                             "node8=node(7)" +
                             "MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4-[r4:To]->node5-[r5:To]->node6-[r6:To]->node7-[r7:To]->node8 " +
                             "RETURN TOINT(r1.weight)+ TOINT(r2.weight) + TOINT(r3.weight) + TOINT(r4.weight)+ TOINT(r5.weight)+ TOINT(r6.weight)+ TOINT(r7.weight) ",
@@ -938,9 +957,9 @@ angular.module('fYPApp')
                 $scope.newJourneyDistance = threeStopDistances[idx];
             }
             $scope.waypoints.push($scope.journey.source);
-            for (var i = 0; i < arrayWithoutSourcesAtEnd[idx].length; i++) {
+            for (var i = 0; i < arrayWithoutSourcesAtEnd_DestinationAsStart[idx].length; i++) {
                 for (var j = 0; j < node_id_array.length; j++) {
-                    if (arrayWithoutSourcesAtEnd[idx][i].localeCompare(node_id_array[j]) == 0) {
+                    if (arrayWithoutSourcesAtEnd_DestinationAsStart[idx][i].localeCompare(node_id_array[j]) == 0) {
                         $scope.waypoints.push(town_array[j]);
                         $scope.displayWaypoints.push(town_array[j]);
                     }
@@ -967,38 +986,52 @@ angular.module('fYPApp')
 
                 if (id == 2) {
                     node_ids.splice(idx, 1);
-                    node_ids.splice(idx, 1);
+                    $log.log(JSON.stringify(idx));
+                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 3) {
                     node_ids.splice(idx, 1);
-                    node_ids.splice(idx, 1);
+                    $log.log(JSON.stringify(idx));
+                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 4) {
                     node_ids.splice(idx, 1);
-                    node_ids.splice(idx, 1);
+                    $log.log(JSON.stringify(idx));
+                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 5) {
-                    node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
                 }
             }
             else {
                 $scope.selection.push(id);
                 if (id == 2) {
+                    //var stopArray1 = ["0", "1"];
+                    //node_ids.push(stopArray1);
                     node_ids.push("0");
                     node_ids.push("1");
+                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 3) {
+                    //var stopArray2 = ["2", "3"];
+                    //node_ids.push(stopArray2);
                     node_ids.push("2");
                     node_ids.push("3");
+                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 4) {
+                    //var stopArray3 = ["4", "5"];
+                    //node_ids.push(stopArray3);
                     node_ids.push("4");
                     node_ids.push("5");
+                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 5) {
+                    //var stopArray4 = ["12", "13"];
+                    //node_ids.push(stopArray4);
                     node_ids.push("12");
                     node_ids.push("13");
+                    $log.log(JSON.stringify(node_ids));
                 }
             }
             if ($scope.selection.length < 1) {
@@ -1006,38 +1039,20 @@ angular.module('fYPApp')
                 $scope.isOld = true;
                 $scope.isKnew = false;
             }
+
         };
 
         $scope.sendForm = function () {
-            var waypointObj = {'name':$scope.displayWaypoints[0]};
-            var waypointsArr = [];
-            waypointsArr.push(waypointObj);
-            $scope.journey.waypts = waypointsArr;
-            if (arrayLength == 2) {
-                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
-                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
+            var wayPointsArray = [];
+            for (var i = 0; i < $scope.displayWaypoints.length; i++) {
+                var wayPointObject = {'name': $scope.displayWaypoints[i]};
+                wayPointsArray.push(wayPointObject);
             }
-            if (arrayLength == 4) {
-                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
-                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
-                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
-                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
-            }
-            if (arrayLength == 6) {
-                $scope.journey.waypoints1 = $scope.displayWaypoints[0];
-                $scope.journey.waypoints2 = $scope.displayWaypoints[1];
-                $scope.journey.waypoints3 = $scope.displayWaypoints[2];
-                $scope.journey.waypoints4 = $scope.displayWaypoints[3];
-                $scope.journey.waypoints5 = $scope.displayWaypoints[4];
-                $scope.journey.waypoints6 = $scope.displayWaypoints[5];
-
-            }
-            $log.log(JSON.stringify($scope.journey));
+            $scope.journey.waypts = wayPointsArray;
 
             $http.post("/api/journey/registerDriverJourney", $scope.journey)
                 .success(function (data, status, headers, config) {
                     $scope.success = 'OK';
-
                 })
                 .error(function (response) {
                     $scope.success = null;
@@ -1047,256 +1062,51 @@ angular.module('fYPApp')
                 });
         };
 
+        var journeyRequestLength = 0;
+        $scope.searchByDate = function (page) {
+            var searchData = {
+                'date': $filter('date')($scope.journey.date, "dd/MM/yyyy")
+            };
+            $http.post('/api/journey/searchPassengerJourney?page=' + page, searchData).
+                success(function (data, status, headers, config) {
+                    $scope.journeyRequest = data.content;
+                    $scope.noJourneys = $scope.journeyRequests <= 0 ? true : false;
+                    journeyRequestLength = $scope.journeyRequest.length;
+                }).
+                error(function (data) {
+                    //$log.log(data);
+                });
+        };
+
+        $scope.isChecked = false;
+        $scope.isNotValidDate = false;
+
+        $scope.validate = function () {
+            $scope.searchByDate();
+            var remember = document.getElementById('remember');
+            if (remember.checked) {
+
+                if ($scope.journey.username == null) {
+                    $scope.isNotValidDate = true;
+                }
+                else {
+                    if (journeyRequestLength <= 0 || journeyRequestLength == null) {
+                        $scope.isNotValidDate = true;
+                    }
+                    else {
+                        $scope.isChecked = true;
+                    }
+                }
+            }
+            else {
+                $scope.isChecked = false;
+                $scope.journey.waypts = null;
+                $scope.isNotValidDate = false;
+            }
+        };
+
 
     });
 
 
-//$scope.getRoute = function () {
-//    $scope.node = [];
-//    $.ajax({
-//        url: "http://localhost:7474/db/data/cypher",
-//        // url: "http://localhost:7474/db/data/node/2/relationships/cypher",
-//        accepts: "application/json; charset=UTF-8",
-//        dataType: "json",
-//        data: {
-//            "query": "start n  = node(*) return n",
-//            //"query":"MATCH (*) RETURN node.property",
-//            "params": {}
-//        },
-//        type: "POST",
-//        success: function (data, xhr, status) {
-//            //$scope.node = data.data[0][0].data;
-//            for (var i = 0; i < data.data.length; i++) {
-//                $scope.node.push(data.data[i][0].data.name);
-//            }
-//            console.log(JSON.stringify($scope.node));
-//            //console.log(JSON.stringify(data));
-//        },
-//        error: function (xhr, err, msg) {
-//            console.log(xhr);
-//            console.log(err);
-//            console.log(msg);
-//        }
-//    });
-//};
 
-// var geocoder = new google.maps.Geocoder;
-// var service = new google.maps.DistanceMatrixService;
-//
-////for (var k = 0; k < combinations.length - 1; k++) {
-//     var list = combinations[3];
-//
-//     service.getDistanceMatrix({
-//
-//         origins: list,
-//         destinations: list,
-//         travelMode: google.maps.TravelMode.DRIVING
-//
-//     }, function (response, status) {
-//
-//         var originList = response.originAddresses;
-//         var destinationList = response.destinationAddresses;
-//
-//         var output = new Array();
-//
-//         for (var i = 0; i < 1; i++) {
-//
-//             var results = response.rows[i].elements;
-//
-//             for (var j = 0; j < results.length; j++) {
-//
-//
-//                 //result += results[j].duration.text;
-//                 //if (!output[i]) output[i] = [];
-//                 var result = originList[i] + ' to ' + destinationList[j] +
-//                     ': ' + results[j].distance.text + ' in ' +
-//                     results[j].duration.text + '<br>';
-//
-//             }
-//             console.log(result);
-//             document.write('<br>' + result + '<br>');
-//         }
-//     });
-//}
-
-////$scope.waypts = [];
-////var wayPointsArr = [];
-////for (var i = 0; i <= combinations.length - 1; i++) {
-////    var waypointsObj = ({"location": combinations[i], "stopover": true});
-////    $scope.waypts.push(waypointsObj);
-////
-////}
-////console.log(JSON.stringify(wayPointsArr));
-////
-////$scope.removeRoute = function () {
-////    $state.reload();
-////};
-////
-////var start;
-////var end;
-////$scope.add = function (value) {
-////    start = $scope.journey.source;
-////    end = $scope.journey.driverDestination;
-////};
-//
-
-
-//function getCombinations(chars) {
-//    var result = [];
-//    var f = function(prefix, chars) {
-//        for (var i = 0; i < chars.length; i++) {
-//            result.push(prefix + chars[i]);
-//            f(prefix + chars[i], chars.slice(i + 1));
-//        }
-//    }
-//    f('', chars);
-//    return result;
-//}
-//
-//function sets(input, size){
-//    var results = [], result, mask, total = Math.pow(2, input.length);
-//    for(mask = 0; mask < total; mask++){
-//        result = [];
-//        i = input.length - 1;
-//        do{
-//            if( (mask & (1 << i)) !== 0){
-//                result.push(input[i]);
-//            }
-//        }while(i--);
-//        if( result.length >= size){
-//            results.push(result);
-//        }
-//    }
-//
-//    return results;
-//}
-//
-
-////console.log(destinationNode_Ids.length);
-////printArray(arrayWithoutSourcesAtEnd.join("<br>"));
-//var x = [];
-//$scope.waypts = [];
-//for (var i = 0; i < 1; i++) {
-//    for (var j = 0; j < arrayWithoutSourcesAtEnd[arrayWithoutSourcesAtEnd.length - 1].length; j++) {
-//        //for (var k = 0; k < 1; k++) {
-//        $scope.waypts.push(
-//            x.push({
-//                location: arrayWithoutSourcesAtEnd[0][j],
-//                stopover: true
-//            }));
-//        //}
-//    }
-//}
-
-//var serverURL = "http://localhost:7474/db/data";
-//$.ajax({
-//    type: "POST",
-//    url: serverURL + "/cypher",
-//    accepts: "application/json",
-//    dataType: "json",
-//    contentType: "application/json",
-//    headers: {
-//        "X-Stream": "true"
-//    },
-//    data: JSON.stringify({
-//        query: query1,
-//        //query: "START node1=node(6)," +
-//        //"node2=node(" + arrayWithoutSourcesAtEnd[i][0] + ")," +
-//        //"node3=node(" + arrayWithoutSourcesAtEnd[i][1] + ")," +
-//        //"node4=node(" + arrayWithoutSourcesAtEnd[i][2] + ")," +
-//        //"node5=node(" + arrayWithoutSourcesAtEnd[i][3] + ")," +
-//        ////"node6=node(" + arrayWithoutSourcesAtEnd[i][4] + ")," +
-//        ////"node7=node(" + arrayWithoutSourcesAtEnd[i][5] + ")," +
-//        //"node8=node(7)" +
-//        //"MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4-[r4:To]->node5-[r5:To]->node8 " +
-//        //"RETURN TOINT(r1.weight)+ TOINT(r2.weight) + TOINT(r3.weight) + TOINT(r4.weight)+ TOINT(r5.weight) ",
-//        "params": {}
-//    }),
-//    success: function (data, textStatus, jqXHR) {
-//        //bestDistance.push(parseInt(data.data[0][0]));
-//        console.log(JSON.stringify(data.data[0][0]));
-//        //for(var m=0; m < data.data.length ; m++) {
-//        //    for(var i=0; i < data.data[0][0].length ; i++){
-//        //        console.log(JSON.stringify(data.data[m][0][i].data.name));node6-[r6:To]->node7-[r7:To]-+ TOINT(r6.weight)+ TOINT(r7.weight)
-//        //    }
-//        //}
-//    },
-//    error: function (jqXHR, textStatus) {
-//        console.log(textStatus);
-//    }
-//});
-//var query1 = "MATCH ({ name: 'Abbeyfeale' })-[:contains*0..]->(parentDir)-[:leaf]->(Town) RETURN Town";
-//var query2 = "MATCH (a) WHERE a.name='Tralee' RETURN size((a)-->()-->()) AS fof";
-//for(var m=0; m < data.data.length ; m++) {
-//    for(var i=0; i < data.data[0][0].length ; i++){
-//        console.log(JSON.stringify(data.data[m][0][i].data.name));node6-[r6:To]->node7-[r7:To]-+ TOINT(r6.weight)+ TOINT(r7.weight)
-//    }
-//}
-
-//$scope.getRoute = function () {
-//    $scope.node = [];
-//    var serverURL = "http://localhost:7474/db/data";
-//    $.ajax({
-//        type: "POST",
-//        url: serverURL + "/cypher",
-//        accepts: "application/json",
-//        dataType: "json",
-//        contentType: "application/json",
-//        headers: {
-//            "X-Stream": "true"
-//        },
-//        data: JSON.stringify({
-//            //"query": query2,
-//            //"query": "CREATE (a:Person { name:'Tom Hanks', born:1956 })-[r:ACTED_IN ]->(m:Movie { title:'Forrest Gump',released:1994 })"+
-//            //"CREATE (d:Person { name:'Robert Zemeckis', born:1951 })-[:DIRECTED]->(m)RETURN a,d,r,m",
-//            //"query": " UNWIND { props } AS map  CREATE (n) SET n = map",
-//            //"query": "START n=node(*) match n-[r?]-() where r is null return n",
-//            //START a=node(...), b=node(...) CREATE UNIQUE a-[r:CONNECTED_TO]-b SET r.weight = coalesce(r.weight?, 0) + 1
-//            "query": " CREATE (n:Destination { props }) ",
-//            //"query" : " START n=node:nameIdx(name='Abbeyfeale')return id(n)",
-//            //"query" : " START n=node(*) WHERE n.name = 'Tralee' return id(n)",
-//            //"query" : " CREATE (jdoe {name:'John Doe'})-[r:friend]->(mj {name:'Mary Joe'}) return r, jdoe, mj",;
-//            //"query" : " START n=node(*) where n.name = 'Tralee' return n",
-//            //"query" : "START first = node(18), second = node(19) CREATE first-[r:CONNECTED_TO]->second SET r.weight = "+dis +" return r",
-//            // "query" : "start n = node(*) return n;",
-//            "params": {
-//                "props": {
-//                    "position": "Developer",
-//                    "name": "Andres"
-//                }
-//            }
-//        }),
-//        success: function (data, textStatus, jqXHR) {
-//
-//            console.log(JSON.stringify(data));
-//        },
-//        error: function (jqXHR, textStatus) {
-//
-//            console.log(jqXHR);
-//        }
-//    });//end of ajax
-//};
-
-//$scope.delNodes = function () {
-//    $scope.node = [];
-//    var serverURL = "http://localhost:7474/db/data";
-//    $.ajax({
-//        type: "POST",
-//        url: serverURL + "/cypher",
-//        accepts: "application/json",
-//        dataType: "json",
-//        contentType: "application/json",
-//        headers: {
-//            "X-Stream": "true"
-//        },
-//        data: JSON.stringify({
-//            "query": " START n=node(*) delete n", "params": {}
-//        }),
-//        success: function (data, textStatus, jqXHR) {
-//            console.log(JSON.stringify(data));
-//        },
-//        error: function (jqXHR, textStatus) {
-//            console.log(textStatus);
-//        }
-//    });//end of ajax
-//};

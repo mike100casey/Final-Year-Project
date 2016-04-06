@@ -130,33 +130,6 @@
                   separator=";"
                   tableName="jhi_user_authority"/>
 
-        <!-- Add Makes and Models -->
-        <createTable tableName = "makes">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="make" type="varchar(255)" >
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-
-        <createTable tableName = "makeandmodel">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="makeId" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="model" type="varchar(255)" >
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-
-
-
-        <!--    -->
 
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">

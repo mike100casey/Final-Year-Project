@@ -31,8 +31,8 @@ public class Utils {
 
     public static List<PassengerJourneyDTO> convertToJourneyRequestPage(List<PassengerJourney> content) {
         List<PassengerJourneyDTO> dtos = new ArrayList<PassengerJourneyDTO>();
-        for(PassengerJourney journeyRequest: content){
-            dtos.add(journeyRequest.toDTO());
+        for(PassengerJourney journey: content){
+            dtos.add(journey.toDTO());
         }
         return dtos;
     }

@@ -110,4 +110,22 @@ public class JourneyService {
         return errorMessages;
     }
 
+    public Page<PassengerJourneyDTO> getPassengerJourneySearchResults(PassengerJourneyDTO passengerJourneyDto, Pageable page) {
+        Page<PassengerJourney> passengerJourney = getPassengerJourneyQuery(passengerJourneyDto, page);
+        Page<PassengerJourneyDTO> journeyDtos = new PageImpl<PassengerJourneyDTO>(Utils.convertToJourneyRequestPage(passengerJourney.getContent()), page, passengerJourney.getTotalElements());
+        return journeyDtos;
+    }
+
+    private Page<PassengerJourney> getPassengerJourneyQuery(PassengerJourneyDTO passengerJourneyDto, Pageable page) {
+        Date date = null;
+        try {
+            date = formatter.parse(passengerJourneyDto.getDate());
+        } catch (ParseException e) {
+        }
+
+        Page<PassengerJourney> journeyRequests = null;
+        journeyRequests = passengerJourneyRepository.findAllRecent(page, date);
+        return journeyRequests;
+    }
+
 }
