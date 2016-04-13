@@ -49,7 +49,6 @@ public class JourneyController {
         return journeyService.getAllJourneyRequests(page);
     }
 
-
     @SuppressWarnings("unchecked")
     @RequestMapping(value="/registerDriverJourney",method=RequestMethod.POST)
     @PreAuthorize("permitAll")
@@ -67,6 +66,13 @@ public class JourneyController {
     @RequestMapping(value="/searchPassengerJourney",method=RequestMethod.POST)
     public @ResponseBody Page<PassengerJourneyDTO> searchJourneyRequest(@RequestBody PassengerJourneyDTO passengerJourneyDto, Pageable page) {
         return journeyService.getPassengerJourneySearchResults(passengerJourneyDto, page);
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/allJourneys/{username}", method = RequestMethod.GET)
+    @PreAuthorize("permitAll")
+    Page<DriverJourneyDTO> findAllUserJourneys(@PathVariable("username") String username, Pageable page) {
+        return journeyService.getAllUserJourneys(username, page);
     }
 
 

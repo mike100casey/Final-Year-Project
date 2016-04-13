@@ -26,7 +26,6 @@ import java.util.List;
 
 
 /**
- *
  * Created by Michael on 1/25/2016.
  */
 
@@ -55,9 +54,9 @@ public class JourneyService {
 
     public Page<PassengerJourneyDTO> getAllJourneyRequests(Pageable page) {
         Page<PassengerJourney> journeyRequests = passengerJourneyRepository.findAll(page);
-        Page<PassengerJourneyDTO> passengerJourneyDTOs = new PageImpl<PassengerJourneyDTO>(
-            Utils.convertToJourneyRequestPage(journeyRequests.getContent()), page, journeyRequests.getTotalElements());
-        return passengerJourneyDTOs;
+        //Page<PassengerJourneyDTO> passengerJourneyDTOs = new PageImpl<>(Utils.convertToJourneyRequestPage(journeyRequests.getContent()), page, journeyRequests.getTotalElements());
+        return new PageImpl<>(Utils.convertToJourneyRequestPage(journeyRequests.getContent()), page, journeyRequests.getTotalElements());
+        //passengerJourneyDTOs;
     }
 
     public List<String> validatePassengerJourney(PassengerJourneyDTO dto, BindingResult result) {
@@ -112,7 +111,7 @@ public class JourneyService {
 
     public Page<PassengerJourneyDTO> getPassengerJourneySearchResults(PassengerJourneyDTO passengerJourneyDto, Pageable page) {
         Page<PassengerJourney> passengerJourney = getPassengerJourneyQuery(passengerJourneyDto, page);
-        Page<PassengerJourneyDTO> journeyDtos = new PageImpl<PassengerJourneyDTO>(Utils.convertToJourneyRequestPage(passengerJourney.getContent()), page, passengerJourney.getTotalElements());
+        Page<PassengerJourneyDTO> journeyDtos = new PageImpl<>(Utils.convertToJourneyRequestPage(passengerJourney.getContent()), page, passengerJourney.getTotalElements());
         return journeyDtos;
     }
 
@@ -128,4 +127,8 @@ public class JourneyService {
         return journeyRequests;
     }
 
+    public Page<DriverJourneyDTO> getAllUserJourneys(String username, Pageable page) {
+        Page<DriverJourney> journeys = driverJourneyRepository.findAllByUserId(userRepository.findByLogin(username).getId(), page);
+        return new PageImpl<>(Utils.convertToJourneyPage(journeys.getContent()), page, journeys.getTotalElements());
+    }
 }

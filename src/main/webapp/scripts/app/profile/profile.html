@@ -1,0 +1,46 @@
+<div>
+    <button class="btn btn-primary" ng-click="add();">show journeys</button>
+</div>
+
+<div class="mycontainer">
+    <div class="left-nav">
+        <accordion close-others="true">
+            <accordion-group is-open="isopen">
+                <accordion-heading>
+                    User Journeys
+                    <i class="pull-right glyphicon"
+                       ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}"
+                        ></i>
+                </accordion-heading>
+                <div id="tableDiv">
+                    <div>
+                        <table class="table table-bordered table-hover success">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>Date</th>
+                                    <th>Stops</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="journey in journeys" ng-class="{even: $even, odd: $odd}">
+                                    <td>{{journey.source}}</td>
+                                    <td>{{journey.destination}}</td>
+                                    <td>{{journey.date}}</td>
+                                    <td>
+                                        <ul ng-repeat="waypt in journey.waypts">
+                                            <li>{{waypt.name}}</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
+    <div class="content">
+    </div>
+</div>

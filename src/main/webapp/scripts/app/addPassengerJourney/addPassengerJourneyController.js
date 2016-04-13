@@ -42,16 +42,6 @@ angular.module('fYPApp')
             var MyDirectionsDisplay = new google.maps.DirectionsRenderer({'map': map, 'draggable': true});
             var start = angular.element('#source').val();
             var end = angular.element('#destination').val();
-            //google.maps.event.addListener(MyDirectionsDisplay, 'directions_changed', function (e) {
-            //    var routeLeg = MyDirectionsDisplay.directions.routes[0].legs[0];
-            //    var legSize = MyDirectionsDisplay.directions.routes[0].legs.length;
-            //    var routeLegEnd = MyDirectionsDisplay.directions.routes[0].legs[legSize - 1];
-            //
-            //    $scope.journey.sourceLat = routeLeg.start_location.lat();
-            //    $scope.journey.sourceLng = routeLeg.start_location.lng();
-            //    $scope.journey.destinationLat = routeLegEnd.end_location.lat();
-            //    $scope.journey.destinationLng = routeLegEnd.end_location.lng();
-            //});
             var request = {
                 origin: start,
                 waypoints: $scope.journey.waypts,

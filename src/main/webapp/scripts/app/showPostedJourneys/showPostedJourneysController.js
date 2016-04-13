@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('DriverJourneyController1', function ($scope, $log, $http, Principal) {
+    .controller('PostedJourneyController', function ($scope, $log, $http, Principal) {
 
         Principal.identity().then(function (account) {
             $scope.account = account;

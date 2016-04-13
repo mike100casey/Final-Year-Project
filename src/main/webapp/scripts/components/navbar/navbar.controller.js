@@ -28,7 +28,6 @@ angular.module('fYPApp')
         $scope.getCar = function () {
             $http.get('/api/car/getUserCar/' + $scope.userName).
                 success(function (data, status, headers, config) {
-                    //console.log(JSON.stringify(data));
                     $scope.make = data.make;
                     $scope.isDriver = $scope.make != "";
                 })

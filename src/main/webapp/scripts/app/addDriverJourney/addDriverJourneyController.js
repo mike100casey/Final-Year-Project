@@ -986,20 +986,24 @@ angular.module('fYPApp')
 
                 if (id == 2) {
                     node_ids.splice(idx, 1);
+                    node_ids.splice(idx, 1);
                     $log.log(JSON.stringify(idx));
                     $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 3) {
                     node_ids.splice(idx, 1);
+                   node_ids.splice(idx, 1);
                     $log.log(JSON.stringify(idx));
                     $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 4) {
                     node_ids.splice(idx, 1);
+                    node_ids.splice(idx, 1);
                     $log.log(JSON.stringify(idx));
                     $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 5) {
+                    node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
                 }
             }
@@ -1068,13 +1072,13 @@ angular.module('fYPApp')
                 'date': $filter('date')($scope.journey.date, "dd/MM/yyyy")
             };
             $http.post('/api/journey/searchPassengerJourney?page=' + page, searchData).
-                success(function (data, status, headers, config) {
+                success(function (data) {
                     $scope.journeyRequest = data.content;
                     $scope.noJourneys = $scope.journeyRequests <= 0 ? true : false;
                     journeyRequestLength = $scope.journeyRequest.length;
                 }).
                 error(function (data) {
-                    //$log.log(data);
+                    $state.go('error');
                 });
         };
 

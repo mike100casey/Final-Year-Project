@@ -1,10 +1,7 @@
 'use strict';
 
 angular.module('fYPApp', ['LocalStorageModule','ngResource', 'ui.router', 'ngCookies', 'ngAria','ngAutocomplete',
-    'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'angular-loading-bar','fYPApp.directive.map'])
-
-
-
+    'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'angular-loading-bar','fYPApp.directive.map','ui.bootstrap'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
 
@@ -91,4 +88,4 @@ angular.module('fYPApp', ['LocalStorageModule','ngResource', 'ui.router', 'ngCoo
             is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
             pattern: /bool|true|0|1/
         });
-    }]);;
+    }]);

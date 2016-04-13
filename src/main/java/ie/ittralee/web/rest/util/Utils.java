@@ -1,6 +1,8 @@
 package ie.ittralee.web.rest.util;
 
+import ie.ittralee.domain.DriverJourney;
 import ie.ittralee.domain.PassengerJourney;
+import ie.ittralee.web.rest.dto.DriverJourneyDTO;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 import org.json.simple.JSONObject;
 
@@ -30,9 +32,17 @@ public class Utils {
     }
 
     public static List<PassengerJourneyDTO> convertToJourneyRequestPage(List<PassengerJourney> content) {
-        List<PassengerJourneyDTO> dtos = new ArrayList<PassengerJourneyDTO>();
+        List<PassengerJourneyDTO> dtos = new ArrayList<>();
         for(PassengerJourney journey: content){
             dtos.add(journey.toDTO());
+        }
+        return dtos;
+    }
+
+    public static List<DriverJourneyDTO> convertToJourneyPage(List<DriverJourney> content) {
+        List<DriverJourneyDTO> dtos = new ArrayList<>();
+        for(DriverJourney journeyRequest: content){
+            dtos.add(journeyRequest.toDTO());
         }
         return dtos;
     }

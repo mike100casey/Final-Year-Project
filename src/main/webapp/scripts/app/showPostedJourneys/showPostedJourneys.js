@@ -13,11 +13,10 @@ angular.module('fYPApp')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/showPostedJourneys/showPostedJourneys.html',
-                        controller: 'DriverJourneyController1'
+                        controller: 'PostedJourneyController'
                     }
                 },
                 resolve: {
-
                 }
             });
     });
