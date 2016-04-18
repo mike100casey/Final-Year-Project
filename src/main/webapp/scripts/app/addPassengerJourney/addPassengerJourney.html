@@ -1,6 +1,38 @@
+<!--<div class="alert alert-success" role="alert" ng-show="!success">-->
+    <!--<div><label>Delete Edges</label> <span><button class="btn btn-primary" ng-click="deleteEdges();">Delete</button></span></div>-->
+    <!--<div><label>Source to Source distance </label> <span><button class="btn btn-primary" ng-click="sourceToSourceDistances();">S2S</button></span></div>-->
+    <!--<span><label>Source to Source Edges </label><button class="btn btn-primary" ng-click="sourceToSourceEdges(); ">S2SE</button></span>-->
+    <!--<div><label>Source to all destination distances </label> <span><button class="btn btn-primary" ng-click="sourceToDestinationDistances();">S2AD</button></span></div>-->
+    <!--<div><label>Source to all destination edges </label> <span><button class="btn btn-primary" ng-click="allSourcesToDestinationEdges();">S2ADE</button></span></div>-->
+    <!--<br>-->
+    <!--<div><label>Destination to destination distance </label><span><button class="btn btn-primary" ng-click="destinationToDestinationDistances();">D2D</button></span></div>-->
+    <!--<div><label>Destination to destination edges </label><span><button class="btn btn-primary" ng-click="destinationToDestinationEdges();">D2DE</button></span></div>-->
+    <!--<div><label>Destination to all source distances </label> <span><button class="btn btn-primary" ng-click="allDestinationToSourceDistances();">AD2S</button></span></div>-->
+    <!--<div><label>Destination to all source edges </label> <span><button class="btn btn-primary" ng-click="allDestinationToSourceEdges();">AD2SE</button></span></div>-->
+
+<!--</div>-->
+
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" ng-show="!success">
+    <div class="btn-group" role="group" aria-label="First group">
+        <button type="button" class="btn btn-secondary" ng-click="sourceToSourceDistances();">S2S</button>
+        <button type="button" class="btn btn-secondary" ng-click="sourceToSourceEdges();">S2SE</button>
+        <button type="button" class="btn btn-secondary" ng-click="sourceToDestinationDistances();">S2AD</button>
+        <button type="button" class="btn btn-secondary" ng-click="allSourcesToDestinationEdges();">S2ADE</button>
+    </div>
+    <div class="btn-group" role="group" aria-label="Second group">
+        <button type="button" class="btn btn-secondary" ng-click="destinationToDestinationDistances();">D2D</button>
+        <button type="button" class="btn btn-secondary" ng-click="destinationToDestinationEdges();">D2DE</button>
+        <button type="button" class="btn btn-secondary" ng-click="allDestinationToSourceDistances();">AD2S</button>
+        <button type="button" class="btn btn-secondary" ng-click="allDestinationToSourceEdges();">AD2SE</button>
+    </div>
+    <div class="btn-group" role="group" aria-label="Third group">
+        <button type="button" class="btn btn-secondary" ng-click="deleteEdges();">Delete</button>
+    </div>
+</div>
+
 <div class="col-md-12">
     <div class="col-md-5 ">
-        <form name="form" ng-hide="success" ng-submit="sendForm();" role="form" novalidate show-validation>
+        <form name="form" ng-hide="success" ng-submit="sendForm();createNodes();" role="form" novalidate show-validation>
             <div id="myRoute" class="list-group-item">
                 <h5><b>Please fill in the following form to display route</b></h5>&#xA0;
                 <fieldset class="main-block">
@@ -71,7 +103,41 @@
         <p>Journey registered <a ui-sref="home" class="alert-link">GO to home page</a></p>
     </div>
 
+
     <div class="col-md-7" ng-hide="success">
         <my-map id="map_canvas"></my-map>
     </div>
 </div>
+
+<!--&lt;!&ndash;<div><label>Driver source to passenger sources </label> <span><button class="btn btn-primary" ng-click="driverSourceToSourceDistances(); "></button></span></div>&ndash;&gt;-->
+<!--<div><label>Driver source to passenger sources edges </label> <span><button class="btn btn-primary" ng-click="driverSourceToAllSourceEdges(); "></button></span></div>-->
+
+<!--&lt;!&ndash;<div><label>Driver destination to passenger destination </label> <span><button class="btn btn-primary" ng-click="driverDestinationToAllDestinationDistances(); "></button></span></div>&ndash;&gt;-->
+<!--<div><label>Driver destination to passenger destination edges </label> <span><button class="btn btn-primary" ng-click="driverDestinationToDestinationEdges(); "></button></span></div>-->
+
+<!--&lt;!&ndash;<div><label>Source to Source distance </label> <span><button class="btn btn-primary" ng-click="sourceToSourceDistances() "></button></span></div>&ndash;&gt;-->
+<!--<div><label>Source to Source edges </label>-->
+
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges1(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges2(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges3(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges4(); "></button></span>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div><label>Destination to destination distance </label> <span><button class="btn btn-primary" ng-click="destinationToDestinationDistances(); "></button></span></div>&ndash;&gt;-->
+
+
+<!--<div><label>Destination to destination edges </label>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges1(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges2(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges3(); "></button></span>-->
+<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges4(); "></button></span>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash;<div><label>Destination to all source distances </label> <span><button class="btn btn-primary" ng-click="allDestinationToSourceDistances(); "></button></span></div>&ndash;&gt;-->
+<!--<div><label>Destination to all source edges </label> <span><button class="btn btn-primary" ng-click="allDestinationToSourceEdges(); "></button></span></div>-->
+
+<!--&lt;!&ndash;<div><label>Source to all destination distances </label> <span><button class="btn btn-primary" ng-click="sourceToDestinationDistances(); "></button></span></div>&ndash;&gt;-->
+<!--<div><label>Source to all destination edges </label> <span><button class="btn btn-primary" ng-click="allSourcesToDestinationEdges(); "></button></span></div>-->
+
+<!--<div><button class="btn btn-primary" ng-click="paths();"></button>Paths</div>-->

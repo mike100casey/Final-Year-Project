@@ -2,12 +2,9 @@ CREATE TABLE fyp.passenger_journey (
     id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     date datetime DEFAULT NULL,
     destination varchar(255) DEFAULT NULL,
-    destination_Lat float NOT NULL,
-    destination_Lng float NOT NULL,
     source varchar(255) DEFAULT NULL,
-    source_Lat float NOT NULL,
-    source_Lng float NOT NULL,
     time varchar(255) DEFAULT NULL,
+    available varchar(255) DEFAULT NULL,
     user_Id bigint(20) NOT NULL,
     KEY FK_PJ_USER (user_Id),
     CONSTRAINT FK_PJ_USER FOREIGN KEY (user_Id) REFERENCES fyp.jhi_user (id)
@@ -68,5 +65,8 @@ INSERT INTO fyp.jhi_user VALUES (8,'user4','$2a$10$qGKpBWjUEqZKGbkNqlthq.pKvn4O5
 
 INSERT INTO fyp.cars VALUES (7,196,7,2016);
 
-INSERT INTO fyp.passenger_journey VALUES (2,'2018-06-04 00:00:00','Askeaton, Ireland',0,0,'Foynes, Ireland',0,0,'3:10 PM',4),(3,'2018-06-04 00:00:00','Dromcolliher, Ireland',0,0,'Kanturk, Ireland',0,0,'3:12 PM',5),(4,'2018-06-04 00:00:00','Newcastle West, Ireland',0,0,'Listowel, Ireland',0,0,'3:13 PM',8),(5,'2018-06-04 00:00:00','Killorglin, Ireland',0,0,'Cahirciveen, Ireland',0,0,'3:15 PM',6);
+INSERT INTO fyp.passenger_journey VALUES (2,'2018-06-04 00:00:00','Askeaton, Ireland','Foynes, Ireland','3:10 PM','yes',4),
+    (3,'2018-06-04 00:00:00','Dromcolliher, Ireland','Kanturk, Ireland','3:12 PM','yes',5),
+    (4,'2018-06-04 00:00:00','Newcastle West, Ireland','Listowel, Ireland','3:13 PM','yes',8),
+    (5,'2018-06-04 00:00:00','Killorglin, Ireland','Cahirciveen, Ireland','3:15 PM','yes',6);
 

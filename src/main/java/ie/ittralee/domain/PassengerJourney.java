@@ -3,7 +3,6 @@ package ie.ittralee.domain;
 import ie.ittralee.web.rest.dto.PassengerJourneyDTO;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,16 +25,10 @@ public class PassengerJourney {
     private User user;
 
     private String source;
-    private double sourceLat;
-    private double sourceLng;
-
     private String destination;
-    private double destinationLat;
-    private double destinationLng;
-
     private Date date;
-
     private String time;
+    private String available;
 
     public User getUser() {
         return user;
@@ -53,44 +46,12 @@ public class PassengerJourney {
         this.source = source;
     }
 
-    public double getSourceLat() {
-        return sourceLat;
-    }
-
-    public void setSourceLat(double sourceLat) {
-        this.sourceLat = sourceLat;
-    }
-
-    public double getSourceLng() {
-        return sourceLng;
-    }
-
-    public void setSourceLng(double sourceLng) {
-        this.sourceLng = sourceLng;
-    }
-
     public String getDestination() {
         return destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
-    }
-
-    public double getDestinationLat() {
-        return destinationLat;
-    }
-
-    public void setDestinationLat(double destinationLat) {
-        this.destinationLat = destinationLat;
-    }
-
-    public double getDestinationLng() {
-        return destinationLng;
-    }
-
-    public void setDestinationLng(double destinationLng) {
-        this.destinationLng = destinationLng;
     }
 
     public Date getDate() {
@@ -109,19 +70,20 @@ public class PassengerJourney {
         this.id = id;
     }
 
+    public String getAvailable() { return available;  }
+
+    public void setAvailable(String available) { this.available = available; }
+
     public PassengerJourneyDTO toDTO() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         PassengerJourneyDTO dto = new PassengerJourneyDTO();
         dto.setId(this.getId());
         dto.setUsername(this.getUser().getLogin());
         dto.setSource(this.getSource());
-        dto.setSourceLat(this.getSourceLat());
-        dto.setSourceLng(this.getSourceLng());
         dto.setDestination(this.getDestination());
-        dto.setDestinationLat(this.getDestinationLat());
-        dto.setDestinationLng(this.getDestinationLng());
         dto.setDate(formatter.format(this.getDate()));
         dto.setTime(this.getTime());
+        dto.setAvailable(this.getAvailable());
         return dto;
     }
 

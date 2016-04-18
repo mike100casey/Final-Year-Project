@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('fYPApp')
-    .controller('addDriverJourneyController', function ($scope, Principal, $timeout, Auth, $http, $log, $filter) {
+    .controller('addDriverJourneyController', function ($scope, Principal, $timeout, Auth, $http, $log, $filter, $state) {
 
         var username = null;
         Principal.identity().then(function (account) {
@@ -344,8 +344,7 @@ angular.module('fYPApp')
         };
 
 //-----------------------sources to destinations----------------------
-        var sourceToDestinationDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15,
-            49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
+        var sourceToDestinationDistances = [11.36, 37.17, 21.06, 90.85, 58.65, 24.46, 36.61, 71.15, 49.43, 36.7, 46.84, 53.11, 136.05, 123.79, 113.39, 40.12];
         $scope.sourceToDestinationDistances = function () {
             for (var i = 3; i < 4; i++) {
                 for (var m = 0; m < destinationNodes.length; m++) {
@@ -987,20 +986,20 @@ angular.module('fYPApp')
                 if (id == 2) {
                     node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
-                    $log.log(JSON.stringify(idx));
-                    $log.log(JSON.stringify(node_ids));
+                    //$log.log(JSON.stringify(idx));
+                    //$log.log(JSON.stringify(node_ids));
                 }
                 if (id == 3) {
                     node_ids.splice(idx, 1);
-                   node_ids.splice(idx, 1);
-                    $log.log(JSON.stringify(idx));
-                    $log.log(JSON.stringify(node_ids));
+                    node_ids.splice(idx, 1);
+                    //$log.log(JSON.stringify(idx));
+                    //$log.log(JSON.stringify(node_ids));
                 }
                 if (id == 4) {
                     node_ids.splice(idx, 1);
                     node_ids.splice(idx, 1);
-                    $log.log(JSON.stringify(idx));
-                    $log.log(JSON.stringify(node_ids));
+                    //$log.log(JSON.stringify(idx));
+                    //$log.log(JSON.stringify(node_ids));
                 }
                 if (id == 5) {
                     node_ids.splice(idx, 1);
@@ -1010,32 +1009,20 @@ angular.module('fYPApp')
             else {
                 $scope.selection.push(id);
                 if (id == 2) {
-                    //var stopArray1 = ["0", "1"];
-                    //node_ids.push(stopArray1);
                     node_ids.push("0");
                     node_ids.push("1");
-                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 3) {
-                    //var stopArray2 = ["2", "3"];
-                    //node_ids.push(stopArray2);
                     node_ids.push("2");
                     node_ids.push("3");
-                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 4) {
-                    //var stopArray3 = ["4", "5"];
-                    //node_ids.push(stopArray3);
                     node_ids.push("4");
                     node_ids.push("5");
-                    $log.log(JSON.stringify(node_ids));
                 }
                 if (id == 5) {
-                    //var stopArray4 = ["12", "13"];
-                    //node_ids.push(stopArray4);
                     node_ids.push("12");
                     node_ids.push("13");
-                    $log.log(JSON.stringify(node_ids));
                 }
             }
             if ($scope.selection.length < 1) {
@@ -1044,6 +1031,11 @@ angular.module('fYPApp')
                 $scope.isKnew = false;
             }
 
+        };
+
+        $scope.ids = [];
+        $scope.addId = function addId(id) {
+            $scope.ids.push(id);
         };
 
         $scope.sendForm = function () {
@@ -1064,12 +1056,33 @@ angular.module('fYPApp')
                         $scope.error = 'ERROR';
                     }
                 });
+            if($scope.ids.length > 0){
+                $scope.update();
+            }
         };
+
+        $scope.update = function () {
+            for (var j = 0; j < $scope.ids.length; j++) {
+                $scope.id = $scope.ids[j];
+                $http.get("/api/journey/updatePassengerJourney/" + $scope.id)
+                    .success(function (data, status, headers, config) {
+                        $scope.success = 'OK';
+                    })
+                    .error(function (response) {
+                        $scope.success = null;
+                        if (response.status === 500) {
+                            $scope.error = 'ERROR';
+                        }
+                    });
+            }
+        };
+
 
         var journeyRequestLength = 0;
         $scope.searchByDate = function (page) {
             var searchData = {
-                'date': $filter('date')($scope.journey.date, "dd/MM/yyyy")
+                'date': $filter('date')($scope.journey.date, "dd/MM/yyyy"),
+                'available': 'yes'
             };
             $http.post('/api/journey/searchPassengerJourney?page=' + page, searchData).
                 success(function (data) {

@@ -1,18 +1,14 @@
-<div>
-    <button class="btn btn-primary" ng-click="add();">show journeys</button>
-</div>
-
-<div class="mycontainer">
+<div class="container">
     <div class="left-nav">
         <accordion close-others="true">
             <accordion-group is-open="isopen">
                 <accordion-heading>
-                    User Journeys
-                    <i class="pull-right glyphicon"
-                       ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}"
-                        ></i>
+                    <button id="showJourney" class="btn btn-primary" ng-click="add();"> Journeys</button>
+                    <a id="journeyLink" class="pull-right glyphicon" style="text-decoration: none"
+                       ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}">
+                    </a>
                 </accordion-heading>
-                <div id="tableDiv">
+                <div id="tableDiv" ng-show="!noJourneys">
                     <div>
                         <table class="table table-bordered table-hover success">
                             <thead>
@@ -38,9 +34,10 @@
                         </table>
                     </div>
                 </div>
+                <div class="alert alert-warning" ng-show="noJourneys">
+                    You don't have any journeys yet? <a class="alert-link" href="#/addJourney"> Register a new Journey</a>
+                </div>
             </accordion-group>
         </accordion>
-    </div>
-    <div class="content">
     </div>
 </div>

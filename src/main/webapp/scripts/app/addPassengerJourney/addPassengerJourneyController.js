@@ -16,6 +16,7 @@ angular.module('fYPApp')
         $scope.journey = {};
         $scope.journey.source = "";
         $scope.journey.destination = "";
+        $scope.journey.available = "yes";
         $scope.addUsername = function () {
             $scope.journey.username = username;
         };
@@ -110,14 +111,35 @@ angular.module('fYPApp')
                     "CREATE (s1)-[r:TO]->(d1) SET r.weight = '" + roundedDistance + "' return r",
                     "params": {
                         "source": {
-                            "name": angular.element('#source').val(),
-                            "id": "1"
+                            "name": angular.element('#source').val()
                         },
                         "destination": {
-                            "name": angular.element('#destination').val(),
-                            "id": "1"
+                            "name": angular.element('#destination').val()
                         }
                     }
+                }),
+                success: function (data, textStatus, jqXHR) {
+                    console.log(JSON.stringify(data));
+                },
+                error: function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                }
+            });
+        };
+        $scope.deleteEdges = function () {
+            $scope.node = [];
+            var serverURL = "http://localhost:7474/db/data";
+            $.ajax({
+                type: "POST",
+                url: serverURL + "/cypher",
+                accepts: "application/json",
+                dataType: "json",
+                contentType: "application/json",
+                headers: {
+                    "X-Stream": "true"
+                },
+                data: JSON.stringify({
+                    "query": "START r=rel(*) delete r", "params": {}
                 }),
                 success: function (data, textStatus, jqXHR) {
                     console.log(JSON.stringify(data));
@@ -148,6 +170,7 @@ angular.module('fYPApp')
                             }
                             var roundedDistance = Math.round(distance * 100) / 100;
                             sourceToSourceDistance.push(roundedDistance);
+                            $log.log(roundedDistance);
                         }
                     });
                 }
@@ -203,6 +226,7 @@ angular.module('fYPApp')
                             }
                             var roundedDistance = Math.round(distance * 100) / 100;
                             sourceToDestinationDistances.push(roundedDistance);
+                            $log.log(roundedDistance);
                         }
                     });
                 }
@@ -275,8 +299,8 @@ angular.module('fYPApp')
                         "X-Stream": "true"
                     },
                     data: JSON.stringify({
-                        "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[m] +
-                        "' AND b.name = '" + angular.element('#destination').val() + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + driverDestinationToDestinationDistances[m] + "' RETURN r",
+                        "query": "MATCH (a:Destination),(b:Destination) WHERE a.name = '" + destinationNodes[m] +
+                        "' AND b.name = '" + angular.element('#destination').val() + "' CREATE (a)-[r:To]->(b) SET r.weight = '" + driverDestinationToDestinationDistances[m] + "' RETURN r",
                         "params": {}
                     }),
                     success: function (data, textStatus, jqXHR) {
@@ -329,11 +353,11 @@ angular.module('fYPApp')
                             "X-Stream": "true"
                         },
                         data: JSON.stringify({
-                            "query": "MATCH (a:Destination),(b:Destination)  WHERE a.name = '" + destinationNodes[i] +
-                            "' AND b.name = '" + destinationNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToDestinationDistances[l] + "' RETURN r ",
+                            "query": "MATCH (a:Destination),(b:Destination) WHERE a.name = '" + destinationNodes[i] +
+                            "' AND b.name = '" + destinationNodes[m] + "' CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToDestinationDistances[l] + "' RETURN r ",
                             "params": {}
                         }),
-                        success: function (data, textStatus, jqXHR) {
+                        success: function (data) {
                             console.log(JSON.stringify(data));
                         },
                         error: function (jqXHR, textStatus) {
@@ -384,11 +408,11 @@ angular.module('fYPApp')
                             "X-Stream": "true"
                         },
                         data: JSON.stringify({
-                            "query": "MATCH (a:Destination),(b:Source)  WHERE a.name = '" + destinationNodes[i] +
-                            "' AND b.name = '" + startNodes[m] + "'   CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToSourceDistances[a] + "' RETURN r ",
+                            "query": "MATCH (a:Destination),(b:Source) WHERE a.name = '" + destinationNodes[i] +
+                            "' AND b.name = '" + startNodes[m] + "'CREATE (a)-[r:To]->(b) SET r.weight = '" + destinationToSourceDistances[a] + "' RETURN r ",
                             "params": {}
                         }),
-                        success: function (data, textStatus, jqXHR) {
+                        success: function (data) {
                             console.log(JSON.stringify(data));
                         },
                         error: function (jqXHR, textStatus) {

@@ -11,7 +11,7 @@ angular.module('fYPApp')
         $stateProvider
             .state('addDriverJourneys', {
                 parent: 'site',
-                url: '/findPassengers',
+                url: '/addJourney',
                 data: {
                     roles: [],
                     pageTitle: 'add Driver Journeys'

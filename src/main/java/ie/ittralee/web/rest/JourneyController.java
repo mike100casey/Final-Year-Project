@@ -44,6 +44,14 @@ public class JourneyController {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value="/updatePassengerJourney/{id}",method= RequestMethod.GET)
+    @PreAuthorize("permitAll")
+    public @ResponseBody JSONObject updatePassengerJourney(@PathVariable("id") Long id) {
+        journeyService.updatePassengerRequest(id);
+        return Utils.returnSuccess();
+    }
+
     @RequestMapping(value = "/allJourneyRequests", method = RequestMethod.GET)
     Page<PassengerJourneyDTO> findAllJourneyRequests(Pageable page) {
         return journeyService.getAllJourneyRequests(page);
@@ -73,6 +81,13 @@ public class JourneyController {
     @PreAuthorize("permitAll")
     Page<DriverJourneyDTO> findAllUserJourneys(@PathVariable("username") String username, Pageable page) {
         return journeyService.getAllUserJourneys(username, page);
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/allPassengerJourneys/{username}", method = RequestMethod.GET)
+    @PreAuthorize("permitAll")
+    Page<PassengerJourneyDTO> findAllUserPassengerJourneys(@PathVariable("username") String username, Pageable page) {
+        return journeyService.getAllUserPassengerJourneys(username, page);
     }
 
 

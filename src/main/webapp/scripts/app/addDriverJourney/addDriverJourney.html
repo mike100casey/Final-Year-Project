@@ -50,7 +50,7 @@
             <label>Time</label>
 
             <div class="input-group bootstrap-timepicker timepicker">
-                <input id="timepicker" class="form-control" data-provide="timepicker"
+                <input id="timepicker" class="form-control" data-provide="timepicker" ng-click="update();"
                        ng-model="journey.time" data-minute-step="1" type="text"/>
                 <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
             </div>
@@ -99,7 +99,7 @@
                 <tbody>
                 <tr ng-repeat="pj in journeyRequest" ng-class="{even: $even, odd: $odd}">
                     <td><input id="{{pj.id}}" type="checkbox" ng-checked="selection.indexOf(pj.id) > -1"
-                               ng-click="toggleSelection(pj.id); isStopping = true;">
+                               ng-click="toggleSelection(pj.id); isStopping = true; addId(pj.id);">
 
                     </td>
                     <td>{{pj.username}}</td>
@@ -125,35 +125,3 @@
 <div class="alert alert-success" role="alert" ng-show="success">
     <p>Journey registered <a ui-sref="home" class="alert-link">GO to home page</a></p>
 </div>
-
-
-
-
-<!--&lt;!&ndash;<div><label>Driver source to passenger sources </label> <span><button class="btn btn-primary" ng-click="driverSourceToSourceDistances(); "></button></span></div>&ndash;&gt;-->
-<!--<div><label>Driver source to passenger sources edges </label> <span><button class="btn btn-primary" ng-click="driverSourceToAllSourceEdges(); "></button></span></div>-->
-<!--&lt;!&ndash;<div><label>Driver destination to passenger destination </label> <span><button class="btn btn-primary" ng-click="driverDestinationToAllDestinationDistances(); "></button></span></div>&ndash;&gt;-->
-<!--<div><label>Driver destination to passenger destination edges </label> <span><button class="btn btn-primary" ng-click="driverDestinationToDestinationEdges(); "></button></span></div>-->
-<!--&lt;!&ndash;<div><label>Source to Source distance </label> <span><button class="btn btn-primary" ng-click="sourceToSourceDistances() "></button></span></div>&ndash;&gt;-->
-<!--<div><label>Source to Source edges </label>-->
-<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges1(); "></button></span>-->
-<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges2(); "></button></span>-->
-<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges3(); "></button></span>-->
-<!--<span><button class="btn btn-primary" ng-click="sourceToSourceEdges4(); "></button></span>-->
-<!--</div>-->
-<!--&lt;!&ndash;<div><label>Destination to destination distance </label> <span><button class="btn btn-primary" ng-click="destinationToDestinationDistances(); "></button></span></div>&ndash;&gt;-->
-
-
-<!--<div><label>Destination to destination edges </label>-->
-<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges1(); "></button></span>-->
-<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges2(); "></button></span>-->
-<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges3(); "></button></span>-->
-<!--<span><button class="btn btn-primary" ng-click="destinationToDestinationEdges4(); "></button></span>-->
-<!--</div>-->
-
-
-<!--&lt;!&ndash;<div><label>Destination to all source distances </label> <span><button class="btn btn-primary" ng-click="allDestinationToSourceDistances(); "></button></span></div>&ndash;&gt;-->
-<!--<div><label>Destination to all source edges </label> <span><button class="btn btn-primary" ng-click="allDestinationToSourceEdges(); "></button></span></div>-->
-<!--&lt;!&ndash;<div><label>Source to all destination distances </label> <span><button class="btn btn-primary" ng-click="sourceToDestinationDistances(); "></button></span></div>&ndash;&gt;-->
-<!--<div><label>Source to all destination edges </label> <span><button class="btn btn-primary" ng-click="allSourcesToDestinationEdges(); "></button></span></div>-->
-
-<!--<div><button class="btn btn-primary" ng-click="paths();"></button>Paths</div>-->

@@ -2,6 +2,7 @@ package ie.ittralee.service;
 
 import ie.ittralee.domain.DriverJourney;
 import ie.ittralee.domain.PassengerJourney;
+import ie.ittralee.domain.User;
 import ie.ittralee.repository.DriverJourneyRepository;
 import ie.ittralee.repository.PassengerJourneyRepository;
 import ie.ittralee.repository.UserRepository;
@@ -26,6 +27,7 @@ import java.util.List;
 
 
 /**
+ *
  * Created by Michael on 1/25/2016.
  */
 
@@ -54,9 +56,7 @@ public class JourneyService {
 
     public Page<PassengerJourneyDTO> getAllJourneyRequests(Pageable page) {
         Page<PassengerJourney> journeyRequests = passengerJourneyRepository.findAll(page);
-        //Page<PassengerJourneyDTO> passengerJourneyDTOs = new PageImpl<>(Utils.convertToJourneyRequestPage(journeyRequests.getContent()), page, journeyRequests.getTotalElements());
         return new PageImpl<>(Utils.convertToJourneyRequestPage(journeyRequests.getContent()), page, journeyRequests.getTotalElements());
-        //passengerJourneyDTOs;
     }
 
     public List<String> validatePassengerJourney(PassengerJourneyDTO dto, BindingResult result) {
@@ -87,6 +87,12 @@ public class JourneyService {
         driverJourneyRepository.save(journey);
     }
 
+    public void updatePassengerRequest(Long id) {
+        PassengerJourney journey = passengerJourneyRepository.findOneById(id);
+        journey.setAvailable("no");
+        passengerJourneyRepository.save(journey);
+    }
+
     public List<String> validateDriverJourney(DriverJourneyDTO dto, BindingResult result) {
         Date journeyDate = null;
         try {
@@ -111,24 +117,32 @@ public class JourneyService {
 
     public Page<PassengerJourneyDTO> getPassengerJourneySearchResults(PassengerJourneyDTO passengerJourneyDto, Pageable page) {
         Page<PassengerJourney> passengerJourney = getPassengerJourneyQuery(passengerJourneyDto, page);
-        Page<PassengerJourneyDTO> journeyDtos = new PageImpl<>(Utils.convertToJourneyRequestPage(passengerJourney.getContent()), page, passengerJourney.getTotalElements());
-        return journeyDtos;
+        //Page<PassengerJourneyDTO> journeyDtos = new PageImpl<>(Utils.convertToJourneyRequestPage(passengerJourney.getContent()), page, passengerJourney.getTotalElements());
+        return new PageImpl<>(Utils.convertToJourneyRequestPage(passengerJourney.getContent()), page, passengerJourney.getTotalElements());
+        //return journeyDtos;
     }
 
     private Page<PassengerJourney> getPassengerJourneyQuery(PassengerJourneyDTO passengerJourneyDto, Pageable page) {
+        String available = "yes";
         Date date = null;
         try {
             date = formatter.parse(passengerJourneyDto.getDate());
         } catch (ParseException e) {
+           e.printStackTrace();
         }
 
         Page<PassengerJourney> journeyRequests = null;
-        journeyRequests = passengerJourneyRepository.findAllRecent(page, date);
+        journeyRequests = passengerJourneyRepository.findAllRecent(page, date, available);
         return journeyRequests;
     }
 
     public Page<DriverJourneyDTO> getAllUserJourneys(String username, Pageable page) {
         Page<DriverJourney> journeys = driverJourneyRepository.findAllByUserId(userRepository.findByLogin(username).getId(), page);
         return new PageImpl<>(Utils.convertToJourneyPage(journeys.getContent()), page, journeys.getTotalElements());
+    }
+
+    public Page<PassengerJourneyDTO> getAllUserPassengerJourneys(String username, Pageable page) {
+        Page<PassengerJourney> journeys = passengerJourneyRepository.findAllByUserId(userRepository.findByLogin(username).getId(), page);
+        return new PageImpl<>(Utils.convertToJourneyRequestPage(journeys.getContent()), page, journeys.getTotalElements());
     }
 }
