@@ -1065,7 +1065,7 @@ angular.module('fYPApp')
             for (var j = 0; j < $scope.ids.length; j++) {
                 $scope.id = $scope.ids[j];
                 $http.get("/api/journey/updatePassengerJourney/" + $scope.id)
-                    .success(function (data, status, headers, config) {
+                    .success(function () {
                         $scope.success = 'OK';
                     })
                     .error(function (response) {
