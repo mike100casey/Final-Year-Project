@@ -2,6 +2,7 @@
  *
  * Created by Michael on 11/24/2015.
  */
+
 angular.module('fYPApp.directive.map', [])
     .directive('myMap', function () {
         return {

@@ -1,3 +1,8 @@
+/**
+ *
+ * Created by Michael on 2/1/2016.
+ */
+
 'use strict';
 
 angular.module('fYPApp')
@@ -79,24 +84,14 @@ angular.module('fYPApp')
                 return result;
             }
         });
-       // $scope.journeyRequests = $.getValues(0);
 
         var startNodes = [];
-        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-        //    startNodes.push(this.source);
-        //});
         var destinationNodes = [];
-        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-        //    destinationNodes.push(this.destination);
-        //});
         var sourceAndDestination = [];
-        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-        //    sourceAndDestination.push(this.source);
-        //    sourceAndDestination.push(this.destination);
-        //});
 
         function getSourceAndDestination() {
             $scope.journeyRequests = $.getValues(0);
+            // StackOverflow.com
             $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
                 startNodes.push(this.source);
             });
@@ -169,7 +164,6 @@ angular.module('fYPApp')
         $scope.sourceToSourceDistances = function () {
             getSourceAndDestination();
 
-            $log.log(startNodes);
             for (var i = 0; i < startNodes.length; i++) {
                 for (var m = 0; m < startNodes.length; m++) {
                     var request = {

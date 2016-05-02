@@ -22,6 +22,10 @@ angular.module('fYPApp')
             angular.element('[ng-model="registerAccount.login"]').focus();
         });
 
+        /**
+         *
+         * Created by Michael on 2/1/2016.
+         */
         $scope.getMakes = function () {
             $http.get('/api/dropdown/makes').
                 success(function (data, status, headers, config) {

@@ -25,21 +25,6 @@ angular.module('fYPApp')
         $(".date-input").datepicker({});
         $('#timepicker').timepicker({});
 
-        //$scope.showJourneyRequests = function (pageNumber) {
-        //    $http.get('/api/journey/allJourneyRequests?page=' + pageNumber).
-        //        success(function (data) {
-        //            $scope.journeyRequests = data.content;
-        //            $scope.currentPage = data.number + 1;
-        //            $scope.numPerPage = data.size;
-        //            $scope.total = data.totalElements;
-        //            $scope.maxSize = 5;
-        //        }).
-        //        error(function (data, status, headers, config) {
-        //            // log error
-        //        });
-        //};
-        //$scope.showJourneyRequests(0);
-
         $scope.journeyRequests = [];
         jQuery.extend({
             getValues: function (pageNumber) {
@@ -678,6 +663,7 @@ angular.module('fYPApp')
 
         $scope.oldJourneyDistance = 0;
         var roundedDistance = 0;
+        // Google developers API
         $scope.calculateRoute = function () {
             var start = angular.element('#source').val();
             var end = angular.element('#destination').val();
@@ -700,7 +686,7 @@ angular.module('fYPApp')
                 }
             });
         };
-
+        // StackOverflow.com
         function routeGenerator(inputArr) {
             var results = [];
             function permute(arr, memo) {
@@ -717,7 +703,7 @@ angular.module('fYPApp')
             }
             return permute(inputArr);
         }
-
+        // StackOverflow.com
         var printArray = function (arr) {
             if (typeof(arr) == "object") {
                 for (var i = 0; i < arr.length; i++) {
@@ -962,6 +948,7 @@ angular.module('fYPApp')
         $scope.isOld = true;
         $scope.isKnew = false;
 
+        // StackOverflow.com
         $scope.selection = [];
         $scope.toggleSelection = function toggleSelection(id) {
             var idx = $scope.selection.indexOf(id);
