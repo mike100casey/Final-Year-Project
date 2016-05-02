@@ -65,8 +65,8 @@ INSERT INTO fyp.jhi_user VALUES (8,'user4','$2a$10$qGKpBWjUEqZKGbkNqlthq.pKvn4O5
 
 INSERT INTO fyp.cars VALUES (7,196,7,2016);
 
-INSERT INTO fyp.passenger_journey VALUES (2,'2018-06-04 00:00:00','Askeaton, Ireland','Foynes, Ireland','3:10 PM','yes',4),
-    (3,'2018-06-04 00:00:00','Dromcolliher, Ireland','Kanturk, Ireland','3:12 PM','yes',5),
-    (4,'2018-06-04 00:00:00','Newcastle West, Ireland','Listowel, Ireland','3:13 PM','yes',8),
-    (5,'2018-06-04 00:00:00','Killorglin, Ireland','Cahirciveen, Ireland','3:15 PM','yes',6);
+INSERT INTO fyp.passenger_journey VALUES (2,'2018-03-05 00:00:00','Askeaton, Ireland','Foynes, Ireland','3:10 PM','yes',4),
+    (3,'2018-03-05 00:00:00','Dromcolliher, Ireland','Kanturk, Ireland','3:12 PM','yes',5),
+    (4,'2018-03-05 00:00:00','Newcastle West, Ireland','Listowel, Ireland','3:13 PM','yes',8),
+    (5,'2018-03-05 00:00:00','Killorglin, Ireland','Cahirciveen, Ireland','3:15 PM','yes',6);
 

@@ -79,21 +79,35 @@ angular.module('fYPApp')
                 return result;
             }
         });
-        $scope.journeyRequests = $.getValues(0);
+       // $scope.journeyRequests = $.getValues(0);
 
         var startNodes = [];
-        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-            startNodes.push(this.source);
-        });
+        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+        //    startNodes.push(this.source);
+        //});
         var destinationNodes = [];
-        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-            destinationNodes.push(this.destination);
-        });
+        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+        //    destinationNodes.push(this.destination);
+        //});
         var sourceAndDestination = [];
-        $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
-            sourceAndDestination.push(this.source);
-            sourceAndDestination.push(this.destination);
-        });
+        //$(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+        //    sourceAndDestination.push(this.source);
+        //    sourceAndDestination.push(this.destination);
+        //});
+
+        function getSourceAndDestination() {
+            $scope.journeyRequests = $.getValues(0);
+            $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+                startNodes.push(this.source);
+            });
+            $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+                destinationNodes.push(this.destination);
+            });
+            $(jQuery.parseJSON(JSON.stringify($scope.journeyRequests.content))).each(function () {
+                sourceAndDestination.push(this.source);
+                sourceAndDestination.push(this.destination);
+            });
+        }
 
         $scope.createNodes = function () {
             var serverURL = "http://localhost:7474/db/data";
@@ -153,6 +167,9 @@ angular.module('fYPApp')
 
         var sourceToSourceDistance = [];
         $scope.sourceToSourceDistances = function () {
+            getSourceAndDestination();
+
+            $log.log(startNodes);
             for (var i = 0; i < startNodes.length; i++) {
                 for (var m = 0; m < startNodes.length; m++) {
                     var request = {

@@ -697,29 +697,24 @@ angular.module('fYPApp')
                     }
                     $scope.oldJourneyDistance = Math.round(distance * 100) / 100;
                     roundedDistance = Math.round(distance * 100) / 100;
-                    //document.getElementById('distanceLabel').innerHTML = "Travel Distance: " + start + " to " +
-                    //    end + " " + dist;
-                    //console.log(dist);
                 }
             });
         };
 
         function routeGenerator(inputArr) {
             var results = [];
-
             function permute(arr, memo) {
-                var cur, memo = memo || [];
+                var current, memo = memo || [];
                 for (var i = 0; i < arr.length; i++) {
-                    cur = arr.splice(i, 1);
+                    current = arr.splice(i, 1);
                     if (arr.length === 0) {
-                        results.push(memo.concat(cur));
+                        results.push(memo.concat(current));
                     }
-                    permute(arr.slice(), memo.concat(cur));
-                    arr.splice(i, 0, cur[0]);
+                    permute(arr.slice(), memo.concat(current));
+                    arr.splice(i, 0, current[0]);
                 }
                 return results;
             }
-
             return permute(inputArr);
         }
 
@@ -730,7 +725,6 @@ angular.module('fYPApp')
                 }
             }
             else console.log(arr);
-            //document.write(arr);
         };
 
         var destinationNode_Ids = [];
@@ -748,17 +742,6 @@ angular.module('fYPApp')
         var arrayLength;
 
         $scope.paths = function () {
-            //function toSingleArray() {
-            //    for(var i = 0; i < node_ids.length; i++ ){
-            //        for(var j = 0; j < node_ids[0].length; j++) {
-            //            node_ids_singleArray.push(node_ids[i][j])
-            //        }
-            //    }
-            //    $log.log(node_ids_singleArray);
-            //}
-            //
-            //toSingleArray();
-
 
             var destinationNumbers = [];
             var uniqueDestinationNumbers = [];
@@ -823,8 +806,10 @@ angular.module('fYPApp')
                         "X-Stream": "true"
                     },
                     data: JSON.stringify({
-                        query: "START node1=node(6),node2=node(" + node_ids[0] + "),node3=node(" + node_ids[1] + "),node4=node(7)" +
-                        "MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4 RETURN TOINT(r1.weight)+ TOINT(r2.weight) + TOINT(r3.weight)",
+                        query: "START node1=node(6),node2=node(" + node_ids[0] + ")," +
+                            "node3=node(" + node_ids[1] + "),node4=node(7)" +
+                            "MATCH paths = node1-[r1:To]->node2-[r2:To]->node3-[r3:To]-node4 " +
+                            "RETURN TOINT(r1.weight)+ TOINT(r2.weight) + TOINT(r3.weight)",
                         "params": {}
                     }),
                     success: function (data) {
@@ -1066,7 +1051,7 @@ angular.module('fYPApp')
                 $scope.id = $scope.ids[j];
                 $http.get("/api/journey/updatePassengerJourney/" + $scope.id)
                     .success(function () {
-                        $scope.success = 'OK';
+                        //$scope.success = 'OK';
                     })
                     .error(function (response) {
                         $scope.success = null;
@@ -1084,8 +1069,8 @@ angular.module('fYPApp')
                 'date': $filter('date')($scope.journey.date, "dd/MM/yyyy"),
                 'available': 'yes'
             };
-            $http.post('/api/journey/searchPassengerJourney?page=' + page, searchData).
-                success(function (data) {
+            $http.post('/api/journey/searchPassengerJourney?page=' + page, searchData)
+                .success(function (data) {
                     $scope.journeyRequest = data.content;
                     $scope.noJourneys = $scope.journeyRequests <= 0 ? true : false;
                     journeyRequestLength = $scope.journeyRequest.length;
